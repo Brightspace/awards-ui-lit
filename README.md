@@ -1,41 +1,9 @@
 # d2l-awards
 
-[![NPM version](https://img.shields.io/npm/v/@brightspace-ui/awards.svg)](https://www.npmjs.org/package/@brightspace-ui/awards)
-[![Dependabot badge](https://flat.badgen.net/dependabot/BrightspaceUI/awards?icon=dependabot)](https://app.dependabot.com/)
-[![Build status](https://travis-ci.com/@brightspace-ui/awards.svg?branch=master)](https://travis-ci.com/@brightspace-ui/awards)
+[![Dependabot badge](https://flat.badgen.net/dependabot/Brightspace/awards-ui-lit?icon=dependabot)](https://app.dependabot.com/)
+[![Build status](https://travis-ci.com/Brightspace/awards-ui-lit.svg?branch=master)](https://travis-ci.com/Brightspace/awards-ui-lit)
 
 New Awards Experience UI
-
-## Installation
-
-To install from NPM:
-
-```shell
-npm install @brightspace-ui/awards
-```
-
-## Usage
-
-```html
-<script type="module">
-    import '@brightspace-ui/awards/awards.js';
-</script>
-<d2l-awards>My element</d2l-awards>
-```
-
-**Properties:**
-
-| Property | Type | Description |
-|--|--|--|
-| | | |
-
-**Accessibility:**
-
-To make your usage of `d2l-awards` accessible, use the following properties when applicable:
-
-| Attribute | Description |
-|--|--|
-| | |
 
 ## Developing, Testing and Contributing
 
@@ -80,6 +48,8 @@ npm run test:headless:watch
 ```
 
 ### Visual Diff Testing
+
+NOTE: Visual Diff Testing implementation on hold
 
 This repo uses the [@brightspace-ui/visual-diff utility](https://github.com/BrightspaceUI/visual-diff/) to compare current snapshots against a set of golden snapshots stored in source control.
 
