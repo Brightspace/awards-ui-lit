@@ -1,6 +1,6 @@
 # d2l-awards
 
-[![Dependabot badge](https://flat.badgen.net/dependabot/BrightspaceUI/awards?icon=dependabot)](https://app.dependabot.com/)
+[![Dependabot badge](https://flat.badgen.net/dependabot/Brightspace/awards-ui-lit?icon=dependabot)](https://app.dependabot.com/)
 [![Build status](https://travis-ci.com/Brightspace/awards-ui-lit.svg?branch=master)](https://travis-ci.com/Brightspace/awards-ui-lit)
 
 New Awards Experience UI
