@@ -6,7 +6,7 @@ export const BaseMixin = superclass => class extends LocalizeMixin(superclass) {
 			let translations;
 			switch (lang) {
 				case 'en':
-					translations = await import('../../../locales/en.js');
+					translations = await import('../../locales/en.js');
 					break;
 			}
 
