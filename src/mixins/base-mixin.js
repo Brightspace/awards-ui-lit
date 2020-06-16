@@ -20,4 +20,4 @@ export const BaseMixin = superclass => class extends LocalizeMixin(superclass) {
 
 		return null;
 	}
-}
+};

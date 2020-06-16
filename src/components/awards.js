@@ -1,8 +1,8 @@
-import { css, html, LitElement } from 'lit-element/lit-element';
-import { BaseMixin } from '../mixins/base-mixin';
+import './awards-classlist';
 import '@brightspace-ui/core/components/tabs/tabs';
 import '@brightspace-ui/core/components/tabs/tab-panel';
-import './awards-classlist';
+import { css, html, LitElement } from 'lit-element/lit-element';
+import { BaseMixin } from '../mixins/base-mixin';
 
 class Awards extends BaseMixin(LitElement) {
 
