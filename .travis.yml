@@ -14,7 +14,13 @@ script:
   fi
 after_success:
 - frauci-update-version -d=skip && export TRAVIS_TAG=$(frauci-get-version)
+deploy:
+  provider: releases
+  api_key: "$GITHUB_RELEASE_TOKEN"
+  on:
+    tags: true
 env:
   global:
   - SAUCE_USERNAME: Desire2Learn
-
+  # GITHUB_RELEASE_TOKEN
+  - secure: qcHy8asDD+2q/regVK1IvN7ofLSOOuxN3jv01CI+Ff7DA6borDuwQQk2LEln/RP+uoDmNpSjcDfmAF+vQGRxAs/cQXvP5S6uOxHM/dJYqnfMJUAcf6TL0BpQSrZ+t1xH/09mKq6dOwncgR80BA5oDgaHzAGD35SXgFlhq2OZf+OnLyUrDgxKrOIBLTv1oWqZOUPTO/MflB3x2Uz3TvTvfmkqC0jQA1vMFKP1xV/ipLsljnezkg5POnojhF91xiuZFw6VGAjv8YP2JfobUzbMt9lduPnmYVj7Th7AI1rCNt9Z76Z7VMCVXJpxUDdHDMPkO+wgaM6o7FAWRUnS9xk6/78JYxZI3b8HEFKxv3/Fq5KpimKCP+P0N6Mrj+xtdlHIZpjVxvF5FpmwnK5+h6BOjsD3k+LoJy72MyT2o+A8DabbNTvRLZht7/AvLupxgmJ7Hrc5hNHzY1qUz+c/yl8/vLtTeoLPIfoDP/ojn1kkC0hCdlM7GhmBT3boQ18jNPniDcr1NZPNyTlxGAUPGkxeokv2UQe3zs4VvU2gaeg9EQSndFsb12XtsjXvMe6TtB9AF0ddUjv6LrfxFSNwmCslgP43X3Ua7lpIpbjsQ357qJA6r0OiccQ1B9GUomO+dJ9KNAwxwECd9xpcGDMZptC7bJQGsHqyTICTmPpAOmDOFM0=
