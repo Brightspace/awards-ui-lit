@@ -47,67 +47,120 @@ class CourseAwards extends BaseMixin(LitElement) {
 		this.enableEditing = false;
 		this.awards = [
 			{
+				id: "123",
 				name: "exampleAward",
 				imgPath: "../../images/example_award.png",
 				type: 'Badge',
 				credits: 5,
-				hidden: false,
-				conditions: "example condition?"
+				hiddenUntilEarned: false,
+				doShow: true
 			}
 		]
 	}
 
-	toggleEditing() {
-		console.log('clicked');
+	handleSearch(event) {
+		const { detail: { value: q } } = event;
+		this.awards.forEach(award => award.doShow = award.name.includes(q));
+		this.requestUpdate();
+	}
+
+	handleBadgrUpdate(event) {
+		console.log('TODO: Support Badgr');
+	}
+
+	addAwardToCourse() {
+		console.log('TODO: Add award to course');
+	}
+
+	editAward(event) { // it doesn't seem possible to determine which button was pressed... maybe a closure with the award id stored?
+		console.log(event);
+		if (this.enableEditing) { // we are finishing editing
+			console.log(`TODO: Update award: ${JSON.stringify(event.relatedTarget)}`)
+		}
 		this.enableEditing = !this.enableEditing;
-		console.log(this.enableEditing);
+	}
+
+	deleteAward() {
+		console.log('TODO: delete award');
 	}
 
 	renderHeader() {
 		return html`
-		<d2l-input-checkbox>Allow users in this course to send earned awards to Badgr Backpack</d2l-input-checkbox>
+		<d2l-input-checkbox
+			@change="${this.handleBadgrUpdate}"
+		>Allow users in this course to send earned awards to Badgr Backpack</d2l-input-checkbox>
 		<div id="search_and_add">
 			<div class="search_add_wrapper">
 				<d2l-input-search
 					label="Search for course awards"
-					placeholder="Search for course awards">
+					placeholder="Search for course awards"
+					@d2l-input-search-searched="${this.handleSearch}">
 				</d2l-input-search>
 			</div>
 			<div class="search_add_wrapper">
-				<d2l-button primary>Add Award to Course</d2l-button>
+				<d2l-button
+					text="Add Award to Course"
+					aria-label="Add Award to Course"
+					primary
+					@click="${this.addAwardToCourse}"
+				>Add Award to Course</d2l-button>
 			</div>
 		</div>
 		`;
 	}
 
 	renderTable(type) {
-		return html`
-			<h2>
-				Awards
+		const renderedAwards = this.awards && this.awards.filter(award => award.doShow).map(award => this.renderAward(award));
+		return renderedAwards.length !== 0 ?
+			html`
+				<table aria-label="${type} table">
+					<thead>
+						<tr>
+							<th id="award_icon" class="centered_column">Icon</th>
+							<th>Name</th>
+							<th>Type</th>
+							<th>Credits</th>
+							<th>Hidden Until Earned</th>
+							<th class="centered_column">Edit</th>
+							<th class="centered_column">Delete</th>
+						</tr>
+					</thead>
+					<tbody>
+						${renderedAwards}
+					</tbody>
+				</table>
+			` :
+			html`<p>No awards found</p>`;
+	}
+
+	getCreditsElement(award) {
+		return this.enableEditing ?
+			html`
+				<d2l-input-text label-hidden
+					title="Credits"
+					label="Credits"
+					placeholder="0.0"
+					value="${award.credits}"
+					size=1
+				></d2l-input-text>` :
+			html`
+				<p>${award.credits}</p>
+			`;
+	}
+
+	getHiddenAwardElement(award) {
+		return this.enableEditing ?
+			html`
+				<d2l-input-checkbox
+					class="hidden_checkbox"
+					?checked=${award.hiddenUntilEarned}>
+				</d2l-input-checkbox>` :
+			html`
 				<d2l-button-icon
-					text="Edit"
-					aria-label="Edit"
-					icon="tier1:edit"
-					@click="${this.toggleEditing}">
+					text=${award.hiddenUntilEarned ? "Hidden" : "Not Hidden"}
+					icon=${award.hiddenUntilEarned ? "tier1:check" : "tier1:close-default"}>
 				</d2l-button-icon>
-			</h2>
-			<table aria-label="${type} table">
-				<thead>
-					<tr>
-						<th id="award_icon" class="centered_column">Icon</th>
-						<th>Name</th>
-						<th>Type</th>
-						<th>Credits</th>
-						<th>Hidden Until Earned</th>
-						<th>Conditions</th>
-						<th id="delete" class="centered_column">Delete</th>
-					</tr>
-				</thead>
-				<tbody>
-					${this.awards && this.awards.map(award => this.renderAward(award))}
-				</tbody>
-			</table>
-		`;
+			`;
 	}
 
 	renderAward(award) {
@@ -119,25 +172,25 @@ class CourseAwards extends BaseMixin(LitElement) {
 				<td>${award.name}</td>
 				<td>${award.type}</td>
 				<td>
-					<d2l-input-text label-hidden
-						?disabled=${!this.enableEditing}
-						title="Credits"
-						label="Credits"
-						placeholder="0.0"
-						value="${award.credits}"
-						size=4
-					></d2l-input-text>
+					${this.getCreditsElement(award)}
 				</td>
 				<td class="centered_column">
-					<d2l-input-checkbox
-						?disabled=${!this.enableEditing}
-						class="hidden_checkbox"
-						?checked=${award.hidden}>
-					</d2l-input-checkbox>
+					${this.getHiddenAwardElement(award)}
 				</td>
-				<td>${award.conditions}</td>
 				<td class="centered_column">
-					<d2l-button-icon text="Delete" icon="tier1:delete"></d2l-button-icon>
+					<d2l-button-icon
+						text=${this.enableEditing ? "Finish editing award" : "Edit award"}
+						icon=${this.enableEditing ? "tier1:save" : "tier1:edit"}
+						id="${award.id}"
+						@click="${this.editAward}">
+					</d2l-button-icon>
+				</td>
+				<td class="centered_column">
+					<d2l-button-icon
+						text="Delete Award"
+						icon="tier1:delete"
+						@click="${this.deleteAward}">
+					</d2l-button-icon>
 				</td>
 			</tr>
 		`;
@@ -145,8 +198,9 @@ class CourseAwards extends BaseMixin(LitElement) {
 
 	render() {
 		return html`
-		${this.renderHeader()}
-		${this.renderTable('Badges')}
+			${this.renderHeader()}
+			<h2>Awards</h2>
+			${this.renderTable()}
 		`;
 	}
 }
