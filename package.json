@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "npm run lint:eslint && npm run lint:lit",
     "lint:eslint": "eslint . --ext .js,.html",
-    "lint:lit": "lit-analyzer awards.js demo test",
+    "lint:lit": "lit-analyzer src/components/*.js demo src/test",
     "start": "es-dev-server --app-index demo/index.html --node-resolve --dedupe --open --watch",
     "test": "npm run lint && npm run test:headless",
     "test:diff": "mocha ./**/*.visual-diff.js -t 40000",
