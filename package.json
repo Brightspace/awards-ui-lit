@@ -1,8 +1,8 @@
 {
-  "name": "@brightspace-ui/awards",
+  "name": "awards-ui",
   "description": "New Awards Experience UI",
-  "repository": "https://github.com/BrightspaceUI/awards.git",
-  "private": true,
+  "version": "0.0.1",
+  "repository": "https://github.com/Brightspace/awards-ui-lit.git",
   "scripts": {
     "lint": "npm run lint:eslint && npm run lint:lit",
     "lint:eslint": "eslint . --ext .js,.html",
