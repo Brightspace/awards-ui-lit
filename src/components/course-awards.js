@@ -8,14 +8,6 @@ import { BaseMixin } from '../mixins/base-mixin';
 import { awardsTableStyles } from '../styles/awards-table-styles';
 
 class CourseAwards extends BaseMixin(LitElement) {
-	editClickHandler = {
-		handleEvent(event) {
-			console.log('clicked');
-			this.enableEditing = !this.enableEditing;
-			console.log(this.enableEditing);
-		}
-	}
-
 	static get properties() {
 		return {
 			enableEditing: { type: Boolean },
@@ -65,6 +57,12 @@ class CourseAwards extends BaseMixin(LitElement) {
 		]
 	}
 
+	toggleEditing() {
+		console.log('clicked');
+		this.enableEditing = !this.enableEditing;
+		console.log(this.enableEditing);
+	}
+
 	renderHeader() {
 		return html`
 		<d2l-input-checkbox>Allow users in this course to send earned awards to Badgr Backpack</d2l-input-checkbox>
@@ -90,7 +88,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 					text="Edit"
 					aria-label="Edit"
 					icon="tier1:edit"
-					@click=${this.editClickHandler}>
+					@click="${this.toggleEditing}">
 				</d2l-button-icon>
 			</h2>
 			<table aria-label="${type} table">
