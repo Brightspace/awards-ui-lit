@@ -8,6 +8,9 @@ import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../mixins/base-mixin';
 import { awardsTableStyles } from '../styles/awards-table-styles';
 
+const CHECKBOX_BASE = 'checkbox-award-';
+const TEXT_INPUT_BASE = 'text-input-award-';
+
 class CourseAwards extends BaseMixin(LitElement) {
 	static get properties() {
 		return {
@@ -90,7 +93,13 @@ class CourseAwards extends BaseMixin(LitElement) {
 	getEditAwardHandler(awardId) {
 		return () => {
 			const award = this.awards.find(award => award.id === awardId);
+
 			if (award.enableEditing) { // we are finishing editing
+				const inputTextEle = this.shadowRoot.getElementById(`${TEXT_INPUT_BASE}${awardId}`);
+				const checkboxEle = this.shadowRoot.getElementById(`${CHECKBOX_BASE}${awardId}`);
+
+				award.credits = inputTextEle.value;
+				award.hiddenUntilEarned = checkboxEle.checked;
 				console.log(`TODO: Update award with id: ${award.id}`); // call API
 			}
 			award.enableEditing = !award.enableEditing;
@@ -108,7 +117,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 		const { target: { value: q } } = event;
 		console.log(q);
 
-		// reaplce with API call
+		// replace with API call
 		this.awards.forEach(award =>
 			award.doShow = q === 'All Awards' || award.type.toUpperCase() === q.toUpperCase().substring(0, q.length - 1));
 		this.requestUpdate();
@@ -126,11 +135,11 @@ class CourseAwards extends BaseMixin(LitElement) {
 				@d2l-input-search-searched="${this.handleSearchEvent}">
 			</d2l-input-search>
 			<d2l-button
-				text="Add Award to Course"
-				aria-label="Add Award to Course"
+				text="Add Awards to Course"
+				aria-label="Add Awards to Course"
 				primary
 				@click="${this.addAwardToCourse}"
-			>Add Award to Course</d2l-button>
+			>Add Awards to Course</d2l-button>
 		</div>
 		`;
 	}
@@ -163,6 +172,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 		return award.enableEditing ?
 			html`
 				<d2l-input-text label-hidden
+					id="${TEXT_INPUT_BASE}${award.id}"
 					title="Credits"
 					label="Credits"
 					placeholder="0.0"
@@ -178,9 +188,10 @@ class CourseAwards extends BaseMixin(LitElement) {
 		return award.enableEditing ?
 			html`
 				<d2l-input-checkbox
+					id="${CHECKBOX_BASE}${award.id}"
 					class="hidden_checkbox"
-					?checked=${award.hiddenUntilEarned}>
-				</d2l-input-checkbox>` :
+					?checked=${award.hiddenUntilEarned}
+				></d2l-input-checkbox>` :
 			html`
 				<d2l-button-icon
 					text=${award.hiddenUntilEarned ? "Hidden" : "Not Hidden"}
