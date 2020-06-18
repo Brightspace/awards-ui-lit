@@ -29,12 +29,8 @@ th {
 	margin: 1rem 0;
 }
 
-td.centered_column {
+td.centered-column {
 	text-align: center;
-}
-
-d2l-input-checkbox.hidden_checkbox {
-	padding-top: 1rem;
 }
 
 td.award_icon {
