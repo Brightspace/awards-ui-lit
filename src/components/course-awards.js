@@ -7,6 +7,7 @@ import { selectStyles} from '@brightspace-ui/core/components/inputs/input-select
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../mixins/base-mixin';
 import { awardsTableStyles } from '../styles/awards-table-styles';
+import { awardsDialogId } from './add-awards-dialog';
 
 const CHECKBOX_BASE = 'checkbox-award-';
 const TEXT_INPUT_BASE = 'text-input-award-';
@@ -14,7 +15,7 @@ const TEXT_INPUT_BASE = 'text-input-award-';
 class CourseAwards extends BaseMixin(LitElement) {
 	static get properties() {
 		return {
-			awards: { type: Object }
+			courseAwards: { type: Object }
 		};
 	}
 
@@ -29,8 +30,8 @@ class CourseAwards extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			d2l-button {
-				padding: 5px;
+			d2l-button#add-award-button {
+				padding-top: 5px;
 				float: right;
 			}
 			d2l-input-search {
@@ -50,7 +51,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 	constructor() {
 		super();
 		this.enableEditing = false;
-		this.awards = [
+		this.courseAwards = [
 			{
 				id: "123",
 				name: "exampleAward",
@@ -71,28 +72,31 @@ class CourseAwards extends BaseMixin(LitElement) {
 				doShow: true,
 				enableEditing: false
 			}
-		]
+		];
 	}
 
-	handleSearchEvent(event) {
+	_handleSearchEvent(event) {
 		const { detail: { value: q } } = event;
 
 		// replace with API call
-		this.awards.forEach(award => award.doShow = award.name.toUpperCase().includes(q.toUpperCase()));
+		this.courseAwards.forEach(award => award.doShow = award.name.toUpperCase().includes(q.toUpperCase()));
 		this.requestUpdate();
 	}
 
-	handleBadgrUpdate(event) {
+	_handleBadgrUpdate(event) {
 		console.log('TODO: Support Badgr'); // call API
 	}
 
-	addAwardToCourse() {
-		console.log('TODO: Add award to course'); // call API
+	async _addAwardsToCourse() {
+		const dialog = this.shadowRoot.querySelector('d2l-add-awards-dialog');
+		const ids = await dialog.openAndGetItems();
+		console.log(ids);
+		console.log('TODO: Add awards to course'); // call API
 	}
 
-	getEditAwardHandler(awardId) {
+	_getEditAwardHandler(awardId) {
 		return () => {
-			const award = this.awards.find(award => award.id === awardId);
+			const award = this.courseAwards.find(award => award.id === awardId);
 
 			if (award.enableEditing) { // we are finishing editing
 				const inputTextEle = this.shadowRoot.getElementById(`${TEXT_INPUT_BASE}${awardId}`);
@@ -107,18 +111,18 @@ class CourseAwards extends BaseMixin(LitElement) {
 		}
 	}
 
-	getDeleteAwardHandler(awardId) {
+	_getDeleteAwardHandler(awardId) {
 		return () => {
 			console.log(`TODO: Delete award with id: ${awardId}`); // call API
 		}
 	}
 
-	handleAwardTypeSelection(event) {
+	_handleAwardTypeSelection(event) {
 		const { target: { value: q } } = event;
 		console.log(q);
 
 		// replace with API call
-		this.awards.forEach(award =>
+		this.courseAwards.forEach(award =>
 			award.doShow = q === 'All Awards' || award.type.toUpperCase() === q.toUpperCase().substring(0, q.length - 1));
 		this.requestUpdate();
 	}
@@ -126,26 +130,27 @@ class CourseAwards extends BaseMixin(LitElement) {
 	renderHeader() {
 		return html`
 		<d2l-input-checkbox
-			@change="${this.handleBadgrUpdate}"
+			@change="${this._handleBadgrUpdate}"
 		>Allow users in this course to send earned awards to Badgr Backpack</d2l-input-checkbox>
 		<div id="search_and_add">
 			<d2l-input-search
 				label="Search for course awards"
 				placeholder="Search for course awards"
-				@d2l-input-search-searched="${this.handleSearchEvent}">
+				@d2l-input-search-searched="${this._handleSearchEvent}">
 			</d2l-input-search>
 			<d2l-button
+				id="add-award-button"
 				text="Add Awards to Course"
 				aria-label="Add Awards to Course"
 				primary
-				@click="${this.addAwardToCourse}"
+				@click="${this._addAwardsToCourse}"
 			>Add Awards to Course</d2l-button>
 		</div>
 		`;
 	}
 
 	renderTable(type) {
-		const renderedAwards = this.awards && this.awards.filter(award => award.doShow).map(award => this.renderAward(award));
+		const renderedAwards = this.courseAwards && this.courseAwards.filter(award => award.doShow).map(award => this.renderAward(award));
 		return renderedAwards.length !== 0 ?
 			html`
 				<table aria-label="${type} table">
@@ -218,14 +223,14 @@ class CourseAwards extends BaseMixin(LitElement) {
 					<d2l-button-icon
 						text=${award.enableEditing ? `Finish editing award ${award.name}` : `Edit award ${award.name}`}
 						icon=${award.enableEditing ? `tier1:save` : `tier1:edit`}
-						@click="${this.getEditAwardHandler(award.id)}">
+						@click="${this._getEditAwardHandler(award.id)}">
 					</d2l-button-icon>
 				</td>
 				<td class="centered_column">
 					<d2l-button-icon
 						text="Delete Award"
 						icon="tier1:delete"
-						@click="${this.getDeleteAwardHandler(award.id)}">
+						@click="${this._getDeleteAwardHandler(award.id)}">
 					</d2l-button-icon>
 				</td>
 			</tr>
@@ -234,9 +239,10 @@ class CourseAwards extends BaseMixin(LitElement) {
 
 	render() {
 		return html`
+			<d2l-add-awards-dialog></d2l-add-awards-dialog>
 			${this.renderHeader()}
 			<div id="input-select-div">
-				<select class="d2l-input-select" aria-label="Awards Type Dropdown" @change="${this.handleAwardTypeSelection}">
+				<select class="d2l-input-select" aria-label="Awards Type Dropdown" @change="${this._handleAwardTypeSelection}">
 					<option>All Awards</option>
 					<option>Badges</option>
 					<option>Certificates</option>
