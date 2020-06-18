@@ -1,8 +1,8 @@
 import '@brightspace-ui/core/components/dialog/dialog';
 import '@brightspace-ui/core/components/list/list';
 import '@brightspace-ui/core/components/list/list-item';
-import { BaseMixin } from '../mixins/base-mixin';
 import { css, html, LitElement } from 'lit-element/lit-element';
+import { BaseMixin } from '../mixins/base-mixin';
 
 export const awardsDialogId = 'add-award-dialog';
 const DONE_ACTION = 'done';
@@ -30,9 +30,9 @@ class AddAwardsDialog extends BaseMixin(LitElement) {
 		super();
 		this.availableAwards = [
 			{
-				id: "789",
-				name: "Available Award",
-				imgPath: "../../images/example_award.png",
+				id: '789',
+				name: 'Available Award',
+				imgPath: '../../images/example_award.png',
 				type: 'Badge',
 				credits: 5,
 				hiddenUntilEarned: false,
@@ -45,7 +45,7 @@ class AddAwardsDialog extends BaseMixin(LitElement) {
 		const action = await d2lDialog.open();
 
 		if (action === DONE_ACTION) {
-			const d2lList= d2lDialog.querySelector('d2l-list')
+			const d2lList = d2lDialog.querySelector('d2l-list');
 			const { keys } = d2lList.getSelectionInfo();
 			const awards = this.availableAwards.filter(award => keys.includes(award.id));
 
@@ -56,9 +56,9 @@ class AddAwardsDialog extends BaseMixin(LitElement) {
 
 	renderAward(award) {
 		return html`
-			<d2l-list-item key="${award.id}" selectable >
-				<img src="${award.imgPath}" slot="illustration"/>
-				<p>"${award.name}"</p>
+			<d2l-list-item key='${award.id}' selectable >
+				<img src='${award.imgPath}' slot='illustration'/>
+				<p>'${award.name}'</p>
 			</d2l-list-item>
 		`;
 	}
@@ -66,8 +66,8 @@ class AddAwardsDialog extends BaseMixin(LitElement) {
 	render() {
 		return html`
 		<d2l-dialog
-			id="${awardsDialogId}"
-			title-text="Choose Awards to Add to the Course"
+			id='${awardsDialogId}'
+			title-text='Choose Awards to Add to the Course'
 		>
 			<div>
 				<d2l-list>

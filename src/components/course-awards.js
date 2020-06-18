@@ -3,11 +3,10 @@ import '@brightspace-ui/core/components/button/button-icon';
 import '@brightspace-ui/core/components/inputs/input-search';
 import '@brightspace-ui/core/components/inputs/input-checkbox';
 import '@brightspace-ui/core/components/inputs/input-text';
-import { selectStyles} from '@brightspace-ui/core/components/inputs/input-select-styles';
 import { css, html, LitElement } from 'lit-element/lit-element';
-import { BaseMixin } from '../mixins/base-mixin';
 import { awardsTableStyles } from '../styles/awards-table-styles';
-import { awardsDialogId } from './add-awards-dialog';
+import { BaseMixin } from '../mixins/base-mixin';
+import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles';
 
 const CHECKBOX_BASE = 'checkbox-award-';
 const TEXT_INPUT_BASE = 'text-input-award-';
@@ -53,9 +52,9 @@ class CourseAwards extends BaseMixin(LitElement) {
 		this.enableEditing = false;
 		this.courseAwards = [
 			{
-				id: "123",
-				name: "exampleAward",
-				imgPath: "../../images/example_award.png",
+				id: '123',
+				name: 'exampleAward',
+				imgPath: '../../images/example_award.png',
 				type: 'Badge',
 				credits: 5,
 				hiddenUntilEarned: false,
@@ -63,9 +62,9 @@ class CourseAwards extends BaseMixin(LitElement) {
 				enableEditing: false
 			},
 			{
-				id: "456",
-				name: "testAward",
-				imgPath: "../../images/example_award.png",
+				id: '456',
+				name: 'testAward',
+				imgPath: '../../images/example_award.png',
 				type: 'Certificate',
 				credits: 2,
 				hiddenUntilEarned: false,
@@ -83,7 +82,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 		this.requestUpdate();
 	}
 
-	_handleBadgrUpdate(event) {
+	_handleBadgrUpdate() {
 		console.log('TODO: Support Badgr'); // call API
 	}
 
@@ -108,13 +107,13 @@ class CourseAwards extends BaseMixin(LitElement) {
 			}
 			award.enableEditing = !award.enableEditing;
 			this.requestUpdate();
-		}
+		};
 	}
 
 	_getDeleteAwardHandler(awardId) {
 		return () => {
 			console.log(`TODO: Delete award with id: ${awardId}`); // call API
-		}
+		};
 	}
 
 	_handleAwardTypeSelection(event) {
@@ -130,20 +129,20 @@ class CourseAwards extends BaseMixin(LitElement) {
 	renderHeader() {
 		return html`
 		<d2l-input-checkbox
-			@change="${this._handleBadgrUpdate}"
+			@change='${this._handleBadgrUpdate}'
 		>Allow users in this course to send earned awards to Badgr Backpack</d2l-input-checkbox>
-		<div id="search_and_add">
+		<div id='search_and_add'>
 			<d2l-input-search
-				label="Search for course awards"
-				placeholder="Search for course awards"
-				@d2l-input-search-searched="${this._handleSearchEvent}">
+				label='Search for course awards'
+				placeholder='Search for course awards'
+				@d2l-input-search-searched='${this._handleSearchEvent}'>
 			</d2l-input-search>
 			<d2l-button
-				id="add-award-button"
-				text="Add Awards to Course"
-				aria-label="Add Awards to Course"
+				id='add-award-button'
+				text='Add Awards to Course'
+				aria-label='Add Awards to Course'
 				primary
-				@click="${this._addAwardsToCourse}"
+				@click='${this._addAwardsToCourse}'
 			>Add Awards to Course</d2l-button>
 		</div>
 		`;
@@ -153,16 +152,16 @@ class CourseAwards extends BaseMixin(LitElement) {
 		const renderedAwards = this.courseAwards && this.courseAwards.filter(award => award.doShow).map(award => this.renderAward(award));
 		return renderedAwards.length !== 0 ?
 			html`
-				<table aria-label="${type} table">
+				<table aria-label='${type} table'>
 					<thead>
 						<tr>
-							<th id="award_icon" class="centered_column">Icon</th>
+							<th id='award_icon' class='centered_column'>Icon</th>
 							<th>Name</th>
 							<th>Type</th>
 							<th>Credits</th>
 							<th>Hidden Until Earned</th>
-							<th class="centered_column">Edit</th>
-							<th class="centered_column">Delete</th>
+							<th class='centered_column'>Edit</th>
+							<th class='centered_column'>Delete</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -177,11 +176,11 @@ class CourseAwards extends BaseMixin(LitElement) {
 		return award.enableEditing ?
 			html`
 				<d2l-input-text label-hidden
-					id="${TEXT_INPUT_BASE}${award.id}"
-					title="Credits"
-					label="Credits"
-					placeholder="0.0"
-					value="${award.credits}"
+					id='${TEXT_INPUT_BASE}${award.id}'
+					title='Credits'
+					label='Credits'
+					placeholder='0.0'
+					value='${award.credits}'
 					size=1
 				></d2l-input-text>` :
 			html`
@@ -193,14 +192,14 @@ class CourseAwards extends BaseMixin(LitElement) {
 		return award.enableEditing ?
 			html`
 				<d2l-input-checkbox
-					id="${CHECKBOX_BASE}${award.id}"
-					class="hidden_checkbox"
+					id='${CHECKBOX_BASE}${award.id}'
+					class='hidden_checkbox'
 					?checked=${award.hiddenUntilEarned}
 				></d2l-input-checkbox>` :
 			html`
 				<d2l-button-icon
-					text=${award.hiddenUntilEarned ? "Hidden" : "Not Hidden"}
-					icon=${award.hiddenUntilEarned ? "tier1:check" : "tier1:close-default"}>
+					text=${award.hiddenUntilEarned ? 'Hidden' : 'Not Hidden'}
+					icon=${award.hiddenUntilEarned ? 'tier1:check' : 'tier1:close-default'}>
 				</d2l-button-icon>
 			`;
 	}
@@ -208,29 +207,29 @@ class CourseAwards extends BaseMixin(LitElement) {
 	renderAward(award) {
 		return html`
 			<tr>
-				<td class="centered_column award_icon">
-					<img src="${award.imgPath}", width="50%">
+				<td class='centered_column award_icon'>
+					<img src='${award.imgPath}' width='50%'>
 				</td>
 				<td>${award.name}</td>
 				<td>${award.type}</td>
 				<td>
 					${this.getCreditsElement(award)}
 				</td>
-				<td class="centered_column">
+				<td class='centered_column'>
 					${this.getHiddenAwardElement(award)}
 				</td>
-				<td class="centered_column">
+				<td class='centered_column'>
 					<d2l-button-icon
 						text=${award.enableEditing ? `Finish editing award ${award.name}` : `Edit award ${award.name}`}
-						icon=${award.enableEditing ? `tier1:save` : `tier1:edit`}
-						@click="${this._getEditAwardHandler(award.id)}">
+						icon=${award.enableEditing ? 'tier1:save' : 'tier1:edit'}
+						@click='${this._getEditAwardHandler(award.id)}'>
 					</d2l-button-icon>
 				</td>
-				<td class="centered_column">
+				<td class='centered_column'>
 					<d2l-button-icon
-						text="Delete Award"
-						icon="tier1:delete"
-						@click="${this._getDeleteAwardHandler(award.id)}">
+						text='Delete Award'
+						icon='tier1:delete'
+						@click='${this._getDeleteAwardHandler(award.id)}'>
 					</d2l-button-icon>
 				</td>
 			</tr>
@@ -241,8 +240,8 @@ class CourseAwards extends BaseMixin(LitElement) {
 		return html`
 			<d2l-add-awards-dialog></d2l-add-awards-dialog>
 			${this.renderHeader()}
-			<div id="input-select-div">
-				<select class="d2l-input-select" aria-label="Awards Type Dropdown" @change="${this._handleAwardTypeSelection}">
+			<div id='input-select-div'>
+				<select class='d2l-input-select' aria-label='Awards Type Dropdown' @change='${this._handleAwardTypeSelection}'>
 					<option>All Awards</option>
 					<option>Badges</option>
 					<option>Certificates</option>
