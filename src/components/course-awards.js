@@ -3,6 +3,7 @@ import '@brightspace-ui/core/components/button/button-icon';
 import '@brightspace-ui/core/components/inputs/input-search';
 import '@brightspace-ui/core/components/inputs/input-checkbox';
 import '@brightspace-ui/core/components/inputs/input-text';
+import { selectStyles} from '@brightspace-ui/core/components/inputs/input-select-styles';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../mixins/base-mixin';
 import { awardsTableStyles } from '../styles/awards-table-styles';
@@ -10,7 +11,6 @@ import { awardsTableStyles } from '../styles/awards-table-styles';
 class CourseAwards extends BaseMixin(LitElement) {
 	static get properties() {
 		return {
-			enableEditing: { type: Boolean },
 			awards: { type: Object }
 		};
 	}
@@ -18,6 +18,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 	static get styles() {
 		return [
 			awardsTableStyles,
+			selectStyles,
 			css`
 			:host {
 				display: inline-block;
@@ -26,18 +27,19 @@ class CourseAwards extends BaseMixin(LitElement) {
 				display: none;
 			}
 			d2l-button {
-				width: 200px;
 				padding: 5px;
+				float: right;
 			}
 			d2l-input-search {
-				width: 525px;
+				width: 60%;
 				padding: 5px;
 			}
 			d2l-input-checkbox {
 				padding: 5px;
 			}
-			.search_add_wrapper {
-				display: inline-block;
+			#input-select-div {
+				padding-top: 1rem;
+				padding-bottom: 1rem;
 			}
 		`];
 	}
@@ -53,35 +55,63 @@ class CourseAwards extends BaseMixin(LitElement) {
 				type: 'Badge',
 				credits: 5,
 				hiddenUntilEarned: false,
-				doShow: true
+				doShow: true,
+				enableEditing: false
+			},
+			{
+				id: "456",
+				name: "testAward",
+				imgPath: "../../images/example_award.png",
+				type: 'Certificate',
+				credits: 2,
+				hiddenUntilEarned: false,
+				doShow: true,
+				enableEditing: false
 			}
 		]
 	}
 
-	handleSearch(event) {
+	handleSearchEvent(event) {
 		const { detail: { value: q } } = event;
-		this.awards.forEach(award => award.doShow = award.name.includes(q));
+
+		// replace with API call
+		this.awards.forEach(award => award.doShow = award.name.toUpperCase().includes(q.toUpperCase()));
 		this.requestUpdate();
 	}
 
 	handleBadgrUpdate(event) {
-		console.log('TODO: Support Badgr');
+		console.log('TODO: Support Badgr'); // call API
 	}
 
 	addAwardToCourse() {
-		console.log('TODO: Add award to course');
+		console.log('TODO: Add award to course'); // call API
 	}
 
-	editAward(event) { // it doesn't seem possible to determine which button was pressed... maybe a closure with the award id stored?
-		console.log(event);
-		if (this.enableEditing) { // we are finishing editing
-			console.log(`TODO: Update award: ${JSON.stringify(event.relatedTarget)}`)
+	getEditAwardHandler(awardId) {
+		return () => {
+			const award = this.awards.find(award => award.id === awardId);
+			if (award.enableEditing) { // we are finishing editing
+				console.log(`TODO: Update award with id: ${award.id}`); // call API
+			}
+			award.enableEditing = !award.enableEditing;
+			this.requestUpdate();
 		}
-		this.enableEditing = !this.enableEditing;
 	}
 
-	deleteAward() {
-		console.log('TODO: delete award');
+	getDeleteAwardHandler(awardId) {
+		return () => {
+			console.log(`TODO: Delete award with id: ${awardId}`); // call API
+		}
+	}
+
+	handleAwardTypeSelection(event) {
+		const { target: { value: q } } = event;
+		console.log(q);
+
+		// reaplce with API call
+		this.awards.forEach(award =>
+			award.doShow = q === 'All Awards' || award.type.toUpperCase() === q.toUpperCase().substring(0, q.length - 1));
+		this.requestUpdate();
 	}
 
 	renderHeader() {
@@ -90,21 +120,17 @@ class CourseAwards extends BaseMixin(LitElement) {
 			@change="${this.handleBadgrUpdate}"
 		>Allow users in this course to send earned awards to Badgr Backpack</d2l-input-checkbox>
 		<div id="search_and_add">
-			<div class="search_add_wrapper">
-				<d2l-input-search
-					label="Search for course awards"
-					placeholder="Search for course awards"
-					@d2l-input-search-searched="${this.handleSearch}">
-				</d2l-input-search>
-			</div>
-			<div class="search_add_wrapper">
-				<d2l-button
-					text="Add Award to Course"
-					aria-label="Add Award to Course"
-					primary
-					@click="${this.addAwardToCourse}"
-				>Add Award to Course</d2l-button>
-			</div>
+			<d2l-input-search
+				label="Search for course awards"
+				placeholder="Search for course awards"
+				@d2l-input-search-searched="${this.handleSearchEvent}">
+			</d2l-input-search>
+			<d2l-button
+				text="Add Award to Course"
+				aria-label="Add Award to Course"
+				primary
+				@click="${this.addAwardToCourse}"
+			>Add Award to Course</d2l-button>
 		</div>
 		`;
 	}
@@ -134,7 +160,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 	}
 
 	getCreditsElement(award) {
-		return this.enableEditing ?
+		return award.enableEditing ?
 			html`
 				<d2l-input-text label-hidden
 					title="Credits"
@@ -149,7 +175,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 	}
 
 	getHiddenAwardElement(award) {
-		return this.enableEditing ?
+		return award.enableEditing ?
 			html`
 				<d2l-input-checkbox
 					class="hidden_checkbox"
@@ -179,17 +205,16 @@ class CourseAwards extends BaseMixin(LitElement) {
 				</td>
 				<td class="centered_column">
 					<d2l-button-icon
-						text=${this.enableEditing ? "Finish editing award" : "Edit award"}
-						icon=${this.enableEditing ? "tier1:save" : "tier1:edit"}
-						id="${award.id}"
-						@click="${this.editAward}">
+						text=${award.enableEditing ? `Finish editing award ${award.name}` : `Edit award ${award.name}`}
+						icon=${award.enableEditing ? `tier1:save` : `tier1:edit`}
+						@click="${this.getEditAwardHandler(award.id)}">
 					</d2l-button-icon>
 				</td>
 				<td class="centered_column">
 					<d2l-button-icon
 						text="Delete Award"
 						icon="tier1:delete"
-						@click="${this.deleteAward}">
+						@click="${this.getDeleteAwardHandler(award.id)}">
 					</d2l-button-icon>
 				</td>
 			</tr>
@@ -199,7 +224,13 @@ class CourseAwards extends BaseMixin(LitElement) {
 	render() {
 		return html`
 			${this.renderHeader()}
-			<h2>Awards</h2>
+			<div id="input-select-div">
+				<select class="d2l-input-select" aria-label="Awards Type Dropdown" @change="${this.handleAwardTypeSelection}">
+					<option>All Awards</option>
+					<option>Badges</option>
+					<option>Certificates</option>
+				</select>
+			</div>
 			${this.renderTable()}
 		`;
 	}
