@@ -27,6 +27,7 @@ th {
 	line-height: 1rem;
 	text-align: left;
 	margin: 1rem 0;
+	white-space: nowrap;
 }
 
 td.centered-column {
