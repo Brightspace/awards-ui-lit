@@ -3,7 +3,9 @@ import './course-awards';
 import '@brightspace-ui/core/components/tabs/tabs';
 import '@brightspace-ui/core/components/tabs/tab-panel';
 import { css, html, LitElement } from 'lit-element/lit-element';
+import { AwardServiceFactory } from '../services/service-factory';
 import { BaseMixin } from '../mixins/base-mixin';
+import { ValidationService } from '../services/validation-service';
 
 class Awards extends BaseMixin(LitElement) {
 
@@ -28,6 +30,9 @@ class Awards extends BaseMixin(LitElement) {
 		super();
 
 		this.prop1 = 'awards';
+
+		window.AwardService = AwardServiceFactory.getService();
+		window.ValidationService = ValidationService;
 	}
 
 	render() {
