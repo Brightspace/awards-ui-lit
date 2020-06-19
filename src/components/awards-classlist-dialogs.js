@@ -7,6 +7,7 @@ import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../mixins/base-mixin';
 import { inputLabelStyles } from '@brightspace-ui/core/components/inputs/input-label-styles.js';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
+import { ValidationService } from '../services/validation-service.js';
 
 class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 
@@ -21,11 +22,11 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 			selectedStudents: {
 				type: Array
 			},
-			selectedAward: {
-				type: String
+			isValidOption: {
+				type: Boolean
 			},
-			awardCriteria: {
-				type: String
+			isValidCriteria: {
+				type: Boolean
 			}
 		};
 	}
@@ -56,47 +57,59 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 		this.badges = ['Level Up', 'Hawkeye', 'Immortal', 'The Brave'];
 		this.issueDialogOpened = false;
 		this.selectedStudents = Array();
-		this.awardCriteria = '';
-		this.selectedAward = '';
+		this.isValidOption = true;
+		this.isValidCriteria = true;
 	}
 
-	dialogClosed() {
+	_selectAward() {
+		this.isValidOption = ValidationService.optionSelected(this.shadowRoot.getElementById('issue-award-select').value);
+	}
+
+	_changeAwardCriteria() {
+		this.isValidCriteria = ValidationService.stringNotEmpty(this.shadowRoot.getElementById('issue-award-criteria').value);
+	}
+
+	_dialogClosed() {
 		this.issueDialogOpened = false;
 
-		console.log(this.selectedAward);
-		console.log(this.awardCriteria);
-
-		this.selectedAward = '';
-		this.awardCriteria = '';
+		this.shadowRoot.getElementById('issue-award-select').value = '0';
+		this.shadowRoot.getElementById('issue-award-criteria').value = '';
+		this.isValidOption = true;
+		this.isValidCriteria = true;
 	}
 
-	selectAward() {
-		this.selectedAward = this.shadowRoot.getElementById('issue-award-select').value;
-	}
+	_onDone() {
+		const selectedAward = this.shadowRoot.getElementById('issue-award-select').value;
+		const awardCriteria = this.shadowRoot.getElementById('issue-award-criteria').value;
 
-	changeAwardCriteria() {
-		this.awardCriteria = this.shadowRoot.getElementById('issue-award-criteria').value;
+		this.isValidOption = ValidationService.optionSelected(selectedAward);
+		this.isValidCriteria = ValidationService.stringNotEmpty(awardCriteria);
+
+		if (this.isValidOption && this.isValidCriteria) {
+			this.issueDialogOpened = false;
+		}
 	}
 
 	render() {
 		return html`
 		<d2l-dialog 
 			?opened=${this.issueDialogOpened}
-			@d2l-dialog-close=${this.dialogClosed}
+			@d2l-dialog-close=${this._dialogClosed}
 			title-text="Issue Award"
 			>
-
 			<label>
-				<span class="d2l-input-label">Select Award*</span>
+				<span class="d2l-input-label">
+					Select Award *
+				</span>
 				<select 
 					id="issue-award-select"
 					class="d2l-input-select"
-					@change=${this.selectAward}
-					.value=${this.selectedAward}
+					aria-invalid=${!this.isValidOption}
+					@change=${this._selectAward}
 					>
-					<option></option>
-					${this.badges.map(badge => html`
-						<option>${badge}</option>
+					<option value=0></option>
+					${this.badges.map((badge, index) => html`
+						<option value=${index + 1}>${badge}</option>
 					`)}
 				</select>
 			</label>
@@ -106,9 +119,10 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 				placeholder="Enter the award criteria"
 				required
 				aria-haspopup="true"
-				@input=${this.changeAwardCriteria}
-				.value=${this.awardCriteria}
-				></d2l-input-text>
+				aria-invalid=${!this.isValidCriteria}
+				@input=${this._changeAwardCriteria}
+				>
+			</d2l-input-text>
 
 			<label  for="issueDialogStudentList" class="d2l-input-label">
 				Selected Students (${this.selectedStudents.length})
@@ -130,10 +144,13 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 			<d2l-button 
 				slot="footer" 
 				primary 
-				data-dialog-action="done"
-				?disabled=${this.selectedAward.length === 0 || this.awardCriteria.length === 0}
-				>Issue</d2l-button>
-			<d2l-button slot="footer" data-dialog-action>Cancel</d2l-button>
+				@click=${this._onDone}
+				>
+				Issue
+			</d2l-button>
+			<d2l-button slot="footer" data-dialog-action>
+				Cancel
+			</d2l-button>
 		</d2l-dialog>
 		`;
 	}
@@ -152,11 +169,11 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 			selectedStudents: {
 				type: Array
 			},
-			selectedAward: {
-				type: String
+			isValidOption: {
+				type: Boolean
 			},
-			revokeReason: {
-				type: String
+			isValidReason: {
+				type: Boolean
 			}
 		};
 	}
@@ -172,6 +189,12 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
+			.d2l-input-label {
+				padding-top: 7px;
+			}
+			d2l-input-text {
+				padding-top: 7px;
+			}
 		`];
 	}
 
@@ -181,47 +204,59 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 		this.badges = ['Level Up', 'Hawkeye', 'Immortal', 'The Brave'];
 		this.revokeDialogOpened = false;
 		this.selectedStudents = Array();
-		this.revokeReason = '';
-		this.selectedAward = '';
+		this.isValidOption = true;
+		this.isValidReason = true;
 	}
 
-	dialogClosed() {
+	_selectAward() {
+		this.isValidOption = ValidationService.optionSelected(this.shadowRoot.getElementById('revoke-award-select').value);
+	}
+
+	_changeRevokeReason() {
+		this.isValidReason = ValidationService.stringNotEmpty(this.shadowRoot.getElementById('revoke-award-reason').value);
+	}
+
+	_dialogClosed() {
 		this.revokeDialogOpened = false;
 
-		console.log(this.selectedAward);
-		console.log(this.revokeReason);
-
-		this.selectedAward = '';
-		this.revokeReason = '';
+		this.shadowRoot.getElementById('revoke-award-select').value = '0';
+		this.shadowRoot.getElementById('revoke-award-reason').value = '';
+		this.isValidOption = true;
+		this.isValidReason = true;
 	}
 
-	selectAward() {
-		this.selectedAward = this.shadowRoot.getElementById('revoke-award-select').value;
-	}
+	_onDone() {
+		const selectedAward = this.shadowRoot.getElementById('revoke-award-select').value;
+		const revokeReason = this.shadowRoot.getElementById('revoke-award-reason').value;
 
-	changeRevokeReason() {
-		this.revokeReason = this.shadowRoot.getElementById('revoke-award-reason').value;
+		this.isValidOption = ValidationService.optionSelected(selectedAward);
+		this.isValidReason = ValidationService.stringNotEmpty(revokeReason);
+
+		if (this.isValidOption && this.isValidReason) {
+			this.revokeDialogOpened = false;
+		}
 	}
 
 	render() {
 		return html`
 		<d2l-dialog 
 			?opened=${this.revokeDialogOpened}
-			@d2l-dialog-close=${this.dialogClosed}
+			@d2l-dialog-close=${this._dialogClosed}
 			title-text="Revoke Award"
 			>
-
 			<label>
-				<span class="d2l-input-label">Select Award*</span>
+				<span class="d2l-input-label">
+					Select Award *
+				</span>
 				<select 
 					id="revoke-award-select"
 					class="d2l-input-select"
-					@change=${this.selectAward}
-					.value=${this.selectedAward}
+					aria-invalid=${!this.isValidOption}
+					@change=${this._selectAward}
 					>
-					<option></option>
-					${this.badges.map(badge => html`
-						<option>${badge}</option>
+					<option value=0></option>
+					${this.badges.map((badge, index) => html`
+						<option value=${index + 1}>${badge}</option>
 					`)}
 				</select>
 			</label>
@@ -231,9 +266,10 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 				placeholder="Enter the revoke reason"
 				required
 				aria-haspopup="true"
-				@input=${this.changeRevokeReason}
-				.value=${this.revokeReason}
-				></d2l-input-text>
+				aria-invalid=${!this.isValidReason}
+				@input=${this._changeRevokeReason}
+				>
+			</d2l-input-text>
 
 			<label  for="issueDialogStudentList" class="d2l-input-label">
 				Selected Students (${this.selectedStudents.length})
@@ -255,10 +291,13 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 			<d2l-button 
 				slot="footer" 
 				primary 
-				data-dialog-action="done"
-				?disabled=${this.selectedAward.length === 0 || this.revokeReason.length === 0}
-				>Revoke</d2l-button>
-			<d2l-button slot="footer" data-dialog-action>Cancel</d2l-button>
+				@click=${this._onDone}
+				>
+				Revoke
+			</d2l-button>
+			<d2l-button slot="footer" data-dialog-action>
+				Cancel
+			</d2l-button>
 		</d2l-dialog>
 		`;
 	}
