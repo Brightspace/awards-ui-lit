@@ -41,6 +41,12 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
+			.d2l-input-label {
+				padding-top: 7px;
+			}
+			d2l-input-text {
+				padding-top: 7px;
+			}
 		`];
 	}
 
