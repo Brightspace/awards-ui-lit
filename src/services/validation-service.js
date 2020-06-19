@@ -1,13 +1,17 @@
 export class ValidationService {
 	static optionSelected(option) {
-		return option && option > 0;
+		if (!option) return false;
+		return option > 0;
 	}
 
 	static stringNotEmpty(str) {
-		return str && str !== '';
+		if (!str) return false;
+		return str !== '';
 	}
 
+	// TODO: actually do a proper email validation regex
 	static validEmail(email) {
-		return email && email !== '';
+		if (email) return false;
+		return email !== '';
 	}
 }
