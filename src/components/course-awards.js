@@ -142,6 +142,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 				id='add-award-button'
 				text='Add Awards to Course'
 				aria-label='Add Awards to Course'
+				aria-haspopup='true'
 				primary
 				@click='${this._addAwardsToCourse}'
 			>Add Awards to Course</d2l-button>
