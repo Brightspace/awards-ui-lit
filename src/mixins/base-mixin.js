@@ -1,6 +1,7 @@
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
+import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin';
 
-export const BaseMixin = superclass => class extends LocalizeMixin(superclass) {
+export const BaseMixin = superclass => class extends RtlMixin(LocalizeMixin(superclass)) {
 	static async getLocalizeResources(langs) {
 		for await (const lang of langs) {
 			let translations;

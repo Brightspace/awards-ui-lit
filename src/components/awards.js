@@ -1,4 +1,5 @@
 import './awards-classlist';
+import './course-awards';
 import '@brightspace-ui/core/components/tabs/tabs';
 import '@brightspace-ui/core/components/tabs/tab-panel';
 import { css, html, LitElement } from 'lit-element/lit-element';
@@ -36,6 +37,11 @@ class Awards extends BaseMixin(LitElement) {
 					text="Classlist"
 					>
 					<d2l-awards-classlist></d2l-awards-classlist>
+				</d2l-tab-panel>
+				<d2l-tab-panel
+					text="Course Awards"
+					>
+					<d2l-course-awards></d2l-course-awards>
 				</d2l-tab-panel>
 				<d2l-tab-panel
 					text="My Awards"
