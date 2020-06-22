@@ -39,17 +39,17 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			.d2l-awards-classlist-search {
+			.awards-classlist-search {
 				display: flex;
 				flex-direction: row;
 				justify-content: space-between;
 				margin: 12px;
 			}
-			.d2l-awards-classlist-search-input {
+			.awards-classlist-search-input {
 				flex-grow: 1;
 				margin: 6px;
 			}
-			.d2l-awards-classlist-search-order {
+			.awards-classlist-search-order {
 				margin: 6px;
 			}
 		`];
@@ -58,53 +58,26 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 	constructor() {
 		super();
 
-		this.classlist = [
-			{
-				'id': '1',
-				'name': 'Bilbo Baggins',
-				'awards': [],
-				'picture': 'https://external-preview.redd.it/h_toqTwoOJ4LeP1Z2VGXaCO3HujYejJc7uKzZdbPRUA.jpg?auto=webp&s=82b4a93f58ae2770d8ef72d2418b9c34d1835818'
-			},
-			{
-				'id': '2',
-				'name': 'Gandalf the Grey',
-				'awards': ['Level Up'],
-				'picture': 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQbERWUaUohwgPCeQRw917eaNB1OQo1TIYmN_WAZe7V_sQ4dO_L&usqp=CAU'
-			},
-			{
-				'id': '3',
-				'name': 'Samwise Gamgee',
-				'awards': [],
-				'picture': 'https://vignette.wikia.nocookie.net/middle-earth-film-saga/images/5/52/Sam_TTT_profile.png/revision/latest?cb=20190727211735'
-			},
-			{
-				'id': '4',
-				'name': 'Aragorn Elessar',
-				'awards': [],
-				'picture': 'https://nerdist.com/wp-content/uploads/2018/05/Lord-of-the-Rings-Aragorn-Viggo-Mortensen-1.jpg'
-			},
-			{
-				'id': '5',
-				'name': 'Legolas',
-				'awards': ['Hawkeye'],
-				'picture': 'https://superherojacked.com/wp-content/uploads/2019/05/Legolas-Workout-2-1024x539.jpg'
-			}
-		];
 		this.selectedStudents = Array();
 		this.issueDialogOpened = false;
 		this.revokeDialogOpened = false;
 		this.areStudentsSelected = false;
 	}
 
-	issueDialogClosed(event) {
-		this.issueDialogOpened = false;
-
-		if (event.detail.action === 'done') {
-			console.log('Pressed Done');
-		}
+	connectedCallback() {
+		super.connectedCallback();
+		this._fetchData();
 	}
 
-	revokeDialogClosed(event) {
+	async _fetchData() {
+		window.AwardService.getStudents().then(data => this.classlist = data.students);
+	}
+
+	_issueDialogClosed() {
+		this.issueDialogOpened = false;
+	}
+
+	_revokeDialogClosed(event) {
 		this.revokeDialogOpened = false;
 
 		if (event.detail.action === 'done') {
@@ -112,20 +85,24 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 		}
 	}
 
-	renderDialogs() {
+	_renderDialogs() {
 		return html`
 		<d2l-awards-classlist-issue-dialog 
 			?issueDialogOpened=${this.issueDialogOpened} 
-			@d2l-dialog-close=${this.issueDialogClosed}
-			.selectedStudents=${this.selectedStudents}></d2l-awards-classlist-issue-dialog>
+			@d2l-dialog-close=${this._issueDialogClosed}
+			.selectedStudents=${this.selectedStudents}
+			>
+		</d2l-awards-classlist-issue-dialog>
 		<d2l-awards-classlist-revoke-dialog 
 			?revokeDialogOpened=${this.revokeDialogOpened} 
-			@d2l-dialog-close=${this.revokeDialogClosed}
-			.selectedStudents=${this.selectedStudents}></d2l-awards-classlist-revoke-dialog>
+			@d2l-dialog-close=${this._revokeDialogClosed}
+			.selectedStudents=${this.selectedStudents}
+			>
+		</d2l-awards-classlist-revoke-dialog>
 		`;
 	}
 
-	issueButtonClicked() {
+	_issueButtonClicked() {
 		const keys = this.shadowRoot.getElementById('classlist').getSelectionInfo().keys;
 
 		this.selectedStudents = Array();
@@ -136,14 +113,14 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 		this.issueDialogOpened = true;
 	}
 
-	revokeButtonClicked() {
+	_revokeButtonClicked() {
 		this.revokeDialogOpened = true;
 	}
 
-	renderButtons() {
+	_renderButtons() {
 		return html`
 		<d2l-button
-			@click=${this.issueButtonClicked}
+			@click=${this._issueButtonClicked}
 			description="Issue an award to students selected"
 			primary
 			aria-haspopup="true"
@@ -152,7 +129,7 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 			Issue
 		</d2l-button>
 		<d2l-button
-			@click=${this.revokeButtonClicked}
+			@click=${this._revokeButtonClicked}
 			description="Revoke an award to students selected"
 			aria-haspopup="true"
 			?disabled=${!this.areStudentsSelected}
@@ -162,27 +139,27 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 		`;
 	}
 
-	updateSearch(event) {
+	_updateSearch(event) {
 		console.log(event);
 	}
 
-	updateOrder(event) {
+	_updateOrder(event) {
 		console.log(event);
 	}
 
-	renderSearch() {
+	_renderSearch() {
 		return html`
-		<div class="d2l-awards-classlist-search">
+		<div class="awards-classlist-search">
 			<d2l-input-search
 				label="Search classlist"
 				placeholder="Search classlist"
-				@d2l-input-search-searched=${this.updateSearch}
-				class="d2l-awards-classlist-search-input"
+				@d2l-input-search-searched=${this._updateSearch}
+				class="awards-classlist-search-input"
 				>
 			</d2l-input-search>
 			<select 
-				class="d2l-input-select d2l-awards-classlist-search-order"
-				@change=${this.updateOrder}
+				class="d2l-input-select awards-classlist-search-order"
+				@change=${this._updateOrder}
 				>
 				<option>Award Leaders Descending</option>
 				<option>Award Leaders Ascending</option>
@@ -195,21 +172,21 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 		`;
 	}
 
-	listUpdate() {
-		const list = this.shadowRoot.getElementById('classlist');
+	_listUpdate(e) {
+		const list = e.target;
 
 		const state = list.getSelectionInfo().state;
 
 		this.areStudentsSelected = state !== 'none';
 	}
 
-	renderList() {
+	_renderList() {
 		return html`
 		<d2l-list 
 			id="classlist"
 			separators="between"
 			extend-separators
-			@d2l-list-selection-change=${this.listUpdate}
+			@d2l-list-selection-change=${this._listUpdate}
 			>
 			${this.classlist.map(student => html`
 			<d2l-list-item
@@ -231,10 +208,10 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 
 	render() {
 		return html`
-		${this.renderDialogs()}
-		${this.renderButtons()}
-		${this.renderSearch()}
-		${this.renderList()}
+		${this._renderDialogs()}
+		${this._renderButtons()}
+		${this._renderSearch()}
+		${this._renderList()}
 		`;
 	}
 }
