@@ -3,12 +3,11 @@ import '@brightspace-ui/core/components/dialog/dialog.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/components/list/list.js';
 import '@brightspace-ui/core/components/list/list-item.js';
+import '@brightspace-ui/core/components/tooltip/tooltip.js';
 import { css, html, LitElement } from 'lit-element/lit-element';
-import { AwardServiceFactory } from '../services/service-factory.js';
 import { BaseMixin } from '../mixins/base-mixin';
 import { inputLabelStyles } from '@brightspace-ui/core/components/inputs/input-label-styles.js';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
-import { ValidationService } from '../services/validation-service.js';
 
 class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 
@@ -55,8 +54,6 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 	constructor() {
 		super();
 
-		this.awardService = AwardServiceFactory.getService();
-
 		this.issueDialogOpened = false;
 		this.selectedStudents = Array();
 		this.isValidOption = true;
@@ -65,19 +62,19 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 
 	connectedCallback() {
 		super.connectedCallback();
-		this.fetchData();
+		this._fetchData();
 	}
 
-	async fetchData() {
-		this.awardService.getAwards().then(data => this.badges = data.awards);
+	async _fetchData() {
+		window.AwardService.getAwards().then(data => this.badges = data.awards);
 	}
 
-	_selectAward() {
-		this.isValidOption = ValidationService.optionSelected(this.shadowRoot.getElementById('issue-award-select').value);
+	_selectAward(e) {
+		this.isValidOption = window.ValidationService.optionSelected(e.target.value);
 	}
 
-	_changeAwardCriteria() {
-		this.isValidCriteria = ValidationService.stringNotEmpty(this.shadowRoot.getElementById('issue-award-criteria').value);
+	_changeAwardCriteria(e) {
+		this.isValidCriteria = window.ValidationService.stringNotEmpty(e.target.value);
 	}
 
 	_dialogClosed() {
@@ -93,8 +90,8 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 		const selectedAward = this.shadowRoot.getElementById('issue-award-select').value;
 		const awardCriteria = this.shadowRoot.getElementById('issue-award-criteria').value;
 
-		this.isValidOption = ValidationService.optionSelected(selectedAward);
-		this.isValidCriteria = ValidationService.stringNotEmpty(awardCriteria);
+		this.isValidOption = window.ValidationService.optionSelected(selectedAward);
+		this.isValidCriteria = window.ValidationService.stringNotEmpty(awardCriteria);
 
 		if (this.isValidOption && this.isValidCriteria) {
 			this.issueDialogOpened = false;
@@ -123,6 +120,11 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 						<option value=${index + 1}>${badge.name}</option>
 					`)}
 				</select>
+				${!this.isValidOption ? html`
+				<d2l-tooltip for="issue-award-select" state="error" align="start" offset="10">
+					Please select an award
+				</d2l-tooltip>
+				` : html``}
 			</label>
 			<d2l-input-text
 				id="issue-award-criteria"
@@ -134,6 +136,12 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 				@input=${this._changeAwardCriteria}
 				>
 			</d2l-input-text>
+			${!this.isValidCriteria ? html`
+			<d2l-tooltip for="issue-award-criteria" state="error" align="start" offset="10">
+				Please provide an award criteria
+			</d2l-tooltip>
+			` : html``}
+			
 
 			<label  for="issueDialogStudentList" class="d2l-input-label">
 				Selected Students (${this.selectedStudents.length})
@@ -212,8 +220,6 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 	constructor() {
 		super();
 
-		this.awardService = AwardServiceFactory.getService();
-
 		this.revokeDialogOpened = false;
 		this.selectedStudents = Array();
 		this.isValidOption = true;
@@ -222,19 +228,19 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 
 	connectedCallback() {
 		super.connectedCallback();
-		this.fetchData();
+		this._fetchData();
 	}
 
-	async fetchData() {
-		this.awardService.getAwards().then(data => this.badges = data.awards);
+	async _fetchData() {
+		window.AwardService.getAwards().then(data => this.badges = data.awards);
 	}
 
-	_selectAward() {
-		this.isValidOption = ValidationService.optionSelected(this.shadowRoot.getElementById('revoke-award-select').value);
+	_selectAward(e) {
+		this.isValidOption = window.ValidationService.optionSelected(e.target.value);
 	}
 
-	_changeRevokeReason() {
-		this.isValidReason = ValidationService.stringNotEmpty(this.shadowRoot.getElementById('revoke-award-reason').value);
+	_changeRevokeReason(e) {
+		this.isValidReason = window.ValidationService.stringNotEmpty(e.target.value);
 	}
 
 	_dialogClosed() {
@@ -250,8 +256,8 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 		const selectedAward = this.shadowRoot.getElementById('revoke-award-select').value;
 		const revokeReason = this.shadowRoot.getElementById('revoke-award-reason').value;
 
-		this.isValidOption = ValidationService.optionSelected(selectedAward);
-		this.isValidReason = ValidationService.stringNotEmpty(revokeReason);
+		this.isValidOption = window.ValidationService.optionSelected(selectedAward);
+		this.isValidReason = window.ValidationService.stringNotEmpty(revokeReason);
 
 		if (this.isValidOption && this.isValidReason) {
 			this.revokeDialogOpened = false;

@@ -4,7 +4,6 @@ import '@brightspace-ui/core/components/list/list-item.js';
 import '@brightspace-ui/core/components/button/button.js';
 import '@brightspace-ui/core/components/inputs/input-search.js';
 import { css, html, LitElement } from 'lit-element/lit-element';
-import { AwardServiceFactory } from '../services/service-factory.js';
 import { BaseMixin } from '../mixins/base-mixin';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
 
@@ -59,8 +58,6 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 	constructor() {
 		super();
 
-		this.awardService = AwardServiceFactory.getService();
-
 		this.selectedStudents = Array();
 		this.issueDialogOpened = false;
 		this.revokeDialogOpened = false;
@@ -69,11 +66,11 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 
 	connectedCallback() {
 		super.connectedCallback();
-		this.fetchData();
+		this._fetchData();
 	}
 
-	async fetchData() {
-		this.awardService.getStudents().then(data => this.classlist = data.students);
+	async _fetchData() {
+		window.AwardService.getStudents().then(data => this.classlist = data.students);
 	}
 
 	_issueDialogClosed() {
@@ -175,8 +172,8 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 		`;
 	}
 
-	_listUpdate() {
-		const list = this.shadowRoot.getElementById('classlist');
+	_listUpdate(e) {
+		const list = e.target;
 
 		const state = list.getSelectionInfo().state;
 
