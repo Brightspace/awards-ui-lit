@@ -4,6 +4,7 @@ import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/components/list/list.js';
 import '@brightspace-ui/core/components/list/list-item.js';
 import { css, html, LitElement } from 'lit-element/lit-element';
+import { AwardServiceFactory } from '../services/service-factory.js';
 import { BaseMixin } from '../mixins/base-mixin';
 import { inputLabelStyles } from '@brightspace-ui/core/components/inputs/input-label-styles.js';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
@@ -54,11 +55,21 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 	constructor() {
 		super();
 
-		this.badges = ['Level Up', 'Hawkeye', 'Immortal', 'The Brave'];
+		this.awardService = AwardServiceFactory.getService();
+
 		this.issueDialogOpened = false;
 		this.selectedStudents = Array();
 		this.isValidOption = true;
 		this.isValidCriteria = true;
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
+		this.fetchData();
+	}
+
+	async fetchData() {
+		this.awardService.getAwards().then(data => this.badges = data.awards);
 	}
 
 	_selectAward() {
@@ -109,7 +120,7 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 					>
 					<option value=0></option>
 					${this.badges.map((badge, index) => html`
-						<option value=${index + 1}>${badge}</option>
+						<option value=${index + 1}>${badge.name}</option>
 					`)}
 				</select>
 			</label>
@@ -201,11 +212,21 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 	constructor() {
 		super();
 
-		this.badges = ['Level Up', 'Hawkeye', 'Immortal', 'The Brave'];
+		this.awardService = AwardServiceFactory.getService();
+
 		this.revokeDialogOpened = false;
 		this.selectedStudents = Array();
 		this.isValidOption = true;
 		this.isValidReason = true;
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
+		this.fetchData();
+	}
+
+	async fetchData() {
+		this.awardService.getAwards().then(data => this.badges = data.awards);
 	}
 
 	_selectAward() {
@@ -256,7 +277,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 					>
 					<option value=0></option>
 					${this.badges.map((badge, index) => html`
-						<option value=${index + 1}>${badge}</option>
+						<option value=${index + 1}>${badge.name}</option>
 					`)}
 				</select>
 			</label>

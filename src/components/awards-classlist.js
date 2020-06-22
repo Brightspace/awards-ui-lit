@@ -4,6 +4,7 @@ import '@brightspace-ui/core/components/list/list-item.js';
 import '@brightspace-ui/core/components/button/button.js';
 import '@brightspace-ui/core/components/inputs/input-search.js';
 import { css, html, LitElement } from 'lit-element/lit-element';
+import { AwardServiceFactory } from '../services/service-factory.js';
 import { BaseMixin } from '../mixins/base-mixin';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
 
@@ -58,42 +59,21 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 	constructor() {
 		super();
 
-		this.classlist = [
-			{
-				'id': '1',
-				'name': 'Bilbo Baggins',
-				'awards': [],
-				'picture': 'https://external-preview.redd.it/h_toqTwoOJ4LeP1Z2VGXaCO3HujYejJc7uKzZdbPRUA.jpg?auto=webp&s=82b4a93f58ae2770d8ef72d2418b9c34d1835818'
-			},
-			{
-				'id': '2',
-				'name': 'Gandalf the Grey',
-				'awards': ['Level Up'],
-				'picture': 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQbERWUaUohwgPCeQRw917eaNB1OQo1TIYmN_WAZe7V_sQ4dO_L&usqp=CAU'
-			},
-			{
-				'id': '3',
-				'name': 'Samwise Gamgee',
-				'awards': [],
-				'picture': 'https://vignette.wikia.nocookie.net/middle-earth-film-saga/images/5/52/Sam_TTT_profile.png/revision/latest?cb=20190727211735'
-			},
-			{
-				'id': '4',
-				'name': 'Aragorn Elessar',
-				'awards': [],
-				'picture': 'https://nerdist.com/wp-content/uploads/2018/05/Lord-of-the-Rings-Aragorn-Viggo-Mortensen-1.jpg'
-			},
-			{
-				'id': '5',
-				'name': 'Legolas',
-				'awards': ['Hawkeye'],
-				'picture': 'https://superherojacked.com/wp-content/uploads/2019/05/Legolas-Workout-2-1024x539.jpg'
-			}
-		];
+		this.awardService = AwardServiceFactory.getService();
+
 		this.selectedStudents = Array();
 		this.issueDialogOpened = false;
 		this.revokeDialogOpened = false;
 		this.areStudentsSelected = false;
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
+		this.fetchData();
+	}
+
+	async fetchData() {
+		this.awardService.getStudents().then(data => this.classlist = data.students);
 	}
 
 	_issueDialogClosed() {

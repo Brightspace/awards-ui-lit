@@ -1,3 +1,36 @@
 {
-  "Id": 1
+  "awards": [
+    {
+      "id": "789",
+      "name": "Level Up",
+      "imgPath": "../../images/example_award.png",
+      "type": "Badge",
+      "credits": 1,
+      "hiddenUntilEarned": false
+    },
+    {
+      "id": "790",
+      "name": "Hawkeye",
+      "imgPath": "../../images/example_award.png",
+      "type": "Badge",
+      "credits": 5,
+      "hiddenUntilEarned": false
+    },
+    {
+      "id": "791",
+      "name": "Immortal",
+      "imgPath": "../../images/example_award.png",
+      "type": "Badge",
+      "credits": 9000,
+      "hiddenUntilEarned": true
+    },
+    {
+      "id": "792",
+      "name": "The Brave",
+      "imgPath": "../../images/example_award.png",
+      "type": "Badge",
+      "credits": 0,
+      "hiddenUntilEarned": false
+    }
+  ]
 }
