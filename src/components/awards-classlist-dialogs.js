@@ -66,7 +66,8 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 	}
 
 	async _fetchData() {
-		window.AwardService.getAwards().then(data => this.badges = data.awards);
+		const params = {};
+		window.AwardService.getAwards(params).then(data => this.badges = data.awards);
 	}
 
 	_selectAward(e) {
@@ -100,7 +101,7 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 
 	render() {
 		return html`
-		<d2l-dialog 
+		<d2l-dialog
 			?opened=${this.issueDialogOpened}
 			@d2l-dialog-close=${this._dialogClosed}
 			title-text="Issue Award"
@@ -109,7 +110,7 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 				<span class="d2l-input-label">
 					Select Award *
 				</span>
-				<select 
+				<select
 					id="issue-award-select"
 					class="d2l-input-select"
 					aria-invalid=${!this.isValidOption}
@@ -141,12 +142,12 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 				Please provide an award criteria
 			</d2l-tooltip>
 			` : html``}
-			
+
 
 			<label  for="issueDialogStudentList" class="d2l-input-label">
 				Selected Students (${this.selectedStudents.length})
 			</label>
-			<d2l-list 
+			<d2l-list
 				id="issueDialogStudentList"
 				separators="between"
 				extend-separators
@@ -160,9 +161,9 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 				`)}
 			</d2l-list>
 
-			<d2l-button 
-				slot="footer" 
-				primary 
+			<d2l-button
+				slot="footer"
+				primary
 				@click=${this._onDone}
 				>
 				Issue
@@ -232,7 +233,8 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 	}
 
 	async _fetchData() {
-		window.AwardService.getAwards().then(data => this.badges = data.awards);
+		const params = {};
+		window.AwardService.getAwards(params).then(data => this.badges = data.awards);
 	}
 
 	_selectAward(e) {
@@ -266,7 +268,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 
 	render() {
 		return html`
-		<d2l-dialog 
+		<d2l-dialog
 			?opened=${this.revokeDialogOpened}
 			@d2l-dialog-close=${this._dialogClosed}
 			title-text="Revoke Award"
@@ -275,7 +277,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 				<span class="d2l-input-label">
 					Select Award *
 				</span>
-				<select 
+				<select
 					id="revoke-award-select"
 					class="d2l-input-select"
 					aria-invalid=${!this.isValidOption}
@@ -301,7 +303,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 			<label  for="issueDialogStudentList" class="d2l-input-label">
 				Selected Students (${this.selectedStudents.length})
 			</label>
-			<d2l-list 
+			<d2l-list
 				id="issueDialogStudentList"
 				separators="between"
 				extend-separators
@@ -315,9 +317,9 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 				`)}
 			</d2l-list>
 
-			<d2l-button 
-				slot="footer" 
-				primary 
+			<d2l-button
+				slot="footer"
+				primary
 				@click=${this._onDone}
 				>
 				Revoke

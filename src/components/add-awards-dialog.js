@@ -7,11 +7,17 @@ import { BaseMixin } from '../mixins/base-mixin';
 export const awardsDialogId = 'add-award-dialog';
 const DONE_ACTION = 'done';
 const CANCEL_ACTION = 'cancel';
+const ORG_UNIT_ID = 1000;
 
 class AddAwardsDialog extends BaseMixin(LitElement) {
 	static get properties() {
 		return {
-			availableAwards: { type: Object }
+			opened: {
+				type: Boolean
+			},
+			availableAwards: {
+				type: Array
+			}
 		};
 	}
 
@@ -28,35 +34,49 @@ class AddAwardsDialog extends BaseMixin(LitElement) {
 
 	constructor() {
 		super();
-		this.availableAwards = [
-			{
-				id: '789',
-				name: 'Available Award',
-				imgPath: '../../images/example_award.png',
-				type: 'Badge',
-				credits: 5,
-				hiddenUntilEarned: false,
-			}
-		];
+		this.opened = false;
 	}
 
-	async openAndGetItems() {
-		const d2lDialog = this.shadowRoot.querySelector('d2l-dialog');
-		const action = await d2lDialog.open();
+	connectedCallback() {
+		super.connectedCallback();
+		this._fetchAvailableAwards();
+	}
+
+	async _fetchAvailableAwards() {
+		const { awards } = await window.AwardService.getAvailableAwards();
+		this.availableAwards = awards;
+	}
+
+	_fireCustomEvent() {
+		const doneClickedEvent = new CustomEvent('d2l-add-awards-dialog-done-clicked', {
+			detail: {},
+			bubbles: false,
+			composed: false
+		});
+		this.dispatchEvent(doneClickedEvent);
+	}
+
+	async _handleDialogClosed(event) {
+		const { detail: { action } } = event;
+
+		// Get the selection info and then clear the selected items
+		const d2lList = this.shadowRoot.querySelector('d2l-list');
+		const { keys } = d2lList.getSelectionInfo();
+		const items = this.shadowRoot.querySelectorAll('d2l-list d2l-list-item');
+		items.forEach(item => item.setSelected(false, true)); // selected, suppressEvent
 
 		if (action === DONE_ACTION) {
-			const d2lList = d2lDialog.querySelector('d2l-list');
-			const { keys } = d2lList.getSelectionInfo();
 			const awards = this.availableAwards.filter(award => keys.includes(award.id));
-
-			return awards;
+			if (awards.length !== 0) {
+				await window.AwardService.addAwardsToOrgUnit({ awards, orgUnitId: ORG_UNIT_ID });
+				this._fireCustomEvent();
+			}
 		}
-		return [];
 	}
 
-	renderAward(award) {
+	_renderAward(award) {
 		return html`
-			<d2l-list-item key='${award.id}' selectable >
+			<d2l-list-item key='${award.id}' selectable>
 				<img src='${award.imgPath}' slot='illustration'/>
 				<p>'${award.name}'</p>
 			</d2l-list-item>
@@ -66,12 +86,13 @@ class AddAwardsDialog extends BaseMixin(LitElement) {
 	render() {
 		return html`
 		<d2l-dialog
-			id='${awardsDialogId}'
-			title-text='Choose Awards to Add to the Course'
-		>
+			title-text='Choose Awards to Add to Course'
+			?opened=${this.opened}
+			@d2l-dialog-close=${this._handleDialogClosed}
+			>
 			<div>
 				<d2l-list>
-					${this.availableAwards.map(award => this.renderAward(award))}
+					${this.availableAwards.map(award => this._renderAward(award))}
 				</d2l-list>
 			</div>
 			<d2l-button slot='footer' primary data-dialog-action=${DONE_ACTION}>Done</d2l-button>
