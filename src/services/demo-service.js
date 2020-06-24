@@ -11,9 +11,14 @@ export class DemoAwardService {
 		return fetch('../../data/available-awards.json').then(r => r.json());
 	}
 
-	static async getAwards({ query }) {
-		if (query) console.log(`Received search query ${query}`);
+	static async getAwards({ query, orgUnitId, awardType }) {
+		console.log(`ASSOCIATED AWARDS: Received request with following params: [query=${query}], [orgUnitId=${orgUnitId}] [awardType=${awardType}]`);
 		return fetch('../../data/awards.json').then(r => r.json());
+	}
+
+	static async getIssuedAwards({ orgUnitId, userId, query, awardType }) {
+		console.log(`ISSUED AWARDS: Recived request with following params: [query=${query}], [userId=${userId}] [orgUnitId=${orgUnitId}] [awardType=${awardType}]`);
+		return fetch('../../data/issued-awards.json').then(r => r.json());
 	}
 
 	static async getStudents() {

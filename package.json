@@ -40,6 +40,7 @@
   "dependencies": {
     "@brightspace-ui/core": "^1",
     "@webcomponents/webcomponentsjs": "^2",
+    "dayjs": "^1.8.28",
     "lit-element": "^2"
   }
 }

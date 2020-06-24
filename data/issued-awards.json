@@ -1,0 +1,76 @@
+{
+  "awards": [
+    {
+      "id": "789",
+      "name": "Level Up (Issued)",
+      "imgPath": "../../images/example_award.png",
+      "type": "Badge",
+      "credits": 1,
+      "hiddenUntilEarned": false,
+      "description": "Description",
+      "evidence": "This is some evidence. This is some evidence. This is some evidence. This is some evidence. This is some evidence. This is some evidence. This is some evidence.",
+      "issueDate": "2020-06-24T00:00:00Z",
+      "expirationDate": "2022-12-01T14:00:00Z"
+    },
+    {
+      "id": "790",
+      "name": "Hawkeye (Issued)",
+      "imgPath": "../../images/example_award.png",
+      "type": "Badge",
+      "credits": 5,
+      "hiddenUntilEarned": false,
+      "description": "Description",
+      "evidence": "This is some evidence",
+      "issueDate": "2020-06-24T00:00:00Z",
+      "expirationDate": "Never"
+    },
+    {
+      "id": "791",
+      "name": "Immortal (Issued)",
+      "imgPath": "../../images/example_award.png",
+      "type": "Badge",
+      "credits": 9000,
+      "hiddenUntilEarned": true,
+      "description": "This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description.This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description.This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description.This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description.This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description. This is a really long description.",
+      "evidence": "This is some evidence",
+      "issueDate": "2020-06-24T00:00:00Z",
+      "expirationDate": "Never"
+    },
+    {
+      "id": "792",
+      "name": "The Brave (Issued)",
+      "imgPath": "../../images/example_award.png",
+      "type": "Badge",
+      "credits": 0,
+      "hiddenUntilEarned": false,
+      "description": "Description",
+      "evidence": "This is some evidence",
+      "issueDate": "2020-06-24T00:00:00Z",
+      "expirationDate": "Never"
+    },
+    {
+      "id": "793",
+      "name": "The Brave 2 (Issued)",
+      "imgPath": "../../images/example_award.png",
+      "type": "Badge",
+      "credits": 12,
+      "hiddenUntilEarned": false,
+      "description": "Description",
+      "evidence": "This is some evidence",
+      "issueDate": "2020-06-24T00:00:00Z",
+      "expirationDate": "Never"
+    },
+    {
+      "id": "794",
+      "name": "A Strange Certificate (Issued)",
+      "imgPath": "../../images/example_award.png",
+      "type": "Certificate",
+      "credits": 4.5,
+      "hiddenUntilEarned": false,
+      "description": "Description",
+      "evidence": "This is some evidence",
+      "issueDate": "2020-06-24T00:00:00Z",
+      "expirationDate": "Never"
+    }
+  ]
+}

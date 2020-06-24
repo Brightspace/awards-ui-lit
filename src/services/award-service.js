@@ -15,6 +15,10 @@ export class AwardService {
 		return {};
 	}
 
+	static async getIssuedAwards() {
+		return {};
+	}
+
 	static async getStudents() {
 		return {};
 	}

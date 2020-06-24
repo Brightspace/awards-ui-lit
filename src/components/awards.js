@@ -1,5 +1,6 @@
 import './awards-classlist';
 import './course-awards';
+import './my-awards';
 import '@brightspace-ui/core/components/tabs/tabs';
 import '@brightspace-ui/core/components/tabs/tab-panel';
 import { css, html, LitElement } from 'lit-element/lit-element';
@@ -23,6 +24,9 @@ class Awards extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
+			.component {
+				width: 100%
+			}
 		`;
 	}
 
@@ -41,17 +45,17 @@ class Awards extends BaseMixin(LitElement) {
 				<d2l-tab-panel
 					text="Classlist"
 					>
-					<d2l-awards-classlist></d2l-awards-classlist>
+					<d2l-awards-classlist class='component'></d2l-awards-classlist>
 				</d2l-tab-panel>
 				<d2l-tab-panel
 					text="Course Awards"
 					>
-					<d2l-course-awards></d2l-course-awards>
+					<d2l-course-awards class='component'></d2l-course-awards>
 				</d2l-tab-panel>
 				<d2l-tab-panel
 					text="My Awards"
 					>
-					bye
+					<d2l-my-awards class='component'></d2l-my-awards>
 				</d2l-tab-panel>
 			</d2l-tabs>
 		`;

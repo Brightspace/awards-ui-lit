@@ -31,6 +31,14 @@
       "type": "Badge",
       "credits": 0,
       "hiddenUntilEarned": false
+    },
+    {
+      "id": "792",
+      "name": "A Strange Certificate",
+      "imgPath": "../../images/example_award.png",
+      "type": "Certificate",
+      "credits": 0,
+      "hiddenUntilEarned": false
     }
   ]
 }

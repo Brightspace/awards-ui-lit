@@ -13,6 +13,21 @@ import { selectStyles } from '@brightspace-ui/core/components/inputs/input-selec
 const CHECKBOX_BASE = 'checkbox-award-';
 const TEXT_INPUT_BASE = 'text-input-award-';
 const TEXT_INPUT_TOOLTIP_BASE = 'text-input-award-tooltip-';
+const ORG_UNIT_ID = 1000;
+const AWARD_TYPES = [
+	{
+		awardType: 'ALL',
+		name: 'All Awards'
+	},
+	{
+		awardType: 'BADGE',
+		name: 'Badges'
+	},
+	{
+		awardType: 'CERTIFICATE',
+		name: 'Certificates'
+	}
+];
 
 class CourseAwards extends BaseMixin(LitElement) {
 	static get properties() {
@@ -25,6 +40,12 @@ class CourseAwards extends BaseMixin(LitElement) {
 			},
 			uiAwardState: {
 				type: Object
+			},
+			currentAwardType: {
+				type: String
+			},
+			currentQuery: {
+				type: String
 			}
 		};
 	}
@@ -53,12 +74,17 @@ class CourseAwards extends BaseMixin(LitElement) {
 			d2l-input-checkbox {
 				margin: 0.25rem;
 			}
+			.icon-column {
+				width: 10%;
+			}
 		`];
 	}
 
 	constructor() {
 		super();
 		this.addAwardsDialogOpen = false;
+		this.currentQuery = '';
+		this.currentAwardType = AWARD_TYPES[0].awardType;
 	}
 
 	connectedCallback() {
@@ -66,8 +92,14 @@ class CourseAwards extends BaseMixin(LitElement) {
 		this._fetchAssociatedAwards();
 	}
 
-	async _fetchAssociatedAwards(query) {
-		const { awards } = await window.AwardService.getAwards({ query });
+	async _fetchAssociatedAwards() {
+		const params = {
+			query: this.currentQuery,
+			awardType: this.currentAwardType,
+			orgUnitId: ORG_UNIT_ID
+		};
+		const { awards } = await window.AwardService.getAwards(params);
+
 		this.courseAwards = awards;
 		this.uiAwardState = {};
 		this.courseAwards.forEach(award => {
@@ -80,8 +112,8 @@ class CourseAwards extends BaseMixin(LitElement) {
 
 	async _handleSearchEvent(event) {
 		const { detail: { value: query } } = event;
-
-		await this._fetchAssociatedAwards(query);
+		this.currentQuery = query;
+		await this._fetchAssociatedAwards();
 	}
 
 	_handleBadgrUpdate() {
@@ -149,9 +181,9 @@ class CourseAwards extends BaseMixin(LitElement) {
 	}
 
 	async _handleAwardTypeSelection(event) {
-		const { target: { value: query } } = event;
-
-		await this._fetchAssociatedAwards(query);
+		const { target: { value: index } } = event;
+		this.currentAwardType = AWARD_TYPES[index].awardType;
+		await this._fetchAssociatedAwards();
 	}
 
 	_renderComponentHeader() {
@@ -184,14 +216,14 @@ class CourseAwards extends BaseMixin(LitElement) {
 		`;
 	}
 
-	_renderTable(type) {
+	_renderTable() {
 		const renderedAwards = this.courseAwards && this.courseAwards.map(award => this._renderAward(award));
 		return renderedAwards.length !== 0 ?
 			html`
-			<table class='flex-item' aria-label='${type} table'>
+			<table class='flex-item' aria-label='Course awards table'>
 				<thead>
 					<tr>
-						<th id='award_icon' class='centered-column'>Icon</th>
+						<th class='centered-column'>Icon</th>
 						<th>Name</th>
 						<th>Type</th>
 						<th>Credits</th>
@@ -269,8 +301,8 @@ class CourseAwards extends BaseMixin(LitElement) {
 		const state = this.uiAwardState[award.id];
 		return html`
 		<tr>
-			<td class='centered-column award_icon'>
-				<img src='${award.imgPath}' width='50%'>
+			<td class='centered-column icon-column'>
+				<img src='${award.imgPath}' width='75%'/>
 			</td>
 			<td>${award.name}</td>
 			<td>${award.type}</td>
@@ -301,6 +333,9 @@ class CourseAwards extends BaseMixin(LitElement) {
 	}
 
 	_renderTableHeader() {
+		const awardTypeOptions = AWARD_TYPES.map(({ name }, index) => {
+			return html`<option value=${index}>${name}</option>`;
+		});
 		return html`
 		<div class='flex-container'>
 			<div id='input-select-div flex-item'>
@@ -309,9 +344,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 					aria-label='Awards Type Dropdown'
 					@input='${this._handleAwardTypeSelection}'
 					>
-					<option>All Awards</option>
-					<option>Badges</option>
-					<option>Certificates</option>
+					${awardTypeOptions}
 				</select>
 			</div>
 		</div>
