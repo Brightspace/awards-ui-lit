@@ -102,18 +102,24 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 		`;
 	}
 
-	_issueButtonClicked() {
+	_findSelectedStudents() {
 		const keys = this.shadowRoot.getElementById('classlist').getSelectionInfo().keys;
 
 		this.selectedStudents = Array();
 		for (const key of keys) {
 			this.selectedStudents.push(this.classlist.find(student => student.id === key).name);
 		}
+	}
+
+	_issueButtonClicked() {
+		this._findSelectedStudents();
 
 		this.issueDialogOpened = true;
 	}
 
 	_revokeButtonClicked() {
+		this._findSelectedStudents();
+
 		this.revokeDialogOpened = true;
 	}
 
