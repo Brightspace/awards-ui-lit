@@ -346,6 +346,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 					text=${awardIsBeingEdited ? `Finish editing award ${award.Name}` : `Edit award ${award.Name}`}
 					icon=${awardIsBeingEdited ? 'tier1:save' : 'tier1:edit'}
 					@click='${this._getEditAwardHandler(award.Id)}'
+					aria-haspopup='true'
 					>
 				</d2l-button-icon>
 			</td>
@@ -354,6 +355,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 					text='Delete Award'
 					icon='tier1:delete'
 					@click='${this._getDeleteAwardHandler(award.Id)}'
+					aria-haspopup='true'
 					>
 				</d2l-button-icon>
 			</td>
