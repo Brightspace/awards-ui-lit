@@ -38,6 +38,10 @@ function convertToDateString(dateStr) {
 class MyAwards extends BaseMixin(LitElement) {
 	static get properties() {
 		return {
+			orgUnitId: {
+				attribute: 'org-unit-id',
+				type: Number
+			},
 			detailedAward: {
 				type: Object
 			},
