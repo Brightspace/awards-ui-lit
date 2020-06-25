@@ -145,21 +145,21 @@ class MyAwards extends BaseMixin(LitElement) {
 
 	_getPrintHandler(awardId) {
 		return () => {
-			const award = this.issuedAwards.find(award => award.id === awardId);
+			const award = this.issuedAwards.find(award => award.Id === awardId);
 			console.log(`TODO: Print the following award: ${JSON.stringify(award)}`);
 		};
 	}
 
 	_getShareHandler(awardId) {
 		return () => {
-			const award = this.issuedAwards.find(award => award.id === awardId);
+			const award = this.issuedAwards.find(award => award.Id === awardId);
 			console.log(`TODO: Share the following award on Badgr: ${JSON.stringify(award)}`);
 		};
 	}
 
 	_getDialogOpenHandler(awardId) {
 		return () => {
-			const award = this.issuedAwards.find(award => award.id === awardId);
+			const award = this.issuedAwards.find(award => award.Id === awardId);
 			this.detailedAward = award;
 			console.log(`updated detailed award to ${this.detailedAward}`);
 		};
@@ -199,15 +199,15 @@ class MyAwards extends BaseMixin(LitElement) {
 		return html`
 		<tr>
 			<td class='centered-column icon-column'>
-				<img src='${award.imgPath}' width='75%'/>
+				<img src='${award.ImgPath}' width='75%'/>
 			</td>
 			<td>
-				<d2l-link aria-haspopup='true' @click="${this._getDialogOpenHandler(award.id)}">${award.name}</d2l-link>
+				<d2l-link aria-haspopup='true' @click="${this._getDialogOpenHandler(award.Id)}">${award.Name}</d2l-link>
 			</td>
-			<td>${award.type}</td>
-			<td>${award.credits}</td>
-			<td class='time-column'>${convertToDateString(award.issueDate)}</td>
-			<td class='time-column'>${convertToDateString(award.expirationDate)}</td>
+			<td>${award.Type}</td>
+			<td>${award.Credits}</td>
+			<td class='time-column'>${convertToDateString(award.IssueDate)}</td>
+			<td class='time-column'>${convertToDateString(award.ExpirationDate)}</td>
 		</tr>
 		`;
 	}
@@ -243,30 +243,30 @@ class MyAwards extends BaseMixin(LitElement) {
 		const isOpen = this.detailedAward !== null;
 		return isOpen ? html`
 			<d2l-dialog
-				title-text='${this.detailedAward.name}'
+				title-text='${this.detailedAward.Name}'
 				?opened=${isOpen}
 				@d2l-dialog-close=${this._handleDialogClosed}
 				>
 				<div class='flex-award-popup'>
-					<img class='flex-award-image' src=${this.detailedAward.imgPath} />
-					<p class='flex-item'><b>Type:</b> ${this.detailedAward.type}</p>
-					<p class='flex-item'><b>Credits:</b> ${this.detailedAward.credits}</p>
-					<p class='flex-item'><b>Description:</b> ${this.detailedAward.description}</p>
-					<p class='flex-item'><b>Evidence:</b> ${this.detailedAward.evidence}</p>
-					<p class='flex-item'><b>Issue Date:</b> ${convertToDateString(this.detailedAward.issueDate)}</p>
-					<p class='flex-item'><b>Expiration Date:</b> ${convertToDateString(this.detailedAward.expirationDate)}</p>
+					<img class='flex-award-image' src=${this.detailedAward.ImgPath} />
+					<p class='flex-item'><b>Type:</b> ${this.detailedAward.Type}</p>
+					<p class='flex-item'><b>Credits:</b> ${this.detailedAward.Credits}</p>
+					<p class='flex-item'><b>Description:</b> ${this.detailedAward.Description}</p>
+					<p class='flex-item'><b>Evidence:</b> ${this.detailedAward.Evidence}</p>
+					<p class='flex-item'><b>Issue Date:</b> ${convertToDateString(this.detailedAward.IssueDate)}</p>
+					<p class='flex-item'><b>Expiration Date:</b> ${convertToDateString(this.detailedAward.ExpirationDate)}</p>
 					<d2l-button-subtle
 						class='flex-item'
 						text='Print'
 						icon='tier1:print'
-						@click='${this._getPrintHandler(this.detailedAward.id)}'
+						@click='${this._getPrintHandler(this.detailedAward.Id)}'
 						>
 					</d2l-button-subtle>
 					<d2l-button-subtle
 						class='flex-item'
 						text='Share on Badgr'
 						icon='tier1:share'
-						@click='${this._getShareHandler(this.detailedAward.id)}'
+						@click='${this._getShareHandler(this.detailedAward.Id)}'
 						>
 					</d2l-button-subtle>
 				</div>

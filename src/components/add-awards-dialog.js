@@ -43,7 +43,8 @@ class AddAwardsDialog extends BaseMixin(LitElement) {
 	}
 
 	async _fetchAvailableAwards() {
-		const { awards } = await window.AwardService.getAvailableAwards();
+		const params = {};
+		const { awards } = await window.AwardService.getAwards(params);
 		this.availableAwards = awards;
 	}
 
@@ -66,7 +67,7 @@ class AddAwardsDialog extends BaseMixin(LitElement) {
 		items.forEach(item => item.setSelected(false, true)); // selected, suppressEvent
 
 		if (action === DONE_ACTION) {
-			const awards = this.availableAwards.filter(award => keys.includes(award.id));
+			const awards = this.availableAwards.filter(award => keys.includes(award.Id));
 			if (awards.length !== 0) {
 				await window.AwardService.addAwardsToOrgUnit({ awards, orgUnitId: ORG_UNIT_ID });
 				this._fireCustomEvent();
@@ -76,9 +77,9 @@ class AddAwardsDialog extends BaseMixin(LitElement) {
 
 	_renderAward(award) {
 		return html`
-			<d2l-list-item key='${award.id}' selectable>
-				<img src='${award.imgPath}' slot='illustration'/>
-				<p>'${award.name}'</p>
+			<d2l-list-item key='${award.Id}' selectable>
+				<img src='${award.ImgPath}' slot='illustration'/>
+				<p>'${award.Name}'</p>
 			</d2l-list-item>
 		`;
 	}

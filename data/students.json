@@ -1,34 +1,39 @@
 {
     "students": [
         {
-            "id": "1",
-            "name": "Bilbo Baggins",
-            "awards": [],
-            "picture": "https://external-preview.redd.it/h_toqTwoOJ4LeP1Z2VGXaCO3HujYejJc7uKzZdbPRUA.jpg?auto=webp&s=82b4a93f58ae2770d8ef72d2418b9c34d1835818"
+            "Id": "1",
+            "FirstName": "Bilbo",
+            "LastName": "Baggins",
+            "Awards": [],
+            "Picture": "https://external-preview.redd.it/h_toqTwoOJ4LeP1Z2VGXaCO3HujYejJc7uKzZdbPRUA.jpg?auto=webp&s=82b4a93f58ae2770d8ef72d2418b9c34d1835818"
         },
         {
-            "id": "2",
-            "name": "Gandalf the Grey",
-            "awards": ["Level Up"],
-            "picture": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQbERWUaUohwgPCeQRw917eaNB1OQo1TIYmN_WAZe7V_sQ4dO_L&usqp=CAU"
+            "Id": "2",
+            "FirstName": "Gandalf",
+            "LastName": "the Grey",
+            "Awards": ["Level Up"],
+            "Picture": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQbERWUaUohwgPCeQRw917eaNB1OQo1TIYmN_WAZe7V_sQ4dO_L&usqp=CAU"
         },
         {
-            "id": "3",
-            "name": "Samwise Gamgee",
-            "awards": [],
-            "picture": "https://vignette.wikia.nocookie.net/middle-earth-film-saga/images/5/52/Sam_TTT_profile.png/revision/latest?cb=20190727211735"
+            "Id": "3",
+            "FirstName": "Samwise",
+            "LastName": "Gamgee",
+            "Awards": [],
+            "Picture": "https://vignette.wikia.nocookie.net/middle-earth-film-saga/images/5/52/Sam_TTT_profile.png/revision/latest?cb=20190727211735"
         },
         {
-            "id": "4",
-            "name": "Aragorn Elessar",
-            "awards": [],
-            "picture": "https://nerdist.com/wp-content/uploads/2018/05/Lord-of-the-Rings-Aragorn-Viggo-Mortensen-1.jpg"
+            "Id": "4",
+            "FirstName": "Aragorn",
+            "LastName": "Elsessar",
+            "Awards": [],
+            "Picture": "https://nerdist.com/wp-content/uploads/2018/05/Lord-of-the-Rings-Aragorn-Viggo-Mortensen-1.jpg"
         },
         {
-            "id": "5",
-            "name": "Legolas",
-            "awards": ["Hawkeye"],
-            "picture": "https://superherojacked.com/wp-content/uploads/2019/05/Legolas-Workout-2-1024x539.jpg"
+            "Id": "5",
+            "FirstName": "Legolas",
+            "LastName": "Greenleaf",
+            "Awards": ["Hawkeye"],
+            "Picture": "https://superherojacked.com/wp-content/uploads/2019/05/Legolas-Workout-2-1024x539.jpg"
         }
     ]
 }
