@@ -13,7 +13,6 @@ import { selectStyles } from '@brightspace-ui/core/components/inputs/input-selec
 const CHECKBOX_BASE = 'checkbox-award-';
 const TEXT_INPUT_BASE = 'text-input-award-';
 const TEXT_INPUT_TOOLTIP_BASE = 'text-input-award-tooltip-';
-const this.orgUnitId = 1000;
 const AWARD_TYPES = [
 	{
 		awardType: 'ALL',
