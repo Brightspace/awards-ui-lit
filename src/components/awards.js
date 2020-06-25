@@ -12,7 +12,14 @@ class Awards extends BaseMixin(LitElement) {
 
 	static get properties() {
 		return {
-			prop1: { type: String },
+			isCourse: {
+				attribute: 'course',
+				type: Boolean
+			},
+			orgUnitId: {
+				attribute: 'org-unit-id',
+				type: Number
+			}
 		};
 	}
 
@@ -39,23 +46,38 @@ class Awards extends BaseMixin(LitElement) {
 		window.ValidationService = ValidationService;
 	}
 
+	_renderCourseTabs() {
+		return html`
+		<d2l-tab-panel text="Classlist">
+			<d2l-awards-classlist
+				class='component'
+				org-unit-id="${this.orgUnitId}"
+				>
+			</d2l-awards-classlist>
+		</d2l-tab-panel>
+
+		<d2l-tab-panel text="Course Awards">
+			<d2l-course-awards
+				class='component'
+				org-unit-id="${this.orgUnitId}"
+				>
+			</d2l-course-awards>
+		</d2l-tab-panel>
+		`;
+	}
+
 	render() {
 		return html`
 			<d2l-tabs>
-				<d2l-tab-panel
-					text="Classlist"
-					>
-					<d2l-awards-classlist class='component'></d2l-awards-classlist>
-				</d2l-tab-panel>
-				<d2l-tab-panel
-					text="Course Awards"
-					>
-					<d2l-course-awards class='component'></d2l-course-awards>
-				</d2l-tab-panel>
+				${ this.isCourse ? this._renderCourseTabs() : html`` }
 				<d2l-tab-panel
 					text="My Awards"
 					>
-					<d2l-my-awards class='component'></d2l-my-awards>
+					<d2l-my-awards
+						class='component'
+						org-unit-id="${this.orgUnitId}"
+					>
+					</d2l-my-awards>
 				</d2l-tab-panel>
 			</d2l-tabs>
 		`;

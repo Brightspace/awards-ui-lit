@@ -32,6 +32,10 @@ const AWARD_TYPES = [
 class CourseAwards extends BaseMixin(LitElement) {
 	static get properties() {
 		return {
+			orgUnitId: {
+				attribute: 'org-unit-id',
+				type: Number
+			},
 			addAwardsDialogOpen: {
 				type: Boolean
 			},

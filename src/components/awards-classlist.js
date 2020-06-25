@@ -11,6 +11,10 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 
 	static get properties() {
 		return {
+			orgUnitId: {
+				attribute: 'org-unit-id',
+				type: Number
+			},
 			classlist: {
 				type: Array
 			},
@@ -87,14 +91,14 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 
 	_renderDialogs() {
 		return html`
-		<d2l-awards-classlist-issue-dialog 
-			?issueDialogOpened=${this.issueDialogOpened} 
+		<d2l-awards-classlist-issue-dialog
+			?issueDialogOpened=${this.issueDialogOpened}
 			@d2l-dialog-close=${this._issueDialogClosed}
 			.selectedStudents=${this.selectedStudents}
 			>
 		</d2l-awards-classlist-issue-dialog>
-		<d2l-awards-classlist-revoke-dialog 
-			?revokeDialogOpened=${this.revokeDialogOpened} 
+		<d2l-awards-classlist-revoke-dialog
+			?revokeDialogOpened=${this.revokeDialogOpened}
 			@d2l-dialog-close=${this._revokeDialogClosed}
 			.selectedStudents=${this.selectedStudents}
 			>
@@ -163,7 +167,7 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 				class="awards-classlist-search-input"
 				>
 			</d2l-input-search>
-			<select 
+			<select
 				class="d2l-input-select awards-classlist-search-order"
 				@change=${this._updateOrder}
 				>
@@ -188,7 +192,7 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 
 	_renderList() {
 		return html`
-		<d2l-list 
+		<d2l-list
 			id="classlist"
 			separators="between"
 			extend-separators
