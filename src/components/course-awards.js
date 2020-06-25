@@ -39,6 +39,9 @@ class CourseAwards extends BaseMixin(LitElement) {
 			},
 			awardTypes: {
 				type: Array
+			},
+			editingInProgress: {
+				type: Boolean
 			}
 		};
 	}
@@ -80,6 +83,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 		this.awardTypes = window.AwardService.awardTypes;
 		this.currentAwardType = this.awardTypes[0].awardType;
 		this.uiAwardState = {};
+		this.editingInProgress = false;
 	}
 
 	connectedCallback() {
@@ -137,6 +141,9 @@ class CourseAwards extends BaseMixin(LitElement) {
 			const state = this.uiAwardState[award.Id];
 			console.log(`Got state for ${award.Id}`);
 
+			// only allow one award to be edited at a time
+			if (!state.enableEditing && this.editingInProgress) return;
+
 			if (state.enableEditing) {
 				const inputTextEle = this.shadowRoot.getElementById(`${TEXT_INPUT_BASE}${awardId}`);
 				const checkboxEle = this.shadowRoot.getElementById(`${CHECKBOX_BASE}${awardId}`);
@@ -154,6 +161,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 				await this._fetchAssociatedAwards();
 			}
 			state.enableEditing = !state.enableEditing;
+			this.editingInProgress = !this.editingInProgress;
 			this.requestUpdate();
 		};
 	}
@@ -289,16 +297,17 @@ class CourseAwards extends BaseMixin(LitElement) {
 				>
 			</d2l-input-checkbox>` :
 			html`
-			<d2l-button-icon
-				text=${award.HiddenUntilEarned ? 'Hidden' : 'Not Hidden'}
+			<d2l-icon
 				icon=${award.HiddenUntilEarned ? 'tier1:check' : 'tier1:close-default'}
+				aria-label=${award.HiddenUntilEarned ? 'Hidden' : 'Not Hidden'}
 				>
-			</d2l-button-icon>
+			</d2l-icon>
 			`;
 	}
 
 	_renderAward(award) {
 		const state = this.uiAwardState[award.Id];
+		const anotherAwardBeingEdited = !state.enableEditing && this.editingInProgress;
 		return html`
 		<tr>
 			<td class='centered-column icon-column'>
@@ -317,6 +326,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 					text=${state.enableEditing ? `Finish editing award ${award.Name}` : `Edit award ${award.Name}`}
 					icon=${state.enableEditing ? 'tier1:save' : 'tier1:edit'}
 					@click='${this._getEditAwardHandler(award.Id)}'
+					?disabled=${anotherAwardBeingEdited}
 					>
 				</d2l-button-icon>
 			</td>
@@ -325,6 +335,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 					text='Delete Award'
 					icon='tier1:delete'
 					@click='${this._getDeleteAwardHandler(award.Id)}'
+					?disabled=${anotherAwardBeingEdited}
 					>
 				</d2l-button-icon>
 			</td>
