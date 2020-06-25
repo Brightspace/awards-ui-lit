@@ -16,7 +16,7 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 			issueDialogOpened: {
 				type: Boolean
 			},
-			badges: {
+			awards: {
 				type: Array
 			},
 			selectedStudents: {
@@ -67,7 +67,7 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 
 	async _fetchData() {
 		const params = {};
-		window.AwardService.getAwards(params).then(data => this.badges = data.awards);
+		window.AwardService.getAssociatedAwards(params).then(data => this.awards = data.awards);
 	}
 
 	_selectAward(e) {
@@ -117,8 +117,8 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 					@change=${this._selectAward}
 					>
 					<option value=0></option>
-					${this.badges.map((badge, index) => html`
-						<option value=${index + 1}>${badge.name}</option>
+					${this.awards.map((award, index) => html`
+						<option value=${index + 1}>${award.Name}</option>
 					`)}
 				</select>
 				${!this.isValidOption ? html`
@@ -183,7 +183,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 			revokeDialogOpened: {
 				type: Boolean
 			},
-			badges: {
+			awards: {
 				type: Array
 			},
 			selectedStudents: {
@@ -234,7 +234,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 
 	async _fetchData() {
 		const params = {};
-		window.AwardService.getAwards(params).then(data => this.badges = data.awards);
+		window.AwardService.getAssociatedAwards(params).then(data => this.awards = data.awards);
 	}
 
 	_selectAward(e) {
@@ -284,8 +284,8 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 					@change=${this._selectAward}
 					>
 					<option value=0></option>
-					${this.badges.map((badge, index) => html`
-						<option value=${index + 1}>${badge.name}</option>
+					${this.awards.map((award, index) => html`
+						<option value=${index + 1}>${award.Name}</option>
 					`)}
 				</select>
 			</label>

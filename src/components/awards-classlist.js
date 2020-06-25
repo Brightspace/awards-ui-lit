@@ -7,6 +7,8 @@ import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../mixins/base-mixin';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
 
+const ORG_UNIT_ID = 1000;
+
 class AwardsClasslist extends BaseMixin(LitElement) {
 
 	static get properties() {
@@ -29,6 +31,15 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 			},
 			areStudentsSelected: {
 				type: Boolean
+			},
+			currentListOrder: {
+				type: String
+			},
+			currentQuery: {
+				type: String
+			},
+			studentOrders: {
+				type: Array
 			}
 		};
 	}
@@ -66,6 +77,9 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 		this.issueDialogOpened = false;
 		this.revokeDialogOpened = false;
 		this.areStudentsSelected = false;
+		this.studentOrders = window.AwardService.studentOrders;
+		this.currentListOrder = this.studentOrders[0].order;
+		this.currentQuery = '';
 	}
 
 	connectedCallback() {
@@ -74,7 +88,13 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 	}
 
 	async _fetchData() {
-		window.AwardService.getStudents().then(data => this.classlist = data.students);
+		const params = {
+			query: this.currentQuery,
+			order: this.currentListOrder,
+			orgUnitId: ORG_UNIT_ID
+		};
+		const { students } = await window.AwardService.getStudents(params);
+		this.classlist = students;
 	}
 
 	_issueDialogClosed() {
@@ -111,7 +131,8 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 
 		this.selectedStudents = Array();
 		for (const key of keys) {
-			this.selectedStudents.push(this.classlist.find(student => student.id === key).name);
+			const student = this.classlist.find(student => student.Id === key);
+			this.selectedStudents.push(`${student.FirstName} ${student.LastName}`);
 		}
 	}
 
@@ -150,14 +171,21 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 	}
 
 	_updateSearch(event) {
-		console.log(event);
+		const { detail: { value: query } } = event;
+		this.currentQuery = query;
+		this._fetchData();
 	}
 
 	_updateOrder(event) {
-		console.log(event);
+		const { target: { value: index } } = event;
+		this.currentListOrder = this.studentOrders[index].order;
+		this._fetchData();
 	}
 
 	_renderSearch() {
+		const orderOptions = this.studentOrders.map(({ name }, index) => {
+			return html`<option value=${index}>${name}</option>`;
+		});
 		return html`
 		<div class="awards-classlist-search">
 			<d2l-input-search
@@ -171,12 +199,7 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 				class="d2l-input-select awards-classlist-search-order"
 				@change=${this._updateOrder}
 				>
-				<option>Award Leaders Descending</option>
-				<option>Award Leaders Ascending</option>
-				<option>Last Name A-Z</option>
-				<option>Last Name Z-A</option>
-				<option>First Name A-Z</option>
-				<option>First Name Z-A</option>
+				${orderOptions}
 			</select>
 		</div>
 		`;
@@ -200,15 +223,15 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 			>
 			${this.classlist.map(student => html`
 			<d2l-list-item
-				key = ${student.id}
+				key = ${student.Id}
 				selectable
 				>
-				<img src=${student.picture}  slot="illustration">
+				<img src=${student.Picture}  slot="illustration">
 				<div>
-					${student.name}
+					${student.FirstName} ${student.LastName}
 				</div>
 				<div slot="actions">
-					${student.awards.length ? student.awards.map(award => html`${award}`) : html`This user has no awards`}
+					${student.Awards.length ? student.Awards.map(award => html`${award}`) : html`This user has no awards`}
 				</div>
 			</d2l-list-item>
 			`)}

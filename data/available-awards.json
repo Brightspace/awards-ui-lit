@@ -1,20 +1,28 @@
 {
   "awards": [
     {
-      "id": "100",
-      "name": "Available Award 1",
-      "imgPath": "../../images/example_award.png",
-      "type": "Badge",
-      "credits": 5,
-      "hiddenUntilEarned": false
+      "Id": "100",
+      "Name": "Available Badge 1",
+      "ImgPath": "../../images/example_award.png",
+      "Type": "Badge",
+      "Credits": 5,
+      "HiddenUntilEarned": false
     },
     {
-      "id": "101",
-      "name": "Available Award 2",
-      "imgPath": "../../images/example_award.png",
-      "type": "Badge",
-      "credits": 2,
-      "hiddenUntilEarned": false
+      "Id": "101",
+      "Name": "Available Badge 2",
+      "ImgPath": "../../images/example_award.png",
+      "Type": "Badge",
+      "Credits": 2,
+      "HiddenUntilEarned": false
+    },
+    {
+      "Id": "102",
+      "Name": "Available Certificate 3",
+      "ImgPath": "../../images/example_award.png",
+      "Type": "Certificate",
+      "Credits": 2,
+      "HiddenUntilEarned": false
     }
   ]
 }

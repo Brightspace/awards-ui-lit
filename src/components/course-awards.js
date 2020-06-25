@@ -13,6 +13,7 @@ import { selectStyles } from '@brightspace-ui/core/components/inputs/input-selec
 const CHECKBOX_BASE = 'checkbox-award-';
 const TEXT_INPUT_BASE = 'text-input-award-';
 const TEXT_INPUT_TOOLTIP_BASE = 'text-input-award-tooltip-';
+
 const AWARD_TYPES = [
 	{
 		awardType: 'ALL',
@@ -49,6 +50,9 @@ class CourseAwards extends BaseMixin(LitElement) {
 			},
 			currentQuery: {
 				type: String
+			},
+			awardTypes: {
+				type: Array
 			}
 		};
 	}
@@ -87,7 +91,8 @@ class CourseAwards extends BaseMixin(LitElement) {
 		super();
 		this.addAwardsDialogOpen = false;
 		this.currentQuery = '';
-		this.currentAwardType = AWARD_TYPES[0].awardType;
+		this.awardTypes = window.AwardService.awardTypes;
+		this.currentAwardType = this.awardTypes[0].awardType;
 	}
 
 	connectedCallback() {
@@ -101,12 +106,12 @@ class CourseAwards extends BaseMixin(LitElement) {
 			awardType: this.currentAwardType,
 			orgUnitId: this.orgUnitId
 		};
-		const { awards } = await window.AwardService.getAwards(params);
+		const { awards } = await window.AwardService.getAssociatedAwards(params);
 
 		this.courseAwards = awards;
 		this.uiAwardState = {};
 		this.courseAwards.forEach(award => {
-			this.uiAwardState[award.id] = {
+			this.uiAwardState[award.Id] = {
 				enableEditing: false,
 				invalidCredits: false
 			};
@@ -137,8 +142,8 @@ class CourseAwards extends BaseMixin(LitElement) {
 
 	_getEditAwardHandler(awardId) {
 		return async() => {
-			const award = this.courseAwards.find(award => award.id === awardId);
-			const state = this.uiAwardState[award.id];
+			const award = this.courseAwards.find(award => award.Id === awardId);
+			const state = this.uiAwardState[award.Id];
 
 			if (state.enableEditing) {
 				const inputTextEle = this.shadowRoot.getElementById(`${TEXT_INPUT_BASE}${awardId}`);
@@ -149,8 +154,8 @@ class CourseAwards extends BaseMixin(LitElement) {
 				}
 
 				// update the award
-				award.credits = inputTextEle.value;
-				award.hiddenUntilEarned = checkboxEle.checked;
+				award.Credits = inputTextEle.value;
+				award.HiddenUntilEarned = checkboxEle.checked;
 				await window.AwardService.updateAward({ award });
 
 				// get the awards again
@@ -178,14 +183,14 @@ class CourseAwards extends BaseMixin(LitElement) {
 
 	_getDeleteAwardHandler(awardId) {
 		return () => {
-			const award = this.courseAwards.find(award => award.id === awardId);
+			const award = this.courseAwards.find(award => award.Id === awardId);
 			window.AwardService.deleteAward({ award });
 		};
 	}
 
 	async _handleAwardTypeSelection(event) {
 		const { target: { value: index } } = event;
-		this.currentAwardType = AWARD_TYPES[index].awardType;
+		this.currentAwardType = this.awardTypes[index].awardType;
 		await this._fetchAssociatedAwards();
 	}
 
@@ -244,8 +249,8 @@ class CourseAwards extends BaseMixin(LitElement) {
 
 	_getCreditsElement(award) {
 		let fullTemplate;
-		const textInputId = `${TEXT_INPUT_BASE}${award.id}`;
-		const state = this.uiAwardState[award.id];
+		const textInputId = `${TEXT_INPUT_BASE}${award.Id}`;
+		const state = this.uiAwardState[award.Id];
 
 		if (state.enableEditing) {
 			let tooltipTempalte = html``;
@@ -256,7 +261,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 					title='Credits'
 					label='Credits'
 					placeholder='0.0'
-					value='${award.credits}'
+					value='${award.Credits}'
 					size=1
 					aria-invalid='${state.invalidCredits}'
 					@input='${this._handleInputChangedEvent}'
@@ -277,38 +282,38 @@ class CourseAwards extends BaseMixin(LitElement) {
 				${tooltipTempalte}
 			`;
 		} else {
-			fullTemplate = html`<p>${award.credits}</p>`;
+			fullTemplate = html`<p>${award.Credits}</p>`;
 		}
 		return fullTemplate;
 	}
 
 	_getHiddenAwardElement(award) {
-		return this.uiAwardState[award.id].enableEditing ?
+		return this.uiAwardState[award.Id].enableEditing ?
 			html`
 			<d2l-input-checkbox
-				id='${CHECKBOX_BASE}${award.id}'
+				id='${CHECKBOX_BASE}${award.Id}'
 				class='hidden-checkbox flex-item'
-				?checked=${award.hiddenUntilEarned}
+				?checked=${award.HiddenUntilEarned}
 				>
 			</d2l-input-checkbox>` :
 			html`
 			<d2l-button-icon
-				text=${award.hiddenUntilEarned ? 'Hidden' : 'Not Hidden'}
-				icon=${award.hiddenUntilEarned ? 'tier1:check' : 'tier1:close-default'}
+				text=${award.HiddenUntilEarned ? 'Hidden' : 'Not Hidden'}
+				icon=${award.HiddenUntilEarned ? 'tier1:check' : 'tier1:close-default'}
 				>
 			</d2l-button-icon>
 			`;
 	}
 
 	_renderAward(award) {
-		const state = this.uiAwardState[award.id];
+		const state = this.uiAwardState[award.Id];
 		return html`
 		<tr>
 			<td class='centered-column icon-column'>
-				<img src='${award.imgPath}' width='75%'/>
+				<img src='${award.ImgPath}' width='75%'/>
 			</td>
-			<td>${award.name}</td>
-			<td>${award.type}</td>
+			<td>${award.Name}</td>
+			<td>${award.Type}</td>
 			<td>
 				${this._getCreditsElement(award)}
 			</td>
@@ -317,9 +322,9 @@ class CourseAwards extends BaseMixin(LitElement) {
 			</td>
 			<td class='centered-column'>
 				<d2l-button-icon
-					text=${state.enableEditing ? `Finish editing award ${award.name}` : `Edit award ${award.name}`}
+					text=${state.enableEditing ? `Finish editing award ${award.Name}` : `Edit award ${award.Name}`}
 					icon=${state.enableEditing ? 'tier1:save' : 'tier1:edit'}
-					@click='${this._getEditAwardHandler(award.id)}'
+					@click='${this._getEditAwardHandler(award.Id)}'
 					>
 				</d2l-button-icon>
 			</td>
@@ -327,7 +332,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 				<d2l-button-icon
 					text='Delete Award'
 					icon='tier1:delete'
-					@click='${this._getDeleteAwardHandler(award.id)}'
+					@click='${this._getDeleteAwardHandler(award.Id)}'
 					>
 				</d2l-button-icon>
 			</td>
@@ -336,7 +341,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 	}
 
 	_renderTableHeader() {
-		const awardTypeOptions = AWARD_TYPES.map(({ name }, index) => {
+		const awardTypeOptions = this.awardTypes.map(({ name }, index) => {
 			return html`<option value=${index}>${name}</option>`;
 		});
 		return html`
