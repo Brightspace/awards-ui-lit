@@ -14,21 +14,6 @@ const CHECKBOX_BASE = 'checkbox-award-';
 const TEXT_INPUT_BASE = 'text-input-award-';
 const TEXT_INPUT_TOOLTIP_BASE = 'text-input-award-tooltip-';
 
-const AWARD_TYPES = [
-	{
-		awardType: 'ALL',
-		name: 'All Awards'
-	},
-	{
-		awardType: 'BADGE',
-		name: 'Badges'
-	},
-	{
-		awardType: 'CERTIFICATE',
-		name: 'Certificates'
-	}
-];
-
 class CourseAwards extends BaseMixin(LitElement) {
 	static get properties() {
 		return {

@@ -10,20 +10,6 @@ import { selectStyles } from '@brightspace-ui/core/components/inputs/input-selec
 
 const TMP_USER_ID = 101;
 const NEVER_EXPIRATION = 'Never';
-const AWARD_TYPES = [
-	{
-		awardType: 'ALL',
-		name: 'All Awards'
-	},
-	{
-		awardType: 'BADGE',
-		name: 'Badges'
-	},
-	{
-		awardType: 'CERTIFICATE',
-		name: 'Certificates'
-	}
-];
 
 function convertToDateString(dateStr) {
 	if (dateStr === NEVER_EXPIRATION || !dateStr) {
@@ -111,7 +97,7 @@ class MyAwards extends BaseMixin(LitElement) {
 		super();
 		this.detailedAward = null;
 		this.currentQuery = '';
-		this.currentAwardType = AWARD_TYPES[0].awardType;
+		this.currentAwardType = window.AwardService.awardTypes[0].awardType;
 	}
 
 	connectedCallback() {
@@ -138,7 +124,7 @@ class MyAwards extends BaseMixin(LitElement) {
 
 	async _handleAwardTypeSelection(event) {
 		const { target: { value: index} } = event;
-		this.currentAwardType = AWARD_TYPES[index].awardType;
+		this.currentAwardType = window.AwardService.awardTypes[index].awardType;
 		await this._fetchIssuedAwards();
 	}
 
@@ -170,7 +156,7 @@ class MyAwards extends BaseMixin(LitElement) {
 	}
 
 	_renderComponentHeader() {
-		const awardTypeOptions = AWARD_TYPES.map(({ name }, index) => {
+		const awardTypeOptions = window.AwardService.awardTypes.map(({ name }, index) => {
 			return html`<option value=${index}>${name}</option>`;
 		});
 
