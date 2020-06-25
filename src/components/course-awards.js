@@ -79,6 +79,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 		this.currentQuery = '';
 		this.awardTypes = window.AwardService.awardTypes;
 		this.currentAwardType = this.awardTypes[0].awardType;
+		this.uiAwardState = {};
 	}
 
 	connectedCallback() {
@@ -95,12 +96,16 @@ class CourseAwards extends BaseMixin(LitElement) {
 		const { awards } = await window.AwardService.getAssociatedAwards(params);
 
 		this.courseAwards = awards;
-		this.uiAwardState = {};
 		this.courseAwards.forEach(award => {
-			this.uiAwardState[award.Id] = {
-				enableEditing: false,
-				invalidCredits: false
-			};
+			const currentState = this.uiAwardState[award.Id];
+			if (currentState) {
+				this.uiAwardState[award.Id] = currentState;
+			} else {
+				this.uiAwardState[award.Id] = {
+					enableEditing: false,
+					invalidCredits: false
+				};
+			}
 		});
 	}
 
@@ -130,6 +135,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 		return async() => {
 			const award = this.courseAwards.find(award => award.Id === awardId);
 			const state = this.uiAwardState[award.Id];
+			console.log(`Got state for ${award.Id}`);
 
 			if (state.enableEditing) {
 				const inputTextEle = this.shadowRoot.getElementById(`${TEXT_INPUT_BASE}${awardId}`);
