@@ -8,7 +8,6 @@ import { BaseMixin } from '../mixins/base-mixin';
 import dayjs from 'dayjs/esm';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles';
 
-const TMP_ORG_ID = 1000;
 const TMP_USER_ID = 101;
 const NEVER_EXPIRATION = 'Never';
 const AWARD_TYPES = [
@@ -124,7 +123,7 @@ class MyAwards extends BaseMixin(LitElement) {
 		const params = {
 			awardType: this.currentAwardType,
 			query: this.currentQuery,
-			orgUnitId: TMP_ORG_ID,
+			orgUnitId: this.orgUnitId,
 			userId: TMP_USER_ID
 		};
 		const { awards } = await window.AwardService.getIssuedAwards(params);

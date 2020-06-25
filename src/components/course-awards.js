@@ -13,7 +13,7 @@ import { selectStyles } from '@brightspace-ui/core/components/inputs/input-selec
 const CHECKBOX_BASE = 'checkbox-award-';
 const TEXT_INPUT_BASE = 'text-input-award-';
 const TEXT_INPUT_TOOLTIP_BASE = 'text-input-award-tooltip-';
-const ORG_UNIT_ID = 1000;
+const this.orgUnitId = 1000;
 const AWARD_TYPES = [
 	{
 		awardType: 'ALL',
@@ -100,7 +100,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 		const params = {
 			query: this.currentQuery,
 			awardType: this.currentAwardType,
-			orgUnitId: ORG_UNIT_ID
+			orgUnitId: this.orgUnitId
 		};
 		const { awards } = await window.AwardService.getAwards(params);
 
