@@ -1,0 +1,44 @@
+{
+  "awards": [
+    {
+      "Id": "789",
+      "Name": "Level Up",
+      "ImgPath": "../../images/example_award.png",
+      "Type": "Badge",
+      "Credits": 1,
+      "HiddenUntilEarned": false
+    },
+    {
+      "Id": "790",
+      "Name": "Hawkeye",
+      "ImgPath": "../../images/example_award.png",
+      "Type": "Badge",
+      "Credits": 5,
+      "HiddenUntilEarned": false
+    },
+    {
+      "Id": "791",
+      "Name": "Immortal",
+      "ImgPath": "../../images/example_award.png",
+      "Type": "Badge",
+      "Credits": 9000,
+      "HiddenUntilEarned": true
+    },
+    {
+      "Id": "792",
+      "Name": "The Brave",
+      "ImgPath": "../../images/example_award.png",
+      "Type": "Badge",
+      "Credits": 0,
+      "HiddenUntilEarned": false
+    },
+    {
+      "Id": "792",
+      "Name": "A Strange Certificate",
+      "ImgPath": "../../images/example_award.png",
+      "Type": "Certificate",
+      "Credits": 0,
+      "HiddenUntilEarned": false
+    }
+  ]
+}
