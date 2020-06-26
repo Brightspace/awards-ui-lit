@@ -3,7 +3,24 @@
 [![Dependabot badge](https://flat.badgen.net/dependabot/Brightspace/awards-ui-lit?icon=dependabot)](https://app.dependabot.com/)
 [![Build status](https://travis-ci.com/Brightspace/awards-ui-lit.svg?branch=master)](https://travis-ci.com/Brightspace/awards-ui-lit)
 
-UI for New Awards Experience
+UI for New Awards Experience.
+
+This project was started during an inspiration sprint. Due to the short amount of time to work on this it is not completed yet
+and still has some aspects it could be improved on.
+
+| Implemented    | Backlog               |
+|----------------|-----------------------|
+| Classlist      | Backend               |
+| Course Awards  | Accessibility         |
+| My Awards      | Tests                 |
+| Icon Library   | Certificate templates |
+| GET awards API | Available awards      |
+
+A Trello board was created for the inspiration sprint. It contains some tasks that could not be completed during the first sprint.
+
+The board can be found [here](https://trello.com/b/khMwQFxS/awardsv2).
+
+Some additional information can be found [here](./docs/README.md)
 
 ## Developing, Testing and Contributing
 
