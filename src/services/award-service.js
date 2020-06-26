@@ -60,6 +60,10 @@ export class AwardService {
 		return {};
 	}
 
+	static async getIcons() {
+		return {};
+	}
+
 	static async getIssuedAwards() {
 		return {};
 	}

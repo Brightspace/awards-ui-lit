@@ -1,0 +1,129 @@
+{
+    "icons": [
+        {
+            "Id": 0,
+            "Name": "Badge Avatar Speech",
+            "Path": "../../images/icons/Badge_Avatar_Speech.png",
+            "CreatedDate": "2020-06-24T00:00:00Z",
+            "UsedBy": [
+                "Badge 1",
+                "Badge 2",
+                "Badge 3"
+            ]
+        },
+        {
+            "Id": 1,
+            "Name": "Badge Book",
+            "Path": "../../images/icons/Badge_Book.png",
+            "CreatedDate": "2020-06-24T00:00:00Z",
+            "UsedBy": [
+                "Badge 1",
+                "Badge 2",
+                "Badge 3",
+                "Badge 4",
+                "Badge 5",
+                "Badge 6",
+                "Badge 7",
+                "Badge 8",
+                "Badge 9",
+                "Badge 10",
+                "Badge 11",
+                "Badge 12",
+                "Badge 13",
+                "Badge 14",
+                "Badge 15"
+            ]
+        },
+        {
+            "Id": 2,
+            "Name": "Badge Book Mark",
+            "Path": "../../images/icons/Badge_Book_Mark.png",
+            "CreatedDate": "2020-06-24T00:00:00Z",
+            "UsedBy": []
+        },
+        {
+            "Id": 3,
+            "Name": "Badge Calculator",
+            "Path": "../../images/icons/Badge_Calculator.png",
+            "CreatedDate": "2020-06-24T00:00:00Z",
+            "UsedBy": []
+        },
+        {
+            "Id": 4,
+            "Name": "Badge Discussion",
+            "Path": "../../images/icons/Badge_Discussion.png",
+            "CreatedDate": "2020-06-24T00:00:00Z",
+            "UsedBy": []
+        },
+        {
+            "Id": 5,
+            "Name": "Badge Discussion Crown",
+            "Path": "../../images/icons/Badge_Discussion_Crown.png",
+            "CreatedDate": "2020-06-24T00:00:00Z",
+            "UsedBy": []
+        },
+        {
+            "Id": 6,
+            "Name": "Badge Flask Liquid",
+            "Path": "../../images/icons/Badge_Flask_Liquid.png",
+            "CreatedDate": "2020-06-24T00:00:00Z",
+            "UsedBy": []
+        },
+        {
+            "Id": 7,
+            "Name": "Badge Globe",
+            "Path": "../../images/icons/Badge_Globe.png",
+            "CreatedDate": "2020-06-24T00:00:00Z",
+            "UsedBy": []
+        },
+        {
+            "Id": 8,
+            "Name": "Badge Grad Hat",
+            "Path": "../../images/icons/Badge_Grad_Hat.png",
+            "CreatedDate": "2020-06-24T00:00:00Z",
+            "UsedBy": []
+        },
+        {
+            "Id": 9,
+            "Name": "Badge Hand Out",
+            "Path": "../../images/icons/Badge_Hand_Out.png",
+            "CreatedDate": "2020-06-24T00:00:00Z",
+            "UsedBy": []
+        },
+        {
+            "Id": 10,
+            "Name": "Badge Handshake",
+            "Path": "../../images/icons/Badge_Handshake.png",
+            "CreatedDate": "2020-06-24T00:00:00Z",
+            "UsedBy": []
+        },
+        {
+            "Id": 11,
+            "Name": "Badge Lightbulb Great Idea",
+            "Path": "../../images/icons/Badge_Lightbulb_Great_Idea.png",
+            "CreatedDate": "2020-06-24T00:00:00Z",
+            "UsedBy": []
+        },
+        {
+            "Id": 12,
+            "Name": "Badge Lightning",
+            "Path": "../../images/icons/Badge_Lightning.png",
+            "CreatedDate": "2020-06-24T00:00:00Z",
+            "UsedBy": []
+        },
+        {
+            "Id": 13,
+            "Name": "Badge Microphone Speaker",
+            "Path": "../../images/icons/Badge_Microphone_Speaker.png",
+            "CreatedDate": "2020-06-24T00:00:00Z",
+            "UsedBy": []
+        },
+        {
+            "Id": 14,
+            "Name": "Badge Ribbon",
+            "Path": "../../images/icons/Badge_Ribbon.png",
+            "CreatedDate": "2020-06-24T00:00:00Z",
+            "UsedBy": []
+        }
+    ]
+}

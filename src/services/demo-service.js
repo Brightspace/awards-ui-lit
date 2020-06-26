@@ -94,6 +94,10 @@ export class DemoAwardService {
 		return getFilteredAwards({ dataPath: '../../data/available-awards.json', query, awardType });
 	}
 
+	static async getIcons() {
+		return fetch('../../data/award-icons.json').then(r => r.json());
+	}
+
 	static async getIssuedAwards({ orgUnitId, userId, query, awardType }) {
 		console.log(`ISSUED AWARDS: Recived request with following params: [query=${query}], [userId=${userId}] [orgUnitId=${orgUnitId}] [awardType=${awardType}]`);
 		return getFilteredAwards({ dataPath: '../../data/issued-awards.json', query, awardType });
