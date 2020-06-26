@@ -6,7 +6,9 @@
 UI for New Awards Experience.
 
 This project was started during an inspiration sprint. Due to the short amount of time to work on this it is not completed yet
-and still has some aspects it could be improved on.
+and still has some aspects that can be improved on. One of the key goals of this project is to rework the Awards experience so
+that it is more consistent with modern D2L BSI apps. This UI consists of web components created using LitElement built off of
+components that exist in the Brightspace UI core repo.
 
 | Implemented    | Backlog               |
 |----------------|-----------------------|
@@ -15,6 +17,9 @@ and still has some aspects it could be improved on.
 | My Awards      | Tests                 |
 | Icon Library   | Certificate templates |
 | GET awards API | Available awards      |
+|                | Refactoring           |
+|                | Release conditions    |
+|                | Classlist award icons |
 
 A Trello board was created for the inspiration sprint. It contains some tasks that could not be completed during the first sprint.
 
