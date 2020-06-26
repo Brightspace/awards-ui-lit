@@ -37,7 +37,7 @@ class AwardInfoDialog extends BaseMixin(LitElement) {
 				margin: 0.25rem;
 			}
 			.flex-award-image {
-				align-self: center;gt
+				align-self: center;
 			}
 		`;
 	}
