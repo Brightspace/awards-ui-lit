@@ -5,40 +5,55 @@
       "Name": "Level Up",
       "ImgPath": "../../images/example_award.png",
       "Type": "Badge",
+      "Issuer": "Brightspace",
+      "Description": "Description",
       "Credits": 1,
-      "HiddenUntilEarned": false
+      "HiddenUntilEarned": false,
+      "ExpirationDate": "2020-06-26T12:00:00"
     },
     {
       "Id": "790",
       "Name": "Hawkeye",
       "ImgPath": "../../images/example_award.png",
       "Type": "Badge",
+      "Issuer": "Brightspace",
+      "Description": "Description",
       "Credits": 5,
-      "HiddenUntilEarned": false
+      "HiddenUntilEarned": false,
+      "ExpirationDate": "Never"
     },
     {
       "Id": "791",
       "Name": "Immortal",
       "ImgPath": "../../images/example_award.png",
       "Type": "Badge",
+      "Issuer": "Brightspace",
+      "Description": "Description",
       "Credits": 9000,
-      "HiddenUntilEarned": true
+      "HiddenUntilEarned": true,
+      "ExpirationDate": "Never"
     },
     {
       "Id": "792",
       "Name": "The Brave",
       "ImgPath": "../../images/example_award.png",
       "Type": "Badge",
+      "Issuer": "Brightspace",
+      "Description": "Description",
       "Credits": 0,
-      "HiddenUntilEarned": false
+      "HiddenUntilEarned": false,
+      "ExpirationDate": "Never"
     },
     {
       "Id": "793",
       "Name": "A Strange Certificate",
       "ImgPath": "../../images/example_award.png",
       "Type": "Certificate",
+      "Issuer": "Brightspace",
+      "Description": "Description",
       "Credits": 0,
-      "HiddenUntilEarned": false
+      "HiddenUntilEarned": false,
+      "ExpirationDate": "Never"
     }
   ]
 }

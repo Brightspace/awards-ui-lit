@@ -67,6 +67,16 @@ class Awards extends BaseMixin(LitElement) {
 		`;
 	}
 
+	_renderOrgTabs() {
+		return html`
+		<d2l-tab-panel
+			text="Award Icon Library"
+			>
+			<d2l-award-icon-library class='component'></d2l-award-icon-library>
+		</d2l-tab-panel>
+		`;
+	}
+
 	render() {
 		return html`
 			<d2l-tabs>
@@ -80,11 +90,7 @@ class Awards extends BaseMixin(LitElement) {
 					>
 					</d2l-my-awards>
 				</d2l-tab-panel>
-				<d2l-tab-panel
-					text="Award Icon Library"
-					>
-					<d2l-award-icon-library class='component'></d2l-award-icon-library>
-				</d2l-tab-panel>
+				${ !this.isCourse ? this._renderOrgTabs() : html`` }
 			</d2l-tabs>
 		`;
 	}
