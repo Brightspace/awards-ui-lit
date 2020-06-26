@@ -79,7 +79,7 @@ class AddAwardsDialog extends BaseMixin(LitElement) {
 		return html`
 			<d2l-list-item key='${award.Id}' selectable>
 				<img src='${award.ImgPath}' slot='illustration'/>
-				<p>'${award.Name}'</p>
+				<p>${award.Name}</p>
 			</d2l-list-item>
 		`;
 	}
