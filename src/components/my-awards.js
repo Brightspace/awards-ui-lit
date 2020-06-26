@@ -2,23 +2,14 @@ import '@brightspace-ui/core/components/dialog/dialog';
 import '@brightspace-ui/core/components/inputs/input-search';
 import '@brightspace-ui/core/components/link/link';
 import '@brightspace-ui/core/components/button/button-subtle';
+import './award-info-dialog';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { awardsTableStyles } from '../styles/awards-table-styles';
 import { BaseMixin } from '../mixins/base-mixin';
-import dayjs from 'dayjs/esm';
+import { convertToDateString } from '../helpers';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles';
 
 const TMP_USER_ID = 101;
-const NEVER_EXPIRATION = 'Never';
-
-function convertToDateString(dateStr) {
-	if (dateStr === NEVER_EXPIRATION || !dateStr) {
-		return dateStr;
-	}
-
-	const formattedStr = dayjs(dateStr).format('dddd, MMMM D, YYYY h:mm A');
-	return formattedStr;
-}
 
 class MyAwards extends BaseMixin(LitElement) {
 	static get properties() {
@@ -76,19 +67,6 @@ class MyAwards extends BaseMixin(LitElement) {
 			.icon-column {
 				width: 10%
 			}
-			.flex-award-popup {
-				display: flex;
-				flex-flow: column wrap;
-			}
-			.flex-award-image {
-				align-self: center;
-			}
-			.flex-award-share-print {
-				display: flex;
-				flex-flow: row wrap;
-				justify-content: center;
-				align-items: center;
-			}
 			`
 		];
 	}
@@ -128,31 +106,15 @@ class MyAwards extends BaseMixin(LitElement) {
 		await this._fetchIssuedAwards();
 	}
 
-	_getPrintHandler(awardId) {
-		return () => {
-			const award = this.issuedAwards.find(award => award.Id === awardId);
-			console.log(`TODO: Print the following award: ${JSON.stringify(award)}`);
-		};
-	}
-
-	_getShareHandler(awardId) {
-		return () => {
-			const award = this.issuedAwards.find(award => award.Id === awardId);
-			console.log(`TODO: Share the following award on Badgr: ${JSON.stringify(award)}`);
-		};
-	}
-
 	_getDialogOpenHandler(awardId) {
 		return () => {
 			const award = this.issuedAwards.find(award => award.Id === awardId);
 			this.detailedAward = award;
-			console.log(`updated detailed award to ${this.detailedAward}`);
 		};
 	}
 
 	_handleDialogClosed() {
 		this.detailedAward = null;
-		console.log('update detailed award to null');
 	}
 
 	_renderComponentHeader() {
@@ -224,46 +186,23 @@ class MyAwards extends BaseMixin(LitElement) {
 			`;
 	}
 
-	_renderAwardPopup() {
-		const isOpen = this.detailedAward !== null;
-		return isOpen ? html`
-			<d2l-dialog
-				title-text='${this.detailedAward.Name}'
-				?opened=${isOpen}
-				@d2l-dialog-close=${this._handleDialogClosed}
+	_renderAwardInfoPopup() {
+		return html`
+			<d2l-award-info-dialog
+				.detailedAward='${this.detailedAward}'
+				has-share-button
+				has-print-button
+				@d2l-dialog-close='${this._handleDialogClosed}'
 				>
-				<div class='flex-award-popup'>
-					<img class='flex-award-image' src=${this.detailedAward.ImgPath} />
-					<p class='flex-item'><b>Type:</b> ${this.detailedAward.Type}</p>
-					<p class='flex-item'><b>Credits:</b> ${this.detailedAward.Credits}</p>
-					<p class='flex-item'><b>Description:</b> ${this.detailedAward.Description}</p>
-					<p class='flex-item'><b>Evidence:</b> ${this.detailedAward.Evidence}</p>
-					<p class='flex-item'><b>Issue Date:</b> ${convertToDateString(this.detailedAward.IssueDate)}</p>
-					<p class='flex-item'><b>Expiration Date:</b> ${convertToDateString(this.detailedAward.ExpirationDate)}</p>
-					<d2l-button-subtle
-						class='flex-item'
-						text='Print'
-						icon='tier1:print'
-						@click='${this._getPrintHandler(this.detailedAward.Id)}'
-						>
-					</d2l-button-subtle>
-					<d2l-button-subtle
-						class='flex-item'
-						text='Share on Badgr'
-						icon='tier1:share'
-						@click='${this._getShareHandler(this.detailedAward.Id)}'
-						>
-					</d2l-button-subtle>
-				</div>
-			</d2l-dialog>
-			` : html``;
+			</d2l-award-info-dialog>
+		`;
 	}
 
 	render() {
 		return html`
 		${this._renderComponentHeader()}
 		${this._renderTable()}
-		${this._renderAwardPopup()}
+		${this._renderAwardInfoPopup()}
 		`;
 	}
 }

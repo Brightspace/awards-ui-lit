@@ -6,6 +6,7 @@ import '@brightspace-ui/core/components/inputs/input-text';
 import '@brightspace-ui/core/components/tooltip/tooltip';
 import '@brightspace-ui/core/components/dialog/dialog-confirm';
 import './add-awards-dialog';
+import './award-info-dialog';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { awardsTableStyles } from '../styles/awards-table-styles';
 import { BaseMixin } from '../mixins/base-mixin';
@@ -46,6 +47,9 @@ class CourseAwards extends BaseMixin(LitElement) {
 			},
 			invalidCredits: {
 				type: Boolean
+			},
+			detailedAward: {
+				type: Object
 			}
 		};
 	}
@@ -88,6 +92,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 		this.currentAwardType = this.awardTypes[0].awardType;
 		this.invalidCredits = false;
 		this.awardBeingEdited = null;
+		this.detailedAward = null;
 	}
 
 	connectedCallback() {
@@ -216,6 +221,17 @@ class CourseAwards extends BaseMixin(LitElement) {
 		await this._fetchAssociatedAwards();
 	}
 
+	_getAwardInfoOpenHandler(awardId) {
+		return () => {
+			const award = this.courseAwards.find(award => award.Id === awardId);
+			this.detailedAward = award;
+		};
+	}
+
+	_handleAwardInfoDialogClosed() {
+		this.detailedAward = null;
+	}
+
 	_renderComponentHeader() {
 		return html`
 		<d2l-input-checkbox
@@ -333,7 +349,14 @@ class CourseAwards extends BaseMixin(LitElement) {
 			<td class='centered-column icon-column'>
 				<img src='${award.ImgPath}' width='75%'/>
 			</td>
-			<td>${award.Name}</td>
+			<td>
+				<d2l-link
+					aria-haspopup='true'
+					@click='${this._getAwardInfoOpenHandler(award.Id)}'
+					>
+					${award.Name}
+				</d2l-link>
+			</td>
 			<td>${award.Type}</td>
 			<td>
 				${this._getCreditsElement(award)}
@@ -390,6 +413,11 @@ class CourseAwards extends BaseMixin(LitElement) {
 			@d2l-add-awards-dialog-done-clicked=${this._handleAwardsAdded}
 			>
 		</d2l-add-awards-dialog>
+		<d2l-award-info-dialog
+			.detailedAward='${this.detailedAward}'
+			@d2l-dialog-close='${this._handleAwardInfoDialogClosed}'
+			>
+		</d2l-award-info-dialog>
 		<d2l-dialog-confirm id='save-dialog' title-text='Save changes?' text='Do you want to save your changes?'>
 			<d2l-button slot='footer' primary data-dialog-action='${SAVE_ACTION}'>Save</d2l-button>
 			<d2l-button slot='footer' data-dialog-action='${CANCEL_ACTION}'>Cancel</d2l-button>
