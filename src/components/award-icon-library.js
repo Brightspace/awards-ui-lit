@@ -6,19 +6,9 @@ import '@brightspace-ui/core/components/tooltip/tooltip';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../mixins/base-mixin';
-import dayjs from 'dayjs/esm';
+import { convertToDateString } from '../helpers';
 
-const NEVER_EXPIRATION = 'Never';
 const YES = 'yes';
-
-function convertToDateString(dateStr) {
-	if (dateStr === NEVER_EXPIRATION || !dateStr) {
-		return dateStr;
-	}
-
-	const formattedStr = dayjs(dateStr).format('dddd, MMMM D, YYYY h:mm A');
-	return formattedStr;
-}
 
 class AwardIconLibrary extends BaseMixin(LitElement) {
 	static get properties() {
@@ -164,24 +154,24 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 		<div class="grid-container">
 			${this.icons.map(icon => html`
 				<div id="icon-${icon.Id}" class="icon-container">
-					<img 
-						class="icon" 
+					<img
+						class="icon"
 						src=${icon.Path}
 						>
-					
+
 					<div class="icon-button-container">
-						<d2l-button-icon 
+						<d2l-button-icon
 							class="icon-button"
-							text="More information" 
+							text="More information"
 							icon="tier1:more"
 							aria-haspopup="true"
 							aria-label="More information"
 							@click='${this._openInfoDialog(icon.Id)}'
 							>
 						</d2l-button-icon>
-						<d2l-button-icon 
+						<d2l-button-icon
 							class="icon-button"
-							text="Delete" 
+							text="Delete"
 							icon="tier1:delete"
 							aria-haspopup="true"
 							aria-label="Delete Icon"
@@ -216,14 +206,14 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				${this.iconDetails.UsedBy.length ? html`
 				<div><b>Used By:</b></div>
 				` : html``}
-				
+
 				<d2l-list separators="between">
 					${this.iconDetails.UsedBy.map(award => html`
 					<d2l-list-item>
 						${award}
 					</d2l-list-item>
 					`)}
-				</d2l-list>			
+				</d2l-list>
 			</div>
 
 			<d2l-button
@@ -247,21 +237,21 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 
 	_renderDeleteDialog() {
 		return this.deleteOpened ? html`
-		<d2l-dialog-confirm 
-			title-text="Confirm Deletion" 
+		<d2l-dialog-confirm
+			title-text="Confirm Deletion"
 			text="Are you sure you wish to delete the ${this.iconDetails.Name} icon?"
 			?opened=${this.deleteOpened}
 			@d2l-dialog-close=${this._deleteClosed}
 			>
-			<d2l-button 
-				slot="footer" 
-				primary 
+			<d2l-button
+				slot="footer"
+				primary
 				data-dialog-action=${YES}
 				>
 				Yes
 			</d2l-button>
-			<d2l-button 
-				slot="footer" 
+			<d2l-button
+				slot="footer"
 				data-dialog-action
 				>
 				No
@@ -353,7 +343,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			<d2l-tooltip for="icon-image-upload" state="error" align="start" offset="10">
 				Please select and image for the icon
 			</d2l-tooltip>
-			` : html``}		
+			` : html``}
 
 			<d2l-button
 				slot="footer"
@@ -362,8 +352,8 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				>
 				Create
 			</d2l-button>
-			<d2l-button 
-				slot="footer" 
+			<d2l-button
+				slot="footer"
 				data-dialog-action
 				>
 				Cancel

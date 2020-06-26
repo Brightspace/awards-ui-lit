@@ -187,12 +187,11 @@ class MyAwards extends BaseMixin(LitElement) {
 	}
 
 	_renderAwardInfoPopup() {
-		const hasShareAndPrintButton = true;
 		return html`
 			<d2l-award-info-dialog
 				.detailedAward='${this.detailedAward}'
-				?has-share-button='${hasShareAndPrintButton}'
-				?has-print-button='${hasShareAndPrintButton}'
+				has-share-button
+				has-print-button
 				@d2l-dialog-close='${this._handleDialogClosed}'
 				>
 			</d2l-award-info-dialog>
