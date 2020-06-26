@@ -1,6 +1,7 @@
 import './awards-classlist';
 import './course-awards';
 import './my-awards';
+import './award-icon-library';
 import '@brightspace-ui/core/components/tabs/tabs';
 import '@brightspace-ui/core/components/tabs/tab-panel';
 import { css, html, LitElement } from 'lit-element/lit-element';
@@ -78,6 +79,11 @@ class Awards extends BaseMixin(LitElement) {
 						org-unit-id="${this.orgUnitId}"
 					>
 					</d2l-my-awards>
+				</d2l-tab-panel>
+				<d2l-tab-panel
+					text="Award Icon Library"
+					>
+					<d2l-award-icon-library class='component'></d2l-award-icon-library>
 				</d2l-tab-panel>
 			</d2l-tabs>
 		`;

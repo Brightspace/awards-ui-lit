@@ -219,7 +219,7 @@ class MyAwards extends BaseMixin(LitElement) {
 			` :
 			html`
 			<div>
-				<p>You have not been issued any awards.</p>
+				<p>No awards found.</p>
 			</div>
 			`;
 	}
