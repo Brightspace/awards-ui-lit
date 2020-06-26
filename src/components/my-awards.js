@@ -8,23 +8,8 @@ import { BaseMixin } from '../mixins/base-mixin';
 import dayjs from 'dayjs/esm';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles';
 
-const TMP_ORG_ID = 1000;
 const TMP_USER_ID = 101;
 const NEVER_EXPIRATION = 'Never';
-const AWARD_TYPES = [
-	{
-		awardType: 'ALL',
-		name: 'All Awards'
-	},
-	{
-		awardType: 'BADGE',
-		name: 'Badges'
-	},
-	{
-		awardType: 'CERTIFICATE',
-		name: 'Certificates'
-	}
-];
 
 function convertToDateString(dateStr) {
 	if (dateStr === NEVER_EXPIRATION || !dateStr) {
@@ -112,7 +97,7 @@ class MyAwards extends BaseMixin(LitElement) {
 		super();
 		this.detailedAward = null;
 		this.currentQuery = '';
-		this.currentAwardType = AWARD_TYPES[0].awardType;
+		this.currentAwardType = window.AwardService.awardTypes[0].awardType;
 	}
 
 	connectedCallback() {
@@ -124,7 +109,7 @@ class MyAwards extends BaseMixin(LitElement) {
 		const params = {
 			awardType: this.currentAwardType,
 			query: this.currentQuery,
-			orgUnitId: TMP_ORG_ID,
+			orgUnitId: this.orgUnitId,
 			userId: TMP_USER_ID
 		};
 		const { awards } = await window.AwardService.getIssuedAwards(params);
@@ -139,7 +124,7 @@ class MyAwards extends BaseMixin(LitElement) {
 
 	async _handleAwardTypeSelection(event) {
 		const { target: { value: index} } = event;
-		this.currentAwardType = AWARD_TYPES[index].awardType;
+		this.currentAwardType = window.AwardService.awardTypes[index].awardType;
 		await this._fetchIssuedAwards();
 	}
 
@@ -171,7 +156,7 @@ class MyAwards extends BaseMixin(LitElement) {
 	}
 
 	_renderComponentHeader() {
-		const awardTypeOptions = AWARD_TYPES.map(({ name }, index) => {
+		const awardTypeOptions = window.AwardService.awardTypes.map(({ name }, index) => {
 			return html`<option value=${index}>${name}</option>`;
 		});
 
