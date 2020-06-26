@@ -67,6 +67,11 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 			.awards-classlist-search-order {
 				margin: 6px;
 			}
+			.list-student-images {
+				width: 50px;
+				height: 50px;
+				object-fit: contain;
+			}
 		`];
 	}
 
@@ -226,7 +231,7 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 				key = ${student.Id}
 				selectable
 				>
-				<img src=${student.Picture}  slot="illustration">
+				<img class="list-student-images" src=${student.Picture}  slot="illustration">
 				<div>
 					${student.FirstName} ${student.LastName}
 				</div>
