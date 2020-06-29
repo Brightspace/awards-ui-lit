@@ -3,7 +3,29 @@
 [![Dependabot badge](https://flat.badgen.net/dependabot/Brightspace/awards-ui-lit?icon=dependabot)](https://app.dependabot.com/)
 [![Build status](https://travis-ci.com/Brightspace/awards-ui-lit.svg?branch=master)](https://travis-ci.com/Brightspace/awards-ui-lit)
 
-UI for New Awards Experience
+UI for New Awards Experience.
+
+This project was started during an inspiration sprint. Due to the short amount of time to work on this it is not completed yet
+and still has some aspects that can be improved on. One of the key goals of this project is to rework the Awards experience so
+that it is more consistent with modern D2L BSI apps. This UI consists of web components created using LitElement built off of
+components that exist in the Brightspace UI core repo.
+
+| Implemented    | Backlog               |
+|----------------|-----------------------|
+| Classlist      | Backend               |
+| Course Awards  | Accessibility         |
+| My Awards      | Tests                 |
+| Icon Library   | Certificate templates |
+| GET awards API | Available awards      |
+|                | Refactoring           |
+|                | Release conditions    |
+|                | Classlist award icons |
+
+A Trello board was created for the inspiration sprint. It contains some tasks that could not be completed during the first sprint.
+
+The board can be found [here](https://trello.com/b/khMwQFxS/awardsv2).
+
+Some additional information can be found [here](./docs/README.md)
 
 ## Developing, Testing and Contributing
 
