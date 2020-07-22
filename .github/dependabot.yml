@@ -1,0 +1,22 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  ignore:
+  - dependency-name: deepmerge
+    versions:
+    - "> 3.3.0"
+  - dependency-name: eslint
+    versions:
+    - "> 6.8.0"
+  - dependency-name: eslint-config-brightspace
+    versions:
+    - "> 0.6.7"
+  - dependency-name: karma-sauce-launcher
+    versions:
+    - "> 2.0.2"
+  - dependency-name: puppeteer
+    versions:
+    - "> 1.20.0"
