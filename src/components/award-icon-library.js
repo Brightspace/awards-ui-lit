@@ -313,6 +313,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				aria-haspopup="true"
 				aria-invalid=${!this.isValidIconName}
 				@input=${this._changedIconName}
+				novalidate
 				>
 			</d2l-input-text>
 			${!this.isValidIconName ? html`

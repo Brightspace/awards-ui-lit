@@ -135,6 +135,7 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 				aria-haspopup="true"
 				aria-invalid=${!this.isValidCriteria}
 				@input=${this._changeAwardCriteria}
+				novalidate
 				>
 			</d2l-input-text>
 			${!this.isValidCriteria ? html`
@@ -297,6 +298,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 				aria-haspopup="true"
 				aria-invalid=${!this.isValidReason}
 				@input=${this._changeRevokeReason}
+				novalidate
 				>
 			</d2l-input-text>
 
