@@ -302,6 +302,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 					size=1
 					aria-invalid='${this.invalidCredits}'
 					@input='${this._handleInputChangedEvent}'
+					novalidate
 					>
 				</d2l-input-text>`;
 			if (this.invalidCredits) {
