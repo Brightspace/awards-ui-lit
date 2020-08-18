@@ -54,23 +54,13 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			.awards-classlist-search {
-				display: flex;
-				flex-direction: row;
-				justify-content: space-between;
-				margin: 12px;
-			}
-			.awards-classlist-search-input {
-				flex-grow: 1;
-				margin: 6px;
-			}
-			.awards-classlist-search-order {
-				margin: 6px;
-			}
 			.list-student-images {
 				width: 50px;
 				height: 50px;
 				object-fit: contain;
+			}
+			d2l-awards-search {
+				display: flex;
 			}
 		`];
 	}
@@ -189,24 +179,30 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 
 	_renderSearch() {
 		const orderOptions = this.studentOrders.map(({ name }, index) => {
-			return html`<option value=${index}>${name}</option>`;
+			return {
+				'value': index,
+				'name': name
+			};
 		});
+
+		const selectorParams = {
+			label: 'Classlist ordering Dropdown'
+		};
+
+		const searchParams = {
+			label: 'Search classlist',
+			placeholder: 'Search classlist'
+		};
+
 		return html`
-		<div class="awards-classlist-search">
-			<d2l-input-search
-				label="Search classlist"
-				placeholder="Search classlist"
+			<d2l-awards-search
+				.selectorParams=${selectorParams}
+				.selectorOptions=${orderOptions}
+				.searchParams=${searchParams}
 				@d2l-input-search-searched=${this._updateSearch}
-				class="awards-classlist-search-input"
+				@d2l-selector-changed=${this._updateOrder}
 				>
-			</d2l-input-search>
-			<select
-				class="d2l-input-select awards-classlist-search-order"
-				@change=${this._updateOrder}
-				>
-				${orderOptions}
-			</select>
-		</div>
+			</d2l-awards-search>
 		`;
 	}
 

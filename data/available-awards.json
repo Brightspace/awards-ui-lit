@@ -6,6 +6,8 @@
       "ImgPath": "../../images/example_award.png",
       "Type": "Badge",
       "Credits": 5,
+      "Description": "Description",
+      "Course": "Course 1",
       "HiddenUntilEarned": false
     },
     {
@@ -14,6 +16,8 @@
       "ImgPath": "../../images/example_award.png",
       "Type": "Badge",
       "Credits": 2,
+      "Description": "Description",
+      "Course": "Course 1",
       "HiddenUntilEarned": false
     },
     {
@@ -22,6 +26,8 @@
       "ImgPath": "../../images/example_award.png",
       "Type": "Certificate",
       "Credits": 2,
+      "Description": "Description",
+      "Course": "Course 1",
       "HiddenUntilEarned": false
     }
   ]
