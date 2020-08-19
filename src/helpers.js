@@ -9,3 +9,7 @@ export const convertToDateString = (dateStr) => {
 	const formattedStr = dayjs(dateStr).format('dddd, MMMM D, YYYY h:mm A');
 	return formattedStr;
 };
+
+export const isObjectEmpty = (obj) => {
+	return Object.keys(obj).length === 0 && obj.constructor === Object;
+};

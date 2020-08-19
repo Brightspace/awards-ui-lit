@@ -7,6 +7,7 @@ import '@brightspace-ui/core/components/tooltip/tooltip';
 import '@brightspace-ui/core/components/dialog/dialog-confirm';
 import './add-awards-dialog';
 import './award-info-dialog';
+import './helpers/search';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { awardsTableStyles } from '../styles/awards-table-styles';
 import { BaseMixin } from '../mixins/base-mixin';
@@ -65,10 +66,6 @@ class CourseAwards extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			.flex-container {
-				display: flex;
-				flex-flow: row nowrap;
-			}
 			.flex-item {
 				margin: 0.25rem;
 			}
@@ -80,6 +77,9 @@ class CourseAwards extends BaseMixin(LitElement) {
 			}
 			.icon-column {
 				width: 10%;
+			}
+			d2l-awards-search {
+				display: flex;
 			}
 		`];
 	}
@@ -216,7 +216,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 	}
 
 	async _handleAwardTypeSelection(event) {
-		const { target: { value: index } } = event;
+		const { detail: { value: index } } = event;
 		this.currentAwardType = this.awardTypes[index].awardType;
 		await this._fetchAssociatedAwards();
 	}
@@ -233,32 +233,46 @@ class CourseAwards extends BaseMixin(LitElement) {
 	}
 
 	_renderComponentHeader() {
+		const awardTypeOptions = this.awardTypes.map(({ name }, index) => {
+			return {
+				value: index,
+				name: name
+			};
+		});
+
+		const selectorParams = {
+			label: 'Awards Type Dropdown'
+		};
+
+		const searchParams = {
+			label: 'Search for course awards',
+			placeholder: 'Search for course awards'
+		};
+
+		const buttonParams = {
+			id: 'add-award-button',
+			text: 'Add Awards to Course',
+			label: 'Add Awards to Course',
+			haspopup: 'true',
+			primary: true
+		};
+
 		return html`
 		<d2l-input-checkbox
 			@change='${this._handleBadgrUpdate}'
 			>
 			Allow users in this course to send earned awards to Badgr Backpack
 		</d2l-input-checkbox>
-		<div class='flex-container'>
-			<d2l-input-search
-				class='flex-item'
-				label='Search for course awards'
-				placeholder='Search for course awards'
-				@d2l-input-search-searched='${this._handleSearchEvent}'
-				>
-			</d2l-input-search>
-			<d2l-button
-				class='flex-item'
-				id='add-award-button'
-				text='Add Awards to Course'
-				aria-label='Add Awards to Course'
-				aria-haspopup='true'
-				primary
-				@click='${this._handleAddAwardClicked}'
-				>
-				Add Awards to Course
-			</d2l-button>
-		</div>
+		<d2l-awards-search
+			.selectorParams=${selectorParams}
+			.selectorOptions=${awardTypeOptions}
+			.searchParams=${searchParams}
+			.buttonParams=${buttonParams}
+			@d2l-input-search-searched=${this._handleSearchEvent}
+			@d2l-selector-changed=${this._handleAwardTypeSelection}
+			@d2l-button-pressed=${this._handleAddAwardClicked}
+			>
+		</d2l-awards-search>
 		`;
 	}
 
@@ -387,25 +401,6 @@ class CourseAwards extends BaseMixin(LitElement) {
 		`;
 	}
 
-	_renderTableHeader() {
-		const awardTypeOptions = this.awardTypes.map(({ name }, index) => {
-			return html`<option value=${index}>${name}</option>`;
-		});
-		return html`
-		<div class='flex-container'>
-			<div id='input-select-div flex-item'>
-				<select
-					class='d2l-input-select flex-item'
-					aria-label='Awards Type Dropdown'
-					@input='${this._handleAwardTypeSelection}'
-					>
-					${awardTypeOptions}
-				</select>
-			</div>
-		</div>
-		`;
-	}
-
 	render() {
 		return html`
 		<d2l-add-awards-dialog
@@ -428,7 +423,6 @@ class CourseAwards extends BaseMixin(LitElement) {
 			<d2l-button slot='footer' data-dialog-action='${CANCEL_ACTION}'>Cancel</d2l-button>
 		</d2l-dialog-confirm>
 		${this._renderComponentHeader()}
-		${this._renderTableHeader()}
 		${this._renderTable()}
 		`;
 	}

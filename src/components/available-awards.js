@@ -1,26 +1,15 @@
-import '@brightspace-ui/core/components/dialog/dialog';
-import '@brightspace-ui/core/components/link/link';
-import '@brightspace-ui/core/components/button/button-subtle';
-import './award-info-dialog';
-import './helpers/search';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { awardsTableStyles } from '../styles/awards-table-styles';
 import { BaseMixin } from '../mixins/base-mixin';
-import { convertToDateString } from '../helpers';
 
-const TMP_USER_ID = 101;
-
-class MyAwards extends BaseMixin(LitElement) {
+class AvailableAwards extends BaseMixin(LitElement) {
 	static get properties() {
 		return {
 			orgUnitId: {
 				attribute: 'org-unit-id',
 				type: Number
 			},
-			detailedAward: {
-				type: Object
-			},
-			issuedAwards: {
+			availableAwards: {
 				type: Array
 			},
 			currentQuery: {
@@ -42,20 +31,8 @@ class MyAwards extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			.flex-container {
-				display: flex;
-				flex-flow: row wrap;
-				justify-content: flex-start;
-			}
-			.flex-item {
-				margin: 0.25rem;
-				flex: 1;
-			}
-			.time-column {
-				width: 25%;
-			}
-			.icon-column {
-				width: 10%
+			.icon-column img {
+				max-width: 100px;
 			}
 			d2l-awards-search {
 				display: flex;
@@ -66,48 +43,35 @@ class MyAwards extends BaseMixin(LitElement) {
 
 	constructor() {
 		super();
-		this.detailedAward = null;
 		this.currentQuery = '';
 		this.currentAwardType = window.AwardService.awardTypes[0].awardType;
 	}
 
 	connectedCallback() {
 		super.connectedCallback();
-		this._fetchIssuedAwards();
+		this._fetchAvailableAwards();
 	}
 
-	async _fetchIssuedAwards() {
+	async _fetchAvailableAwards() {
 		const params = {
 			awardType: this.currentAwardType,
 			query: this.currentQuery,
-			orgUnitId: this.orgUnitId,
-			userId: TMP_USER_ID
+			orgUnitId: this.orgUnitId
 		};
-		const { awards } = await window.AwardService.getIssuedAwards(params);
-		this.issuedAwards = awards;
+		const { awards } = await window.AwardService.getAwards(params);
+		this.availableAwards = awards;
 	}
 
 	async _handleSearchEvent(event) {
 		const { detail: { value: query } } = event;
 		this.currentQuery = query;
-		await this._fetchIssuedAwards();
+		await this._fetchAvailableAwards();
 	}
 
 	async _handleAwardTypeSelection(event) {
 		const { detail: { value: index } } = event;
 		this.currentAwardType = window.AwardService.awardTypes[index].awardType;
-		await this._fetchIssuedAwards();
-	}
-
-	_getDialogOpenHandler(awardId) {
-		return () => {
-			const award = this.issuedAwards.find(award => award.Id === awardId);
-			this.detailedAward = award;
-		};
-	}
-
-	_handleDialogClosed() {
-		this.detailedAward = null;
+		await this._fetchAvailableAwards();
 	}
 
 	_renderComponentHeader() {
@@ -145,30 +109,24 @@ class MyAwards extends BaseMixin(LitElement) {
 			<td class='centered-column icon-column'>
 				<img src='${award.ImgPath}' width='75%'/>
 			</td>
-			<td>
-				<d2l-link aria-haspopup='true' @click="${this._getDialogOpenHandler(award.Id)}">${award.Name}</d2l-link>
-			</td>
-			<td>${award.Type}</td>
-			<td>${award.Credits}</td>
-			<td class='time-column'>${convertToDateString(award.IssueDate)}</td>
-			<td class='time-column'>${convertToDateString(award.ExpirationDate)}</td>
+			<td>${award.Name}</td>
+			<td>${award.Course}</td>
+			<td>${award.Description}</td>
 		</tr>
 		`;
 	}
 
 	_renderTable() {
-		const renderedAwards = this.issuedAwards.map(award => this._renderAward(award));
+		const renderedAwards = this.availableAwards.map(award => this._renderAward(award));
 		return renderedAwards.length > 0 ?
 			html`
-				<table class='flex-item' aria-label='Issued awards table'>
+				<table class='flex-item' aria-label='Available awards'>
 					<thead>
 						<tr>
 							<th class='icon-column'>Icon</th>
 							<th>Name</th>
-							<th>Type</th>
-							<th>Credits</th>
-							<th class='time-column'>Issue Date</th>
-							<th class='time-column'>Expiration Date</th>
+							<th>Course</th>
+							<th>Description</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -183,25 +141,12 @@ class MyAwards extends BaseMixin(LitElement) {
 			`;
 	}
 
-	_renderAwardInfoPopup() {
-		return html`
-			<d2l-award-info-dialog
-				.detailedAward='${this.detailedAward}'
-				has-share-button
-				has-print-button
-				@d2l-dialog-close='${this._handleDialogClosed}'
-				>
-			</d2l-award-info-dialog>
-		`;
-	}
-
 	render() {
 		return html`
-		${this._renderComponentHeader()}
-		${this._renderTable()}
-		${this._renderAwardInfoPopup()}
+			${this._renderComponentHeader()}
+			${this._renderTable()}
 		`;
 	}
 }
 
-customElements.define('d2l-my-awards', MyAwards);
+customElements.define('d2l-available-awards', AvailableAwards);
