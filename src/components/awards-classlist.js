@@ -180,8 +180,8 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 	_renderSearch() {
 		const orderOptions = this.studentOrders.map(({ name }, index) => {
 			return {
-				'value': index,
-				'name': name
+				value: index,
+				name: name
 			};
 		});
 

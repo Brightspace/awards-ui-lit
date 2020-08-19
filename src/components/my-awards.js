@@ -94,7 +94,7 @@ class MyAwards extends BaseMixin(LitElement) {
 	}
 
 	async _handleAwardTypeSelection(event) {
-		const { detail: { value: index} } = event;
+		const { detail: { value: index } } = event;
 		this.currentAwardType = window.AwardService.awardTypes[index].awardType;
 		await this._fetchIssuedAwards();
 	}
@@ -113,8 +113,8 @@ class MyAwards extends BaseMixin(LitElement) {
 	_renderComponentHeader() {
 		const awardTypeOptions = window.AwardService.awardTypes.map(({ name }, index) => {
 			return {
-				'value': index,
-				'name': name
+				value: index,
+				name: name
 			};
 		});
 

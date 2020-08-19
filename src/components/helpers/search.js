@@ -3,6 +3,7 @@ import '@brightspace-ui/core/components/button/button-icon';
 import '@brightspace-ui/core/components/inputs/input-search';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../../mixins/base-mixin';
+import { isObjectEmpty } from '../../helpers';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles';
 
 class Search extends BaseMixin(LitElement) {
@@ -52,9 +53,9 @@ class Search extends BaseMixin(LitElement) {
 	constructor() {
 		super();
 		this.selectorOptions = [];
-		this.selectorParams = null;
-		this.searchParams = null;
-		this.buttonParams = null;
+		this.selectorParams = {};
+		this.searchParams = {};
+		this.buttonParams = {};
 	}
 
 	connectedCallback() {
@@ -84,10 +85,11 @@ class Search extends BaseMixin(LitElement) {
 	}
 
 	_renderSearchBar() {
-		return this.searchParams ? html`
+		return !isObjectEmpty(this.searchParams) ? html`
 			<d2l-input-search
 				class='flex-item'
 				label=${this.searchParams.label}
+				aria-label=${this.searchParams.label}
 				placeholder=${this.searchParams.placeholder}
 				@d2l-input-search-searched=${this._handleSearchEvent}
 				>
@@ -112,7 +114,7 @@ class Search extends BaseMixin(LitElement) {
 	}
 
 	_renderButton() {
-		return this.buttonParams ? html`
+		return !isObjectEmpty(this.buttonParams) ? html`
 			<d2l-button
 				class='flex-item'
 				id=${this.buttonParams.id}
