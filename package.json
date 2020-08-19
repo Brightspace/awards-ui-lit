@@ -1,7 +1,7 @@
 {
   "name": "d2l-awards",
   "description": "New Awards Experience UI",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "repository": "https://github.com/Brightspace/awards-ui-lit.git",
   "scripts": {
     "lint": "npm run lint:eslint && npm run lint:lit",
