@@ -53,9 +53,9 @@ class Search extends BaseMixin(LitElement) {
 	constructor() {
 		super();
 		this.selectorOptions = [];
-		this.selectorParams = {};
-		this.searchParams = {};
-		this.buttonParams = {};
+		this.selectorParams = Object();
+		this.searchParams = Object();
+		this.buttonParams = Object();
 	}
 
 	connectedCallback() {
