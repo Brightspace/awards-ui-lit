@@ -17,10 +17,6 @@ import { awardsTableStyles } from '../styles/awards-table-styles';
 import { BaseMixin } from '../mixins/base-mixin';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles';
 
-const CHECKBOX_BASE = 'checkbox-award-';
-const TEXT_INPUT_BASE = 'text-input-award-';
-const TEXT_INPUT_TOOLTIP_BASE = 'text-input-award-tooltip-';
-
 const SAVE_ACTION = 'save';
 const DELETE_ACTION = 'delete';
 const CANCEL_ACTION = 'cancel';
