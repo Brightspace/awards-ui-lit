@@ -5,6 +5,10 @@ import '@brightspace-ui/core/components/inputs/input-checkbox';
 import '@brightspace-ui/core/components/inputs/input-text';
 import '@brightspace-ui/core/components/tooltip/tooltip';
 import '@brightspace-ui/core/components/dialog/dialog-confirm';
+import '@brightspace-ui/core/components/dropdown/dropdown';
+import '@brightspace-ui/core/components/dropdown/dropdown-menu';
+import '@brightspace-ui/core/components/menu/menu';
+import '@brightspace-ui/core/components/menu/menu-item';
 import './add-awards-dialog';
 import './award-info-dialog';
 import './helpers/search';
@@ -42,12 +46,6 @@ class CourseAwards extends BaseMixin(LitElement) {
 			},
 			awardTypes: {
 				type: Array
-			},
-			awardBeingEdited: {
-				type: Number
-			},
-			invalidCredits: {
-				type: Boolean
 			},
 			detailedAward: {
 				type: Object
@@ -90,8 +88,6 @@ class CourseAwards extends BaseMixin(LitElement) {
 		this.currentQuery = '';
 		this.awardTypes = window.AwardService.awardTypes;
 		this.currentAwardType = this.awardTypes[0].awardType;
-		this.invalidCredits = false;
-		this.awardBeingEdited = null;
 		this.detailedAward = null;
 	}
 
@@ -109,8 +105,6 @@ class CourseAwards extends BaseMixin(LitElement) {
 		const { awards } = await window.AwardService.getAssociatedAwards(params);
 
 		this.courseAwards = awards;
-		this.awardBeingEdited = null; // clear editing state because we either reloaded, saved, or deleted
-		this.invalidCredits = false;
 	}
 
 	async _handleSearchEvent(event) {
@@ -135,76 +129,9 @@ class CourseAwards extends BaseMixin(LitElement) {
 		this.addAwardsDialogOpen = false;
 	}
 
-	async _updateAward(award) {
-		const inputTextEle = this.shadowRoot.getElementById(`${TEXT_INPUT_BASE}${award.Id}`);
-		const checkboxEle = this.shadowRoot.getElementById(`${CHECKBOX_BASE}${award.Id}`);
-
-		if (this.invalidCredits) {
-			return;
-		}
-
-		// update the award
-		award.Credits = inputTextEle.value;
-		award.HiddenUntilEarned = checkboxEle.checked;
-		await window.AwardService.updateAward({ award });
-
-		// get the awards again
-		await this._fetchAssociatedAwards();
-	}
-
-	async _userIsDoneEditing(awardId) {
-		const userIsEditing = this.awardBeingEdited !== null && this.awardBeingEdited !== awardId;
-		let userIsDone = true; // they're done if they were never editing in the first place
-		if (userIsEditing) {
-			// ask the user if they want to save first
-			const dialog = this.shadowRoot.querySelector('d2l-dialog-confirm#save-dialog');
-			const action = await dialog.open();
-			if (action === SAVE_ACTION) {
-				const editedAward = this.courseAwards.find(award => award.Id === this.awardBeingEdited);
-				await this._updateAward(editedAward);
-			} else if (action === CANCEL_ACTION) {
-				userIsDone = false;
-			}
-		}
-
-		return userIsDone;
-	}
-
-	_getEditAwardHandler(awardId) {
-		return async() => {
-			const award = this.courseAwards.find(award => award.Id === awardId);
-
-			const userIsDone = await this._userIsDoneEditing(award.Id);
-			if (!userIsDone) {
-				return;
-			}
-
-			if (this.awardBeingEdited === award.Id) { // we're finishing editing
-				await this._updateAward(award);
-			} else if (this.awardBeingEdited === null) {
-				this.awardBeingEdited = award.Id;
-			}
-		};
-	}
-
-	_handleInputChangedEvent(event) {
-		const { target: { id: textInputId } } = event;
-		const inputTextEle = this.shadowRoot.getElementById(textInputId);
-
-		if (!window.ValidationService.isNonNegativeNumber(inputTextEle.value) && !this.invalidCredits) {
-			this.invalidCredits = true;
-		} else if (this.invalidCredits) {
-			this.invalidCredits = false;
-		}
-	}
-
 	_getDeleteAwardHandler(awardId) {
 		return async() => {
 			const award = this.courseAwards.find(award => award.Id === awardId);
-			const userIsDone = await this._userIsDoneEditing(award.Id);
-			if (!userIsDone) {
-				return;
-			}
 
 			const dialog = this.shadowRoot.querySelector('d2l-dialog-confirm#delete-dialog');
 			const action = await dialog.open();
@@ -228,8 +155,29 @@ class CourseAwards extends BaseMixin(LitElement) {
 		};
 	}
 
-	_handleAwardInfoDialogClosed() {
+	async _handleAwardInfoDialogClosed() {
 		this.detailedAward = null;
+		await this._fetchAssociatedAwards();
+	}
+
+	_renderActionChevron(awardRowId) {
+		return html`
+			<d2l-dropdown>
+				<d2l-button-icon icon="tier2:chevron-down" class="d2l-dropdown-opener"></d2l-button-icon>
+				<d2l-dropdown-menu>
+					<d2l-menu>
+						<d2l-menu-item
+							text="Edit"
+							@click="${this._getAwardInfoOpenHandler(awardRowId)}">
+						</d2l-menu-item>
+						<d2l-menu-item
+							text="Delete"
+							@click="${this._getDeleteAwardHandler(awardRowId)}">
+						</d2l-menu-item>
+					</d2l-menu>
+				</d2l-dropdown-menu>
+			</d2l-dropdown>
+		`;
 	}
 
 	_renderComponentHeader() {
@@ -288,8 +236,6 @@ class CourseAwards extends BaseMixin(LitElement) {
 						<th>Type</th>
 						<th>Credits</th>
 						<th>Hidden Until Earned</th>
-						<th class='centered-column'>Edit</th>
-						<th class='centered-column'>Delete</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -299,103 +245,32 @@ class CourseAwards extends BaseMixin(LitElement) {
 			html`<p>No awards found</p>`;
 	}
 
-	_getCreditsElement(award) {
-		let fullTemplate;
-		const textInputId = `${TEXT_INPUT_BASE}${award.Id}`;
-
-		if (this.awardBeingEdited === award.Id) {
-			let tooltipTempalte = html``;
-			const inputTextTemplate = html`
-				<d2l-input-text
-					label-hidden
-					id='${textInputId}'
-					title='Credits'
-					label='Credits'
-					placeholder='0.0'
-					value='${award.Credits}'
-					size=1
-					aria-invalid='${this.invalidCredits}'
-					@input='${this._handleInputChangedEvent}'
-					novalidate
-					>
-				</d2l-input-text>`;
-			if (this.invalidCredits) {
-				tooltipTempalte = html`
-					<d2l-tooltip
-						id='${TEXT_INPUT_TOOLTIP_BASE}${award.id}'
-						state='error'
-						align='start'
-						>
-						Please enter a non-negative number
-					</d2l-tooltip>`;
-			}
-			fullTemplate = html`
-				${inputTextTemplate}
-				${tooltipTempalte}
-			`;
-		} else {
-			fullTemplate = html`<p>${award.Credits}</p>`;
-		}
-		return fullTemplate;
-	}
-
 	_getHiddenAwardElement(award) {
-		return this.awardBeingEdited === award.Id ?
-			html`
-			<d2l-input-checkbox
-				id='${CHECKBOX_BASE}${award.Id}'
-				class='hidden-checkbox flex-item'
-				?checked=${award.HiddenUntilEarned}
-				>
-			</d2l-input-checkbox>` :
-			html`
+		return html`
 			<d2l-icon
 				icon=${award.HiddenUntilEarned ? 'tier1:check' : 'tier1:close-default'}
 				aria-label=${award.HiddenUntilEarned ? 'Hidden' : 'Not Hidden'}
 				>
 			</d2l-icon>
-			`;
+		`;
 	}
 
 	_renderAward(award) {
-		const awardIsBeingEdited = this.awardBeingEdited === award.Id;
 		return html`
 		<tr>
 			<td class='centered-column icon-column'>
 				<img src='${award.ImgPath}' width='75%'/>
 			</td>
 			<td>
-				<d2l-link
-					aria-haspopup='true'
-					@click='${this._getAwardInfoOpenHandler(award.Id)}'
-					>
-					${award.Name}
-				</d2l-link>
+				${award.Name}
+				${ this._renderActionChevron(award.Id) }
 			</td>
 			<td>${award.Type}</td>
 			<td>
-				${this._getCreditsElement(award)}
+				<p>${award.Credits}</p>
 			</td>
 			<td class='centered-column'>
 				${this._getHiddenAwardElement(award)}
-			</td>
-			<td class='centered-column'>
-				<d2l-button-icon
-					text=${awardIsBeingEdited ? `Finish editing award ${award.Name}` : `Edit award ${award.Name}`}
-					icon=${awardIsBeingEdited ? 'tier1:save' : 'tier1:edit'}
-					@click='${this._getEditAwardHandler(award.Id)}'
-					aria-haspopup='true'
-					>
-				</d2l-button-icon>
-			</td>
-			<td class='centered-column'>
-				<d2l-button-icon
-					text='Delete Award'
-					icon='tier1:delete'
-					@click='${this._getDeleteAwardHandler(award.Id)}'
-					aria-haspopup='true'
-					>
-				</d2l-button-icon>
 			</td>
 		</tr>
 		`;
@@ -410,6 +285,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 			>
 		</d2l-add-awards-dialog>
 		<d2l-award-info-dialog
+			edit
 			.detailedAward='${this.detailedAward}'
 			@d2l-dialog-close='${this._handleAwardInfoDialogClosed}'
 			>
