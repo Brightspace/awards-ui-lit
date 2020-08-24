@@ -232,7 +232,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 
 		this.revokeDialogOpened = false;
 		this.selectedStudents = Array();
-		this.isValidOption = false;
+		this.isValidOption = true;
 		this.isValidReason = false;
 	}
 
