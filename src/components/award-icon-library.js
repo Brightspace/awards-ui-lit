@@ -315,7 +315,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				aria-invalid=${!this.isValidIconName}
 				@input=${this._changedIconName}
 				@focusout=${this._changedIconName}
-				tabindex="$0"
+				tabindex=0
 				novalidate
 				>
 			</d2l-input-text>
@@ -332,7 +332,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				@focusout=${this._uploadIcon}
 				primary
 				aria-invalid=${!this.isValidImage}
-				tabindex="$1"
+				tabindex=1
 				>
 				Upload Icon
 			</d2l-button>
