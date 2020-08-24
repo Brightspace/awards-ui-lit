@@ -119,12 +119,12 @@ class MyAwards extends BaseMixin(LitElement) {
 		});
 
 		const selectorParams = {
-			label: 'Awards Type Dropdown'
+			label: this.localize('issued-awards-selector-label')
 		};
 
 		const searchParams = {
-			label: 'Search for issued awards',
-			placeholder: 'Search for issued awards'
+			label: this.localize('issued-awards-search-placeholder'),
+			placeholder: this.localize('issued-awards-search-placeholder')
 		};
 
 		return html`
@@ -160,15 +160,15 @@ class MyAwards extends BaseMixin(LitElement) {
 		const renderedAwards = this.issuedAwards.map(award => this._renderAward(award));
 		return renderedAwards.length > 0 ?
 			html`
-				<table class='flex-item' aria-label='Issued awards table'>
+				<table class='flex-item' aria-label=${this.localize('issued-awards-table-label')}>
 					<thead>
 						<tr>
-							<th class='icon-column'>Icon</th>
-							<th>Name</th>
-							<th>Type</th>
-							<th>Credits</th>
-							<th class='time-column'>Issue Date</th>
-							<th class='time-column'>Expiration Date</th>
+							<th class='icon-column'>${this.localize('table-header-icon')}</th>
+							<th>${this.localize('table-header-name')}</th>
+							<th>${this.localize('table-header-type')}</th>
+							<th>${this.localize('table-header-credits')}</th>
+							<th class='time-column'>${this.localize('table-header-issue-date')}</th>
+							<th class='time-column'>${this.localize('table-header-expiration-date')}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -178,7 +178,7 @@ class MyAwards extends BaseMixin(LitElement) {
 			` :
 			html`
 			<div>
-				<p>No awards found.</p>
+				<p>${this.localize('no-awards')}</p>
 			</div>
 			`;
 	}

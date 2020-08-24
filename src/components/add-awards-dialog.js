@@ -96,8 +96,8 @@ class AddAwardsDialog extends BaseMixin(LitElement) {
 					${this.availableAwards.map(award => this._renderAward(award))}
 				</d2l-list>
 			</div>
-			<d2l-button slot='footer' primary data-dialog-action=${DONE_ACTION}>Done</d2l-button>
-			<d2l-button slot='footer' data-dialog-action=${CANCEL_ACTION}>Cancel</d2l-button>
+			<d2l-button slot='footer' primary data-dialog-action=${DONE_ACTION}>${this.localize('done-action')}</d2l-button>
+			<d2l-button slot='footer' data-dialog-action=${CANCEL_ACTION}>${this.localize('cancel-action')}</d2l-button>
 		</d2l-dialog>
 		`;
 	}

@@ -147,20 +147,20 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 		return html`
 		<d2l-button
 			@click=${this._issueButtonClicked}
-			description="Issue an award to students selected"
+			description=${this.localize('classlist-issue-button-description')}
 			primary
 			aria-haspopup="true"
 			?disabled=${!this.areStudentsSelected}
 			>
-			Issue
+			${this.localize('issue-action')}
 		</d2l-button>
 		<d2l-button
 			@click=${this._revokeButtonClicked}
-			description="Revoke an award to students selected"
+			description=${this.localize('classlist-revoke-button-description')}
 			aria-haspopup="true"
 			?disabled=${!this.areStudentsSelected}
 			>
-			Revoke
+			${this.localize('revoke-action')}
 		</d2l-button>
 		`;
 	}
@@ -186,12 +186,12 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 		});
 
 		const selectorParams = {
-			label: 'Classlist ordering Dropdown'
+			label: this.localize('classlist-dropdown-label')
 		};
 
 		const searchParams = {
-			label: 'Search classlist',
-			placeholder: 'Search classlist'
+			label: this.localize('classlist-search-label'),
+			placeholder: this.localize('classlist-search-placeholder')
 		};
 
 		return html`
@@ -232,7 +232,7 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 					${student.FirstName} ${student.LastName}
 				</div>
 				<div slot="actions">
-					${student.Awards.length ? student.Awards.map(award => html`${award}`) : html`This user has no awards`}
+					${student.Awards.length ? student.Awards.map(award => html`${award}`) : html`${this.localize('no-awards')}`}
 				</div>
 			</d2l-list-item>
 			`)}

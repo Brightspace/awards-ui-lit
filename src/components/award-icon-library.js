@@ -126,11 +126,11 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 		<d2l-button
 			class="icon-add-button"
 			@click=${this._uploadButtonClicked}
-			description="Upload new award icon"
+			description=${this.localize('icon-library-upload-button-description')}
 			primary
 			aria-haspopup="true"
 			>
-			Upload New Icon
+			${this.localize('icon-library-upload-button-text')}
 		</d2l-button>
 		`;
 	}
@@ -162,19 +162,19 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 					<div class="icon-button-container">
 						<d2l-button-icon
 							class="icon-button"
-							text="More information"
+							text=${this.localize('icon-library-more-info-button-text')}
 							icon="tier1:more"
 							aria-haspopup="true"
-							aria-label="More information"
+							aria-label=${this.localize('icon-library-more-info-button-text')}
 							@click='${this._openInfoDialog(icon.Id)}'
 							>
 						</d2l-button-icon>
 						<d2l-button-icon
 							class="icon-button"
-							text="Delete"
+							text=${this.localize('icon-library-delete-button-text')}
 							icon="tier1:delete"
 							aria-haspopup="true"
-							aria-label="Delete Icon"
+							aria-label=${this.localize('icon-library-delete-button-label')}
 							@click='${this._openDeleteDialog(icon.Id)}'
 							>
 						</d2l-button-icon>
@@ -201,10 +201,10 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			>
 			<div class="info-dialog-info">
 				<img class="info-dialog-image" src=${this.iconDetails.Path} />
-				<div><b>Name:</b> ${this.iconDetails.Name}</div>
-				<div><b>Creation Date:</b> ${convertToDateString(this.iconDetails.CreatedDate)}</div>
+				<div><b>${this.localize('icon-library-info-name-text')}:</b> ${this.iconDetails.Name}</div>
+				<div><b>${this.localize('icon-library-info-creation-date-text')}:</b> ${convertToDateString(this.iconDetails.CreatedDate)}</div>
 				${this.iconDetails.UsedBy.length ? html`
-				<div><b>Used By:</b></div>
+				<div><b>${this.localize('icon-library-info-used-by-text')}:</b></div>
 				` : html``}
 
 				<d2l-list separators="between">
@@ -221,7 +221,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				primary
 				data-dialog-action
 				>
-				Close
+				${this.localize('close-action')}
 			</d2l-button>
 		</d2l-dialog>
 		` : html``;
@@ -238,8 +238,8 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 	_renderDeleteDialog() {
 		return this.deleteOpened ? html`
 		<d2l-dialog-confirm
-			title-text="Confirm Deletion"
-			text="Are you sure you wish to delete the ${this.iconDetails.Name} icon?"
+			title-text=${this.localize('icon-library-confirm-delete-title')}
+			text=${this.localize('icon-library-confirm-delete-title', {name: this.iconDetails.Name})}
 			?opened=${this.deleteOpened}
 			@d2l-dialog-close=${this._deleteClosed}
 			>
@@ -248,13 +248,13 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				primary
 				data-dialog-action=${YES}
 				>
-				Yes
+				${this.localize('yes-action')}
 			</d2l-button>
 			<d2l-button
 				slot="footer"
 				data-dialog-action
 				>
-				No
+				${this.localize('no-action')}
 			</d2l-button>
 		</d2l-dialog-confirm>
 		` : html``;
@@ -301,14 +301,14 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 		return this.uploadOpened ? html`
 		<d2l-dialog
 			id="upload-dialog"
-			title-text="Upload New Icon"
+			title-text=${this.localize('icon-library-upload-button-text')}
 			?opened=${this.uploadOpened}
 			@d2l-dialog-close=${this._uploadDialogClose}
 			>
 			<d2l-input-text
 				id="icon-name-upload"
-				label="Icon Name"
-				placeholder="Enter the icon name"
+				label=${this.localize('icon-library-icon-name-label')}
+				placeholder=${this.localize('icon-library-icon-name-placeholder')}
 				required
 				aria-haspopup="true"
 				aria-invalid=${!this.isValidIconName}
@@ -318,7 +318,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			</d2l-input-text>
 			${!this.isValidIconName ? html`
 			<d2l-tooltip for="icon-name-upload" state="error" align="start" offset="10">
-				Please provide an icon name
+				${this.localize('icon-library-icon-name-tooltip')}
 			</d2l-tooltip>
 			` : html``}
 
@@ -329,20 +329,20 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				primary
 				aria-invalid=${!this.isValidImage}
 				>
-				Upload Icon
+				${this.localize('icon-library-dialog-upload-button-text')}
 			</d2l-button>
 			${this.imageSelected ? html`
 			<div>
-				Image selected: ${this.imageSelected}
+				${this.localize('icon-library-dialog-image-selected', {name: this.imageSelected})}
 			</div>
 			` : html`
 			<div>
-				No image selected
+				${this.localize('icon-library-dialog-no-image-selected')}
 			</div>
 			`}
 			${!this.isValidImage ? html`
 			<d2l-tooltip for="icon-image-upload" state="error" align="start" offset="10">
-				Please select and image for the icon
+				${this.localize('icon-library-dialog-image-selected-tooltip')}
 			</d2l-tooltip>
 			` : html``}
 
@@ -351,13 +351,13 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				@click=${this._createIcon}
 				primary
 				>
-				Create
+				${this.localize('create-action')}
 			</d2l-button>
 			<d2l-button
 				slot="footer"
 				data-dialog-action
 				>
-				Cancel
+				${this.localize('cancel-action')}
 			</d2l-button>
 		</d2l-dialog>
 		` : html``;
