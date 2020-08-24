@@ -108,11 +108,11 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 		<d2l-dialog
 			?opened=${this.issueDialogOpened}
 			@d2l-dialog-close=${this._dialogClosed}
-			title-text="Issue Award"
+			title-text=${this.localize('issue-award-dialog-title')}
 			>
 			<label>
 				<span class="d2l-input-label">
-					Select Award *
+					${this.localize('issue-awards-dialog-select-label')} *
 				</span>
 				<select
 					id="issue-award-select"
@@ -128,14 +128,14 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 				</select>
 				${!this.isValidOption ? html`
 				<d2l-tooltip for="issue-award-select" state="error" align="start" offset="10">
-					Please select an award
+					${this.localize('issue-award-dialog-select-tooltip')}
 				</d2l-tooltip>
 				` : html``}
 			</label>
 			<d2l-input-text
 				id="issue-award-criteria"
-				label="Award Criteria"
-				placeholder="Enter the award criteria"
+				label=${this.localize('issue-award-dialog-input-label')}
+				placeholder=${this.localize('issue-award-dialog-input-placeholder')}
 				required
 				aria-haspopup="true"
 				aria-invalid=${!this.isValidCriteria}
@@ -146,13 +146,13 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 			</d2l-input-text>
 			${!this.isValidCriteria ? html`
 			<d2l-tooltip for="issue-award-criteria" state="error" align="start" offset="10">
-				Please provide an award criteria
+				${this.localize('issue-award-dialog-input-tooltip')}
 			</d2l-tooltip>
 			` : html``}
 
 
 			<label  for="issueDialogStudentList" class="d2l-input-label">
-				Selected Students (${this.selectedStudents.length})
+				${this.localize('issue-award-dialog-students-selected', {numStudents: this.selectedStudents.length})}
 			</label>
 			<d2l-list
 				id="issueDialogStudentList"
@@ -174,10 +174,10 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 				@click=${this._onDone}
 				.disabled = ${!(this.isValidCriteria && this.isValidOption)}
 				>
-				Issue
+				${this.localize('issue-action')}
 			</d2l-button>
 			<d2l-button slot="footer" data-dialog-action>
-				Cancel
+				${this.localize('cancel-action')}
 			</d2l-button>
 		</d2l-dialog>
 		`;
@@ -280,11 +280,11 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 		<d2l-dialog
 			?opened=${this.revokeDialogOpened}
 			@d2l-dialog-close=${this._dialogClosed}
-			title-text="Revoke Award"
+			title-text=${this.localize('revoke-awards-dialog-title')}
 			>
 			<label>
 				<span class="d2l-input-label">
-					Select Award *
+					${this.localize('issue-awards-dialog-select-label')} *
 				</span>
 				<select
 					id="revoke-award-select"
@@ -301,8 +301,8 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 			</label>
 			<d2l-input-text
 				id="revoke-award-reason"
-				label="Revoke Reason"
-				placeholder="Enter the revoke reason"
+				label=${this.localize('revoke-award-dialog-input-label')}
+				placeholder=${this.localize('revoke-award-dialog-input-placeholder')}
 				required
 				aria-haspopup="true"
 				aria-invalid=${!this.isValidReason}
@@ -313,7 +313,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 			</d2l-input-text>
 
 			<label  for="issueDialogStudentList" class="d2l-input-label">
-				Selected Students (${this.selectedStudents.length})
+				${this.localize('issue-award-dialog-students-selected', {numStudents: this.selectedStudents.length})}
 			</label>
 			<d2l-list
 				id="issueDialogStudentList"
@@ -335,10 +335,10 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 				@click=${this._onDone}
 				.disabled = ${!(this.isValidOption && this.isValidReason)}
 				>
-				Revoke
+				${this.localize('revoke-action')}
 			</d2l-button>
 			<d2l-button slot="footer" data-dialog-action>
-				Cancel
+				${this.localize('cancel-action')}
 			</d2l-button>
 		</d2l-dialog>
 		`;

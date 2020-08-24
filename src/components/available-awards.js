@@ -83,12 +83,12 @@ class AvailableAwards extends BaseMixin(LitElement) {
 		});
 
 		const selectorParams = {
-			label: 'Awards Type Dropdown'
+			label: this.localize('issued-awards-selector-label')
 		};
 
 		const searchParams = {
-			label: 'Search for issued awards',
-			placeholder: 'Search for issued awards'
+			label: this.localize('issued-awards-search-placeholder'),
+			placeholder: this.localize('issued-awards-search-placeholder')
 		};
 
 		return html`
@@ -123,10 +123,10 @@ class AvailableAwards extends BaseMixin(LitElement) {
 				<table class='flex-item' aria-label='Available awards'>
 					<thead>
 						<tr>
-							<th class='icon-column'>Icon</th>
-							<th>Name</th>
-							<th>Course</th>
-							<th>Description</th>
+							<th class='icon-column'>${this.localize('table-header-icon')}</th>
+							<th>${this.localize('table-header-name')}</th>
+							<th>${this.localize('table-header-course')}</th>
+							<th>${this.localize('table-header-description')}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -136,7 +136,7 @@ class AvailableAwards extends BaseMixin(LitElement) {
 			` :
 			html`
 			<div>
-				<p>No awards found.</p>
+				<p>${this.localize('no-awards')}</p>
 			</div>
 			`;
 	}
