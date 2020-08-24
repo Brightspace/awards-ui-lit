@@ -355,7 +355,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				slot="footer"
 				@click=${this._createIcon}
 				primary
-				.disabled = ${!(this.isValidImage && this.isValidIconName)}
+				.disabled=${!(this.isValidImage && this.isValidIconName)}
 				>
 				Create
 			</d2l-button>
