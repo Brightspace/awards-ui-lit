@@ -87,7 +87,7 @@ class AddAwardsDialog extends BaseMixin(LitElement) {
 	render() {
 		return html`
 		<d2l-dialog
-			title-text='Choose Awards to Add to Course'
+			title-text=${this.localize('add-awards-dialog-title')}
 			?opened=${this.opened}
 			@d2l-dialog-close=${this._handleDialogClosed}
 			>

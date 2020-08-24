@@ -1,4 +1,10 @@
 export const val = {
+	'add-awards-dialog-title': 'Choose Awards to Add to Course',
+	'awards-tab-title-available-awards': 'View Available Awards',
+	'awards-tab-title-classlist': 'Classlist',
+	'awards-tab-title-course-awards': 'Course Awards',
+	'awards-tab-title-icon-library': 'Award Icon Library',
+	'awards-tab-title-my-awards': 'My Awards',
 	'award-info-dialog-cancel-button-description': 'Cancel awards data changes',
 	'award-info-dialog-credits-text': 'Credits',
 	'award-info-dialog-description-text': 'Description',
@@ -62,6 +68,7 @@ export const val = {
 	'revoke-action': 'Revoke',
 	'revoke-award-dialog-input-label': 'Revoke Reason',
 	'revoke-award-dialog-input-placeholder': 'Enter the revoke reason',
+	'revoke-awards-dialog-title': 'Revoke Award',
 	'save-action': 'Save',
 	'share-badgr-action': 'Share on Badgr',
 	'table-header-course': 'Course',

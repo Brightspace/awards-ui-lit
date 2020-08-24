@@ -280,7 +280,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 		<d2l-dialog
 			?opened=${this.revokeDialogOpened}
 			@d2l-dialog-close=${this._dialogClosed}
-			title-text="Revoke Award"
+			title-text=${this.localize('revoke-awards-dialog-title')}
 			>
 			<label>
 				<span class="d2l-input-label">
