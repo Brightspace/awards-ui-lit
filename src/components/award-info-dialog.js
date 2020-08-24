@@ -27,6 +27,9 @@ class AwardInfoDialog extends BaseMixin(LitElement) {
 			},
 			edit: {
 				type: Boolean
+			},
+			submitEnabled: {
+				type: Boolean
 			}
 		};
 	}
@@ -55,6 +58,7 @@ class AwardInfoDialog extends BaseMixin(LitElement) {
 	constructor() {
 		super();
 		this.detailedAward = null;
+		this.submitEnabled = true;
 	}
 
 	_printHandler() {
@@ -70,14 +74,20 @@ class AwardInfoDialog extends BaseMixin(LitElement) {
 			const creditElement = this.shadowRoot.getElementById(CREDITS_ID);
 			const checkboxElement = this.shadowRoot.getElementById(CHECKBOX_ID);
 
-			// update the award
-			const award = this.detailedAward;
-			award.Credits = creditElement.value;
-			award.HiddenUntilEarned = checkboxElement.checked;
-			await window.AwardService.updateAward({ award });
+			if (creditElement.validity.valid) {
+				// update the award
+				const award = this.detailedAward;
+				award.Credits = Number(creditElement.value);
+				award.HiddenUntilEarned = checkboxElement.checked;
+				await window.AwardService.updateAward({ award });
+			}
 		}
 
 		this.detailedAward = null;
+	}
+
+	_handleValidityChange(e) {
+		this.submitEnabled = !e.target.invalid;
 	}
 
 	_renderAwardDetails() {
@@ -93,6 +103,7 @@ class AwardInfoDialog extends BaseMixin(LitElement) {
 				primary
 				data-dialog-action=${DONE}
 				description=${this.localize('award-info-dialog-save-button-description')}
+				.disabled=${!this.submitEnabled}
 				>
 				${this.localize('save-action')}
 			</d2l-button>
@@ -135,17 +146,18 @@ class AwardInfoDialog extends BaseMixin(LitElement) {
 					label=${this.localize('award-info-dialog-credits-text')}
 					name=${this.localize('award-info-dialog-credits-text')}
 					title=${this.localize('award-info-dialog-credits-text')}
-					type="number"
+					type="string"
 					value=${this.detailedAward.Credits}
-					placeholder="0"
 					required
 					min=0
+					pattern="^\\d*\\.?\\d*$"
+					prevent-submit
+					@invalid-change=${this._handleValidityChange}
 					>
 				</d2l-input-text>
 			` : html`
 				<p class='flex-item'><b>${this.localize('award-info-dialog-credits-text')}:</b> ${this.detailedAward.Credits}</p>
 			`}
-
 			<p class='flex-item'><b>${this.localize('award-info-dialog-description-text')}:</b> ${this.detailedAward.Description}</p>
 			${evidence}
 			${issueDate}

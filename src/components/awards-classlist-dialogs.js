@@ -47,6 +47,10 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 			}
 			d2l-input-text {
 				padding-top: 7px;
+				margin-top: 48px;
+			}
+			.issue-award-criteria{
+				margin-top: 48px;
 			}
 		`];
 	}
@@ -57,7 +61,7 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 		this.issueDialogOpened = false;
 		this.selectedStudents = Array();
 		this.isValidOption = true;
-		this.isValidCriteria = true;
+		this.isValidCriteria = false;
 	}
 
 	connectedCallback() {
@@ -84,7 +88,7 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 		this.shadowRoot.getElementById('issue-award-select').value = '0';
 		this.shadowRoot.getElementById('issue-award-criteria').value = '';
 		this.isValidOption = true;
-		this.isValidCriteria = true;
+		this.isValidCriteria = false;
 	}
 
 	_onDone() {
@@ -115,6 +119,7 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 					class="d2l-input-select"
 					aria-invalid=${!this.isValidOption}
 					@change=${this._selectAward}
+					@focusout=${this._selectAward}
 					>
 					<option value=0></option>
 					${this.awards.map((award, index) => html`
@@ -135,6 +140,7 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 				aria-haspopup="true"
 				aria-invalid=${!this.isValidCriteria}
 				@input=${this._changeAwardCriteria}
+				@focusout=${this._changeAwardCriteria}
 				novalidate
 				>
 			</d2l-input-text>
@@ -166,6 +172,7 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 				slot="footer"
 				primary
 				@click=${this._onDone}
+				.disabled = ${!(this.isValidCriteria && this.isValidOption)}
 				>
 				${this.localize('issue-action')}
 			</d2l-button>
@@ -215,6 +222,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 			}
 			d2l-input-text {
 				padding-top: 7px;
+				margin-top:48px;
 			}
 		`];
 	}
@@ -225,7 +233,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 		this.revokeDialogOpened = false;
 		this.selectedStudents = Array();
 		this.isValidOption = true;
-		this.isValidReason = true;
+		this.isValidReason = false;
 	}
 
 	connectedCallback() {
@@ -252,7 +260,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 		this.shadowRoot.getElementById('revoke-award-select').value = '0';
 		this.shadowRoot.getElementById('revoke-award-reason').value = '';
 		this.isValidOption = true;
-		this.isValidReason = true;
+		this.isValidReason = false;
 	}
 
 	_onDone() {
@@ -283,6 +291,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 					class="d2l-input-select"
 					aria-invalid=${!this.isValidOption}
 					@change=${this._selectAward}
+					@focusout=${this._selectAward}
 					>
 					<option value=0></option>
 					${this.awards.map((award, index) => html`
@@ -298,6 +307,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 				aria-haspopup="true"
 				aria-invalid=${!this.isValidReason}
 				@input=${this._changeRevokeReason}
+				@focusout=${this._changeRevokeReason}
 				novalidate
 				>
 			</d2l-input-text>
@@ -323,6 +333,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 				slot="footer"
 				primary
 				@click=${this._onDone}
+				.disabled = ${!(this.isValidOption && this.isValidReason)}
 				>
 				${this.localize('revoke-action')}
 			</d2l-button>

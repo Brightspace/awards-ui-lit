@@ -84,6 +84,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			.upload-button{
 				padding-top: 12px;
 				padding-bottom: 12px;
+				margin-top: 48px;
 			}
 			.info-dialog-info{
 				display: flex;
@@ -104,7 +105,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 		this.deleteOpened = false;
 		this.uploadOpened = false;
 		this.isValidIconName = true;
-		this.isValidImage = true;
+		this.isValidImage = false;
 		this.imageSelected = '';
 	}
 
@@ -262,7 +263,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 
 	_reset() {
 		this.isValidIconName = true;
-		this.isValidImage = true;
+		this.isValidImage = false;
 		this.imageSelected = '';
 	}
 
@@ -313,6 +314,8 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				aria-haspopup="true"
 				aria-invalid=${!this.isValidIconName}
 				@input=${this._changedIconName}
+				@focusout=${this._changedIconName}
+				tabindex=0
 				novalidate
 				>
 			</d2l-input-text>
@@ -326,8 +329,10 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				id="icon-image-upload"
 				class="upload-button"
 				@click=${this._uploadIcon}
+				@focusout=${this._uploadIcon}
 				primary
 				aria-invalid=${!this.isValidImage}
+				tabindex=1
 				>
 				${this.localize('icon-library-dialog-upload-button-text')}
 			</d2l-button>
@@ -350,6 +355,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				slot="footer"
 				@click=${this._createIcon}
 				primary
+				.disabled=${!(this.isValidImage && this.isValidIconName)}
 				>
 				${this.localize('create-action')}
 			</d2l-button>
