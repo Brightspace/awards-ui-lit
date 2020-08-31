@@ -50,6 +50,14 @@ class IconCreation extends BaseMixin(LitElement) {
 		console.log("HERE");
 	}
 
+	_changedIconName(e) {
+		this.isValidIconName = window.ValidationService.stringNotEmpty(e.target.value);
+	}
+
+	_createIcon(){
+		this.fireNavigationEvent({page:'org-view'});
+	}
+
 	render() {
 		return html`
 		<div>
@@ -113,7 +121,6 @@ class IconCreation extends BaseMixin(LitElement) {
 			</d2l-button>
 			<d2l-button
 				slot="footer"
-				data-dialog-action
 				>
 				Cancel
 			</d2l-button>
