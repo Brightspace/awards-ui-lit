@@ -3,6 +3,7 @@ import './course-awards';
 import './my-awards';
 import './award-icon-library';
 import './available-awards';
+import './award-icon-creation';
 import '@brightspace-ui/core/components/tabs/tabs';
 import '@brightspace-ui/core/components/tabs/tab-panel';
 import { css, html, LitElement } from 'lit-element/lit-element';
@@ -21,6 +22,9 @@ class Awards extends BaseMixin(LitElement) {
 			orgUnitId: {
 				attribute: 'org-unit-id',
 				type: Number
+			},
+			pageData: {
+				type: Object
 			}
 		};
 	}
@@ -43,9 +47,30 @@ class Awards extends BaseMixin(LitElement) {
 		super();
 
 		this.prop1 = 'awards';
-
+		if(this.isCourse){
+			this.pageData = {detail:"org-unit-view"};
+		}
+		else{
+			this.pageData = {detail:"org-unit-view"};
+		}
+		
 		window.AwardService = AwardServiceFactory.getService();
 		window.ValidationService = ValidationService;
+	}
+
+	handleNavigateEvent(e) {
+		this.pageData.detail = e.detail.pageData.page;
+		this.requestUpdate();
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
+		this.addEventListener('d2l-awards-navigate', this.handleNavigateEvent);
+	}
+
+	disconnectedCallback() {
+		super.disconnectedCallback();
+		this.removeEventListener('d2l-awards-navigate', this.handleNavigateEvent);
 	}
 
 	_renderCourseTabs() {
@@ -102,13 +127,21 @@ class Awards extends BaseMixin(LitElement) {
 	}
 
 	render() {
-		return html`
+		if(this.pageData.detail === "org-unit-view" || this.pageData.detail === "org-view"){
+			return html`
 			<d2l-tabs>
 				${ this.isCourse ? this._renderCourseTabs() : html`` }
 				${this._renderGeneralTabs()}
 				${ !this.isCourse ? this._renderOrgTabs() : html`` }
 			</d2l-tabs>
 		`;
+		}
+		else if(this.pageData.detail === "icon-creation-view"){
+			return html`<d2l-icon-create>
+				
+			</div>`;
+		}
+		
 	}
 }
 customElements.define('d2l-awards', Awards);

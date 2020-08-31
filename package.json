@@ -38,8 +38,10 @@
     "puppeteer": "^1"
   },
   "dependencies": {
+    "@brightspace-ui-labs/file-uploader": "^2.0.1",
     "@brightspace-ui/core": "^1",
     "@webcomponents/webcomponentsjs": "^2",
+    "d2l-polymer-behaviors": "^2.7.1",
     "dayjs": "^1.8.28",
     "lit-element": "^2"
   }

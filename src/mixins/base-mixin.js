@@ -13,6 +13,33 @@ export const BaseMixin = superclass => class extends RtlMixin(LocalizeMixin(supe
 		return copy;
 	}
 
+	fireNavigationEvent(pageData) {
+		const event = new CustomEvent('d2l-awards-navigate', {
+			bubbles: true,
+			composed: true,
+			detail: {
+				pageData
+			}
+		});
+		this.dispatchEvent(event);
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
+		if (window.iFrameResizer && window.iFrameResizer.heightCalculationMethod !== 'lowestElement') {
+			window.iFrameResizer.heightCalculationMethod = 'lowestElement';
+		}
+		new ResizeObserver(() => {
+			this.resize();
+		}).observe(document.body, {
+			attributes: true
+		});
+	}
+
+	resize() {
+		window.parentIFrame && window.parentIFrame.size();
+	}
+
 	static async getLocalizeResources(langs) {
 		for await (const lang of langs) {
 			let translations;
