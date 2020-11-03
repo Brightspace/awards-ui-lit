@@ -53,7 +53,7 @@ class Awards extends BaseMixin(LitElement) {
 		else{
 			this.pageData = {detail:"org-unit-view"};
 		}
-		
+
 		window.AwardService = AwardServiceFactory.getService();
 		window.ValidationService = ValidationService;
 	}
@@ -127,7 +127,7 @@ class Awards extends BaseMixin(LitElement) {
 	}
 
 	render() {
-		if(this.pageData.detail === "org-unit-view" || this.pageData.detail === "org-view"){
+		if (this.pageData.detail === 'org-unit-view' || this.pageData.detail === 'org-view') {
 			return html`
 			<d2l-tabs>
 				${ this.isCourse ? this._renderCourseTabs() : html`` }
@@ -136,12 +136,10 @@ class Awards extends BaseMixin(LitElement) {
 			</d2l-tabs>
 		`;
 		}
-		else if(this.pageData.detail === "icon-creation-view"){
-			return html`<d2l-icon-create>
-				
-			</div>`;
+		else if (this.pageData.detail === 'icon-creation-view') {
+			return html`<d2l-icon-create></d2l-icon-create>`;
 		}
-		
+
 	}
 }
 customElements.define('d2l-awards', Awards);

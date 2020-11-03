@@ -25,6 +25,12 @@ class IconCreation extends BaseMixin(LitElement) {
 			},
 			isValidImage: {
 				type: Boolean
+			},
+			isValidIconName: {
+				type: Boolean
+			},
+			formComplete: {
+				type: Boolean
 			}
 		};
 	}
@@ -35,26 +41,40 @@ class IconCreation extends BaseMixin(LitElement) {
 		`;
 
 	}
-	
+
 	constructor() {
 		super();
 		this.attachments = [];
-		this.isValidImage = true;
-		console.log("creating icon create");
+		this.isValidImage = false;
+		this.isValidIconName = true;
+		this.formComplete = false;
+	}
+
+	formCompleteUpdate() {
+		this.formComplete = this.isValidImage && this.isValidIconName;
 	}
 
 	attachmentsUpdated(event) {
-		console.log(this.attachment);
-		console.log(event.detail.attachmentsList)
+		if (event.detail.attachmentsList.length === 1) {
+			this.isValidImage = true;
+		}
+		else {
+			this.isValidImage = false;
+		}
 		this.attachments = event.detail.attachmentsList;
-		console.log("HERE");
+		this.formCompleteUpdate();
 	}
 
 	_changedIconName(e) {
 		this.isValidIconName = window.ValidationService.stringNotEmpty(e.target.value);
+		this.formCompleteUpdate();
 	}
 
-	_createIcon(){
+	_createIcon() {
+		this.fireNavigationEvent({page:'org-view'});
+	}
+
+	_cancelNavigation() {
 		this.fireNavigationEvent({page:'org-view'});
 	}
 
@@ -70,8 +90,7 @@ class IconCreation extends BaseMixin(LitElement) {
 				aria-invalid=${!this.isValidIconName}
 				@input=${this._changedIconName}
 				@focusout=${this._changedIconName}
-				tabindex=0
-				novalidate
+				autofocus
 				>
 			</d2l-input-text>
 			${!this.isValidIconName ? html`
@@ -79,7 +98,7 @@ class IconCreation extends BaseMixin(LitElement) {
 				Please provide an icon name
 			</d2l-tooltip>
 			` : html``}
-			<d2l-attachments .attachmentsList="${this.attachments}" @d2l-attachments-list-updated="${this.attachmentsUpdated}">
+			<d2l-attachments id='icon-image-upload' .attachmentsList="${this.attachments}" @d2l-attachments-list-updated="${this.attachmentsUpdated}">
 				<p>Attachments are here</p>
 			</d2l-attachments>
 			<!--<d2l-button
@@ -93,7 +112,7 @@ class IconCreation extends BaseMixin(LitElement) {
 				>
 				Upload Icon
 			</d2l-button>
-			
+
 			${this.imageSelected ? html`
 			<div>
 				Image selected: ${this.imageSelected}
@@ -103,11 +122,11 @@ class IconCreation extends BaseMixin(LitElement) {
 				No image selected
 			</div>
 			`}-->
-			
-			
+
+
 			${!this.isValidImage ? html`
 			<d2l-tooltip for="icon-image-upload" state="error" align="start" offset="10">
-				Please select and image for the icon
+				Please select one image for the icon
 			</d2l-tooltip>
 			` : html``}
 
@@ -115,12 +134,13 @@ class IconCreation extends BaseMixin(LitElement) {
 				slot="footer"
 				@click=${this._createIcon}
 				primary
-				.disabled=${!(this.isValidImage && this.isValidIconName)}
+				.disabled=${!(this.formComplete)}
 				>
 				Create
 			</d2l-button>
 			<d2l-button
 				slot="footer"
+				@click=${this._cancelNavigation}
 				>
 				Cancel
 			</d2l-button>
