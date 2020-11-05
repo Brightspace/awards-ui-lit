@@ -4,6 +4,9 @@ import '@brightspace-ui/core/components/dialog/dialog';
 import '@brightspace-ui/core/components/dialog/dialog-confirm.js';
 import '@brightspace-ui/core/components/tooltip/tooltip';
 import '@brightspace-ui/core/components/inputs/input-text.js';
+import '@brightspace-ui-labs/file-uploader/d2l-file-uploader';
+import './attachments';
+import './attachment-list';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../mixins/base-mixin';
 import { convertToDateString } from '../helpers';
@@ -36,6 +39,9 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			},
 			imageSelected: {
 				type: String
+			},
+			attachments :{
+				type: Array
 			}
 		};
 	}
@@ -107,6 +113,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 		this.isValidIconName = true;
 		this.isValidImage = false;
 		this.imageSelected = '';
+		this.attachments = [];
 	}
 
 	connectedCallback() {
@@ -264,6 +271,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 	_reset() {
 		this.isValidIconName = true;
 		this.isValidImage = false;
+		this.attachments = [];
 		this.imageSelected = '';
 	}
 
@@ -283,6 +291,8 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			this.uploadOpened = false;
 			console.log('Creating icon...');
 
+			//send in image and name
+
 			this._reset();
 		}
 	}
@@ -296,6 +306,21 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 		this.isValidImage = this.imageSelected.length > 0;
 
 		this.shadowRoot.getElementById('upload-dialog').resize();
+	}
+
+	stopDialogueCloseBubble(e) {
+		e.stopPropagation();
+	}
+
+	updateList(event) {
+		this.attachments = event.detail.attachmentsList;
+
+		if (this.attachments.length === 1) {
+			this.isValidImage = true;
+		}
+		else {
+			this.isValidImage = false;
+		}
 	}
 
 	_renderUploadDialog() {
@@ -317,6 +342,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				@focusout=${this._changedIconName}
 				tabindex=0
 				novalidate
+				onfocus
 				>
 			</d2l-input-text>
 			${!this.isValidIconName ? html`
@@ -325,26 +351,9 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			</d2l-tooltip>
 			` : html``}
 
-			<d2l-button
-				id="icon-image-upload"
-				class="upload-button"
-				@click=${this._uploadIcon}
-				@focusout=${this._uploadIcon}
-				primary
-				aria-invalid=${!this.isValidImage}
-				tabindex=1
-				>
-				Upload Icon
-			</d2l-button>
-			${this.imageSelected ? html`
-			<div>
-				Image selected: ${this.imageSelected}
-			</div>
-			` : html`
-			<div>
-				No image selected
-			</div>
-			`}
+			<d2l-attachments id='icon-image-upload' .attachmentsList="${this.attachments}" @d2l-dialog-close="${this.stopDialogueCloseBubble}" @d2l-attachments-list-updated="${this.updateList}">
+				<p>Attachments are here</p>
+			</d2l-attachments>
 			${!this.isValidImage ? html`
 			<d2l-tooltip for="icon-image-upload" state="error" align="start" offset="10">
 				Please select and image for the icon
@@ -356,6 +365,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				@click=${this._createIcon}
 				primary
 				.disabled=${!(this.isValidImage && this.isValidIconName)}
+				dialog-action
 				>
 				Create
 			</d2l-button>
