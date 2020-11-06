@@ -49,16 +49,19 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			.icon-add-button {
+			.d2l-button--pad-bottom {
 				padding-bottom: 12px;
 			}
-			.grid-container {
+			.d2l-button--mar-top{
+				margin-top: 48px;
+			}
+			.block--grid {
 				display: grid;
 				grid-template-columns: repeat(6, 1fr);
 				column-gap: 12px;
   				row-gap: 12px;
 			}
-			.icon-container {
+			.block--flex-v-center {
 				justify-self: center;
 				display: flex;
 				flex-direction: column;
@@ -68,29 +71,25 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				padding-top: 6px;
 				padding-bottom: 6px;
 			}
-			.icon {
+			.icon--medium {
 				width: 75px;
 				height: 75px;
 				margin: auto;
 				object-fit: contain;
 			}
-			.icon-button {
+			.d2l-button-icon--center--margin-top {
 				margin: auto;
 				margin-top: 6px;
 			}
-			.icon-button-container {
+			.block--mar-auto {
 				margin: auto;
 			}
-			.upload-button{
-				padding-top: 12px;
-				padding-bottom: 12px;
-				margin-top: 48px;
-			}
-			.info-dialog-info{
+
+			.block--flex-column{
 				display: flex;
 				flex-direction: column;
 			}
-			.info-dialog-image {
+			.img--flex-align-self-center {
 				align-self: center;
 			}
 			`
@@ -125,7 +124,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 	_renderHeader() {
 		return html`
 		<d2l-button
-			class="icon-add-button"
+			class="d2l-button--pad-bottom"
 			@click=${this._uploadButtonClicked}
 			description=${this.localize('icon-library-upload-button-description')}
 			primary
@@ -152,17 +151,17 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 
 	_renderIcons() {
 		return html`
-		<div class="grid-container">
+		<div class="block--grid">
 			${this.icons.map(icon => html`
-				<div id="icon-${icon.Id}" class="icon-container">
+				<div id="icon-${icon.Id}" class="block--flex-v-center">
 					<img
-						class="icon"
+						class="icon--medium"
 						src=${icon.Path}
 						>
 
-					<div class="icon-button-container">
+					<div class="block--mar-auto">
 						<d2l-button-icon
-							class="icon-button"
+							class="d2l-button-icon--center--margin-top"
 							text=${this.localize('icon-library-more-info-button-text')}
 							icon="tier1:more"
 							aria-haspopup="true"
@@ -171,7 +170,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 							>
 						</d2l-button-icon>
 						<d2l-button-icon
-							class="icon-button"
+							class="d2l-button-icon--center--margin-top"
 							text=${this.localize('icon-library-delete-button-text')}
 							icon="tier1:delete"
 							aria-haspopup="true"
@@ -200,8 +199,8 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			?opened=${this.infoDialogOpened}
 			@d2l-dialog-close=${this._infoDialogClose}
 			>
-			<div class="info-dialog-info">
-				<img class="info-dialog-image" src=${this.iconDetails.Path} />
+			<div class="block--flex-column">
+				<img class="img--flex-align-self-center" src=${this.iconDetails.Path} />
 				<div><b>${this.localize('icon-library-info-name-text')}:</b> ${this.iconDetails.Name}</div>
 				<div><b>${this.localize('icon-library-info-creation-date-text')}:</b> ${convertToDateString(this.iconDetails.CreatedDate)}</div>
 				${this.iconDetails.UsedBy.length ? html`
@@ -327,7 +326,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 
 			<d2l-button
 				id="icon-image-upload"
-				class="upload-button"
+				class="d2l-button--pad-bottom d2l-button--mar-top"
 				@click=${this._uploadIcon}
 				@focusout=${this._uploadIcon}
 				primary
