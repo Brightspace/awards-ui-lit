@@ -23,6 +23,7 @@
     "@brightspace-ui/visual-diff": "^1",
     "@open-wc/testing": "^2",
     "@open-wc/testing-karma": "^4",
+    "d2l-polymer-behaviors": "Brightspace/d2l-polymer-behaviors-ui#semver:^2",
     "babel-eslint": "^10",
     "deepmerge": "^3",
     "es-dev-server": "^1",
@@ -34,12 +35,12 @@
     "esm": "^3.2.25",
     "frau-ci": "^1",
     "karma-sauce-launcher": "^2",
-    "lit-analyzer": "^1",
-    "puppeteer": "^1"
+    "lit-analyzer": "^1"
   },
   "dependencies": {
     "@brightspace-ui/core": "^1",
     "@webcomponents/webcomponentsjs": "^2",
+    "@brightspace-ui-labs/file-uploader": "^2",
     "dayjs": "^1.8.28",
     "lit-element": "^2"
   }
