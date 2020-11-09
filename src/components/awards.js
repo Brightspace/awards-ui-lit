@@ -3,6 +3,7 @@ import './course-awards';
 import './my-awards';
 import './award-icon-library';
 import './available-awards';
+import './certificate-templates';
 import '@brightspace-ui/core/components/tabs/tabs';
 import '@brightspace-ui/core/components/tabs/tab-panel';
 import { css, html, LitElement } from 'lit-element/lit-element';
@@ -74,6 +75,11 @@ class Awards extends BaseMixin(LitElement) {
 			text=${this.localize('awards-tab-title-icon-library')}
 			>
 			<d2l-award-icon-library class='component'></d2l-award-icon-library>
+		</d2l-tab-panel>
+		<d2l-tab-panel
+			text=${this.localize('awards-tab-title-certificate-templates')}
+			>
+			<d2l-certificate-templates class='component'></d2l-certificate-templates>
 		</d2l-tab-panel>
 		`;
 	}
