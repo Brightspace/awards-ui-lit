@@ -97,12 +97,16 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				align-self: center;
 			}
 
+			#icon-name-upload-tooltip {
+				margin: auto;
+			}
+
 			#icon-name-upload-div {
-				padding-bottom: 60px;
+				padding-bottom: 54px;
 			}
 
 			#icon-img-upload-div {
-				padding-bottom: 24px;
+				padding-bottom: 36px;
 			}
 			`
 		];
@@ -346,7 +350,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 					>
 				</d2l-input-text>
 				${!this.isValidIconName ? html`
-				<d2l-tooltip id="icon-name-upload-tooltip" for="icon-name-upload" state="error" align="start" offset="10">
+				<d2l-tooltip id="icon-name-upload-tooltip" for="icon-name-upload" state="error" offset="10">
 					Please provide an icon name
 				</d2l-tooltip>
 				` : html``}
@@ -357,11 +361,6 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				<d2l-attachments id='icon-image-upload' .attachmentsList="${this.attachments}" @d2l-dialog-close="${this.stopDialogueCloseBubble}" @d2l-attachments-list-updated="${this.updateList}">
 					<p>Attachments are here</p>
 				</d2l-attachments>
-				${!this.isValidImage ? html`
-				<d2l-tooltip for="icon-image-upload" state="error" align="start" offset="10">
-					Please select and image for the icon
-				</d2l-tooltip>
-				` : html``}
 			</div>
 
 			<d2l-button
