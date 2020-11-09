@@ -21,9 +21,6 @@ class AttachmentList extends BaseMixin(LitElement) {
 			},
 			hostPath: {
 				type: String
-			},
-			cpdService: {
-				type: Object
 			}
 		};
 	}
@@ -40,10 +37,6 @@ class AttachmentList extends BaseMixin(LitElement) {
 
 	connectedCallback() {
 		super.connectedCallback();
-	}
-
-	async getAttachment(e) {
-		const attachment = e.target.attachment;
 	}
 
 	fireAttachmentListUpdated(oldVal) {

@@ -60,13 +60,9 @@ class Attachments extends BaseMixin(LitElement) {
 	}
 
 	newFilesAdded(evt) {
-		console.log("NEW FILE ADDED");
-		console.log(evt);
-		console.log(this.readOnly);
 		const newFileArray = [...this.currentAttachments];
 		newFileArray.push(...evt.detail.files);
 		this.currentAttachments = newFileArray;
-		console.log(this.currentAttachments);
 		this.updateComplete.then(() => this.shadowRoot.querySelector('#add_file_dialog').resize());
 	}
 

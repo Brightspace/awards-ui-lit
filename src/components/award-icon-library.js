@@ -37,10 +37,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			isValidImage: {
 				type: Boolean
 			},
-			imageSelected: {
-				type: String
-			},
-			attachments :{
+			attachments: {
 				type: Array
 			}
 		};
@@ -99,6 +96,14 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			.info-dialog-image {
 				align-self: center;
 			}
+
+			#icon-name-upload-div {
+				padding-bottom: 60px;
+			}
+
+			#icon-img-upload-div {
+				padding-bottom: 24px;
+			}
 			`
 		];
 	}
@@ -106,14 +111,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 	constructor() {
 		super();
 
-		this.iconDetails = null;
-		this.infoDialogOpened = false;
-		this.deleteOpened = false;
-		this.uploadOpened = false;
-		this.isValidIconName = true;
-		this.isValidImage = false;
-		this.imageSelected = '';
-		this.attachments = [];
+		this._reset();
 	}
 
 	connectedCallback() {
@@ -269,10 +267,13 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 	}
 
 	_reset() {
+		this.iconDetails = null;
+		this.infoDialogOpened = false;
+		this.deleteOpened = false;
+		this.uploadOpened = false;
 		this.isValidIconName = true;
 		this.isValidImage = false;
 		this.attachments = [];
-		this.imageSelected = '';
 	}
 
 	_uploadDialogClose() {
@@ -285,7 +286,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 		const iconName = this.shadowRoot.getElementById('icon-name-upload').value;
 
 		this.isValidIconName = window.ValidationService.stringNotEmpty(iconName);
-		this.isValidImage = this.imageSelected.length > 0;
+		this.isValidImage = this.attachments.length > 0;
 
 		if (this.isValidIconName && this.isValidImage) {
 			this.uploadOpened = false;
@@ -302,8 +303,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 	}
 
 	_uploadIcon() {
-		this.imageSelected = 'image.png';
-		this.isValidImage = this.imageSelected.length > 0;
+		this.isValidImage = this.attachments.length > 0;
 
 		this.shadowRoot.getElementById('upload-dialog').resize();
 	}
@@ -317,8 +317,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 
 		if (this.attachments.length === 1) {
 			this.isValidImage = true;
-		}
-		else {
+		} else {
 			this.isValidImage = false;
 		}
 	}
@@ -331,34 +330,39 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			?opened=${this.uploadOpened}
 			@d2l-dialog-close=${this._uploadDialogClose}
 			>
-			<d2l-input-text
-				id="icon-name-upload"
-				label="Icon Name"
-				placeholder="Enter the icon name"
-				required
-				aria-haspopup="true"
-				aria-invalid=${!this.isValidIconName}
-				@input=${this._changedIconName}
-				@focusout=${this._changedIconName}
-				tabindex=0
-				novalidate
-				onfocus
-				>
-			</d2l-input-text>
-			${!this.isValidIconName ? html`
-			<d2l-tooltip for="icon-name-upload" state="error" align="start" offset="10">
-				Please provide an icon name
-			</d2l-tooltip>
-			` : html``}
+			<div id="icon-name-upload-div">
+				<d2l-input-text
+					id="icon-name-upload"
+					label="Icon Name"
+					placeholder="Enter the icon name"
+					required
+					aria-haspopup="true"
+					aria-invalid=${!this.isValidIconName}
+					@input=${this._changedIconName}
+					@focusout=${this._changedIconName}
+					tabindex=0
+					novalidate
+					onfocus
+					>
+				</d2l-input-text>
+				${!this.isValidIconName ? html`
+				<d2l-tooltip id="icon-name-upload-tooltip" for="icon-name-upload" state="error" align="start" offset="10">
+					Please provide an icon name
+				</d2l-tooltip>
+				` : html``}
+			</div>
 
-			<d2l-attachments id='icon-image-upload' .attachmentsList="${this.attachments}" @d2l-dialog-close="${this.stopDialogueCloseBubble}" @d2l-attachments-list-updated="${this.updateList}">
-				<p>Attachments are here</p>
-			</d2l-attachments>
-			${!this.isValidImage ? html`
-			<d2l-tooltip for="icon-image-upload" state="error" align="start" offset="10">
-				Please select and image for the icon
-			</d2l-tooltip>
-			` : html``}
+			<div id="icon-img-upload-div">
+
+				<d2l-attachments id='icon-image-upload' .attachmentsList="${this.attachments}" @d2l-dialog-close="${this.stopDialogueCloseBubble}" @d2l-attachments-list-updated="${this.updateList}">
+					<p>Attachments are here</p>
+				</d2l-attachments>
+				${!this.isValidImage ? html`
+				<d2l-tooltip for="icon-image-upload" state="error" align="start" offset="10">
+					Please select and image for the icon
+				</d2l-tooltip>
+				` : html``}
+			</div>
 
 			<d2l-button
 				slot="footer"
