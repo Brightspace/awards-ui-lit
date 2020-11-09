@@ -94,6 +94,11 @@ export class DemoAwardService {
 		return getFilteredAwards({ dataPath: '../../data/available-awards.json', query, awardType });
 	}
 
+	static async getCertificateTemplates() {
+		console.log('CERTIFICATE TEMPLATES: Received request');
+		return fetch('../../data/certificate-templates.json').then(r => r.json());
+	}
+
 	static async getIcons() {
 		return fetch('../../data/award-icons.json').then(r => r.json());
 	}

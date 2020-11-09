@@ -60,6 +60,10 @@ export class AwardService {
 		return {};
 	}
 
+	static async getCertificateTemplates() {
+		return {};
+	}
+
 	static async getIcons() {
 		return {};
 	}
