@@ -49,19 +49,20 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			.d2l-button--pad-bottom {
+			.--pad-bottom {
 				padding-bottom: 12px;
 			}
-			.d2l-button--mar-top{
+			.upload-dialog__d2l-button{
+				padding-bottom: 12px;
 				margin-top: 48px;
 			}
-			.block--grid {
+			.icon-library__grid {
 				display: grid;
 				grid-template-columns: repeat(6, 1fr);
 				column-gap: 12px;
   				row-gap: 12px;
 			}
-			.block--flex-v-center {
+			.grid__flex-item {
 				justify-self: center;
 				display: flex;
 				flex-direction: column;
@@ -71,26 +72,27 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				padding-top: 6px;
 				padding-bottom: 6px;
 			}
-			.icon--medium {
+			.flex-item__icon {
 				width: 75px;
 				height: 75px;
 				margin: auto;
 				object-fit: contain;
 			}
-			.d2l-button-icon--center--margin-top {
+			.button-bar__d2l-button-icon {
 				margin: auto;
 				margin-top: 6px;
 			}
-			.block--mar-auto {
+			.flex-item__button-bar{
 				margin: auto;
 			}
 
-			.block--flex-column{
+			.info__column{
 				display: flex;
 				flex-direction: column;
 			}
-			.img--flex-align-self-center {
+			.column__img {
 				align-self: center;
+				padding: 20px 0px;
 			}
 			`
 		];
@@ -124,7 +126,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 	_renderHeader() {
 		return html`
 		<d2l-button
-			class="d2l-button--pad-bottom"
+			class="--pad-bottom"
 			@click=${this._uploadButtonClicked}
 			description=${this.localize('icon-library-upload-button-description')}
 			primary
@@ -151,17 +153,17 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 
 	_renderIcons() {
 		return html`
-		<div class="block--grid">
+		<div class="icon-library__grid">
 			${this.icons.map(icon => html`
-				<div id="icon-${icon.Id}" class="block--flex-v-center">
+				<div id="icon-${icon.Id}" class="grid__flex-item">
 					<img
-						class="icon--medium"
+						class="flex-item__icon"
 						src=${icon.Path}
 						>
 
-					<div class="block--mar-auto">
+					<div class="flex-item__button-bar">
 						<d2l-button-icon
-							class="d2l-button-icon--center--margin-top"
+							class="button-bar__d2l-button-icon"
 							text=${this.localize('icon-library-more-info-button-text')}
 							icon="tier1:more"
 							aria-haspopup="true"
@@ -199,8 +201,8 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			?opened=${this.infoDialogOpened}
 			@d2l-dialog-close=${this._infoDialogClose}
 			>
-			<div class="block--flex-column">
-				<img class="img--flex-align-self-center" src=${this.iconDetails.Path} />
+			<div class="info__column">
+				<img class="column__img" src=${this.iconDetails.Path} />
 				<div><b>${this.localize('icon-library-info-name-text')}:</b> ${this.iconDetails.Name}</div>
 				<div><b>${this.localize('icon-library-info-creation-date-text')}:</b> ${convertToDateString(this.iconDetails.CreatedDate)}</div>
 				${this.iconDetails.UsedBy.length ? html`
@@ -326,7 +328,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 
 			<d2l-button
 				id="icon-image-upload"
-				class="d2l-button--pad-bottom d2l-button--mar-top"
+				class="upload-dialog__d2l-button"
 				@click=${this._uploadIcon}
 				@focusout=${this._uploadIcon}
 				primary
