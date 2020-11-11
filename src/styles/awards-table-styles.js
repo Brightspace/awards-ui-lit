@@ -5,9 +5,6 @@ export const awardsTableStyles = css`
 	background-color: transparent;
 	width: 100%;
 	height: 41px;
-	border:1px solid #cdd5dc;
-	border-color: var(--d2l-color-mica);
-	border-collapse: collapse;
 	border-spacing: 0;
 	border-radius: 0.3rem;
 	font-size: 0.8rem;
@@ -15,13 +12,15 @@ export const awardsTableStyles = css`
 }
 .table__td {
 	background-color: #ffffff;
-	border:1px solid #cdd5dc;
+	border-top: 1px solid #cdd5dc;
+	border-left: 1px solid #cdd5dc;
 	padding: 0.5rem 1rem;
 	vertical-align: middle;
 }
 .table__th {
 	background-color: #f9fbff;
-	border:1px solid #cdd5dc;
+	border-top: 1px solid #cdd5dc;
+	border-left: 1px solid #cdd5dc;
 	font-size: 0.7rem;
 	line-height: 1rem;
 	text-align: left;
@@ -42,8 +41,37 @@ export const awardsTableStyles = css`
 	text-align: right;
 }
 
-table thead > tr:first-child {
+/*
+** These would be a huge pain to do with BEM
+** so they will stay a selector
+*/
+.table thead > tr:first-child {
 	border-top-style: none;
 	border-left-style: none;
+}
+
+.table thead > tr > th:first-child {
+	border-radius: 0.3rem 0 0 0;
+}
+
+.table thead > tr > th:last-child {
+	border-radius: 0 0.3rem 0 0;
+	border-right: 1px solid #cdd5dc;
+}
+
+.table tr:last-child > td:first-child {
+	border-radius: 0 0 0 0.3rem;
+}
+
+.table tr:last-child > td:last-child {
+	border-radius: 0 0 0.3rem 0;
+}
+
+.table tr:last-child > td {
+	border-bottom: 1px solid #cdd5dc;
+}
+
+.table tr > td:last-child{
+	border-right: 1px solid #cdd5dc;
 }
 `;

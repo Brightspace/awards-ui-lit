@@ -59,16 +59,16 @@ class CourseAwards extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			.flex-item {
-				margin: 0.25rem;
+			.-flex-item {
+				margin: 0.25rem 0rem;
 			}
 			d2l-input-search.flex-item {
 				flex-grow: 2;
 			}
-			d2l-input-checkbox {
-				margin: 0.25rem;
+			.checkbox {
+				margin: 0.25rem 0rem;
 			}
-			table__td--small {
+			.table__td--small {
 				width: 10%;
 			}
 			d2l-awards-search {
@@ -202,6 +202,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 
 		return html`
 		<d2l-input-checkbox
+			class="checkbox"
 			@change='${this._handleBadgrUpdate}'
 			>
 			${this.localize('badgr-checkbox-text')}
@@ -223,7 +224,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 		const renderedAwards = this.courseAwards && this.courseAwards.map(award => this._renderAward(award));
 		return renderedAwards.length !== 0 ?
 			html`
-			<table class='table flex-item' aria-label='Course awards table'>
+			<table class='table -flex-item' aria-label='Course awards table'>
 				<thead>
 					<tr>
 						<th class='table__th table__td--center'>${this.localize('table-header-icon')}</th>

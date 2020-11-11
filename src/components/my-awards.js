@@ -163,7 +163,7 @@ class MyAwards extends BaseMixin(LitElement) {
 				<table class='table' aria-label=${this.localize('issued-awards-table-label')}>
 					<thead>
 						<tr>
-							<th class="table__th -pad-top">${this.localize('table-header-icon')}</th>
+							<th class="table__th">${this.localize('table-header-icon')}</th>
 							<th class="table__th">${this.localize('table-header-name')}</th>
 							<th class="table__th">${this.localize('table-header-type')}</th>
 							<th class="table__th">${this.localize('table-header-credits')}</th>
