@@ -62,7 +62,6 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 	}
 
 	_reset() {
-		console.log('reset');
 		this.attachment = null;
 		this.attachmentUrl = '';
 		this.nameValue = '';

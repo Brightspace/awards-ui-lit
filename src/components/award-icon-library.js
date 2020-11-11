@@ -285,7 +285,6 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 	}
 
 	_handleUploadDialogClosed() {
-		console.log("one");
 		this.uploadOpened = false;
 		this._reset();
 	}
