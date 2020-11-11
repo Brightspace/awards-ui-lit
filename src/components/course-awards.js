@@ -62,16 +62,14 @@ class CourseAwards extends BaseMixin(LitElement) {
 			.-flex-item {
 				margin: 0.25rem 0rem;
 			}
-			d2l-input-search.flex-item {
-				flex-grow: 2;
-			}
 			.checkbox {
 				margin: 0.25rem 0rem;
 			}
 			.table__td--small {
 				width: 10%;
+				min-width: 50px;
 			}
-			d2l-awards-search {
+			.awards-search {
 				display: flex;
 			}
 		`];
@@ -208,6 +206,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 			${this.localize('badgr-checkbox-text')}
 		</d2l-input-checkbox>
 		<d2l-awards-search
+			class="awards-search"
 			.selectorParams=${selectorParams}
 			.selectorOptions=${awardTypeOptions}
 			.searchParams=${searchParams}

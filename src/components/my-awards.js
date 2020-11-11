@@ -42,22 +42,14 @@ class MyAwards extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			.flex-container {
-				display: flex;
-				flex-flow: row wrap;
-				justify-content: flex-start;
-			}
-			.flex-item {
-				margin: 0.25rem;
-				flex: 1;
-			}
 			.-time-column {
 				width: 25%;
 			}
-			.icon-column {
-				width: 10%
+			.-icon-column {
+				width: 10%;
+				min-width: 50px;
 			}
-			d2l-awards-search {
+			.awards-search {
 				display: flex;
 			}
 			`
@@ -134,6 +126,7 @@ class MyAwards extends BaseMixin(LitElement) {
 				.searchParams=${searchParams}
 				@d2l-input-search-searched=${this._handleSearchEvent}
 				@d2l-selector-changed=${this._handleAwardTypeSelection}
+				class="awards-search"
 				>
 			</d2l-awards-search>
 		`;
@@ -163,7 +156,7 @@ class MyAwards extends BaseMixin(LitElement) {
 				<table class='table' aria-label=${this.localize('issued-awards-table-label')}>
 					<thead>
 						<tr>
-							<th class="table__th">${this.localize('table-header-icon')}</th>
+							<th class="table__th -icon-column table__td--center">${this.localize('table-header-icon')}</th>
 							<th class="table__th">${this.localize('table-header-name')}</th>
 							<th class="table__th">${this.localize('table-header-type')}</th>
 							<th class="table__th">${this.localize('table-header-credits')}</th>
