@@ -9,19 +9,37 @@ import '@brightspace-ui-labs/file-uploader/d2l-file-uploader';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../mixins/base-mixin';
 
-class Attachments extends BaseMixin(LitElement) {
+const CREATE_ACTION = 'Create';
+
+class AttachmentDialog extends BaseMixin(LitElement) {
 
 	static get properties() {
 		return {
-			attachmentsList: {
-				type: Array
+			attachment: {
+				type: Object
 			},
-			currentAttachments: {
-				type: Array
+			attachmentUrl: {
+				type: String
 			},
-			readOnly: {
-				type: Boolean,
-				value: false
+			opened: {
+				type: Boolean
+			},
+			nameValue: {
+				type: String
+			},
+			nameLabel: {
+				type: String,
+				attribute: 'name-label'
+			},
+			namePlaceholder: {
+				type: String,
+				attribute: 'name-placeholder'
+			},
+			isValidName: {
+				type: Boolean
+			},
+			isValidImage: {
+				type: Boolean
 			}
 		};
 	}
@@ -33,79 +51,140 @@ class Attachments extends BaseMixin(LitElement) {
 
 	constructor() {
 		super();
-		this.attachmentsList = [];
-		this.currentAttachments = [];
+		this._reset();
 	}
 
-	fireAttachmentListUpdated(oldVal) {
-		const event = new CustomEvent('d2l-attachments-list-updated', {
+	_reset() {
+		this.attachment = null;
+		this.attachmentUrl = '';
+		this.nameValue = '';
+		this.isValidName = true;
+		this.isValiImage = false;
+		this.nameValue = '';
+	}
+
+	_releaseBlobUrl() {
+		if (this.attachmentUrl && !window.navigator.msSaveOrOpenBlob) {
+			console.log(`Revoking the object URL: ${this.attachmentUrl}`);
+			window.URL.revokeObjectURL(this.attachmentUrl);
+		}
+	}
+
+	_handleClosed(event) {
+		console.log(event.detail.action);
+		this.opened = false;
+		this._releaseBlobUrl();
+		this._reset();
+		if (event.detail.action === CREATE_ACTION) {
+			this._fireCompletionEvent();
+		}
+	}
+
+	_fireCompletionEvent() {
+		const attachmentChosenEvent = new CustomEvent('d2l-attachment-created', {
 			detail: {
-				attachmentsList: this.attachmentsList,
-				oldVal
-			}
+				attachment: this.attachment,
+				name: this.nameValue
+			},
+			bubbles: false
 		});
-		this.dispatchEvent(event);
+		this.dispatchEvent(attachmentChosenEvent);
 	}
 
-	onDialogClosed() {
-		this.currentAttachments = [];
+	_handleFileUploaded(event) {
+		this.attachment = event.detail ? event.detail.files[0] : null;
+		this.isValidImage = this.attachment !== null;
+		this._getObjectUrl();
 	}
 
-	commitCurrentFiles() {
-		const oldVal = [...this.attachmentsList];
-		const newFileArray = [...this.attachmentsList];
-		newFileArray.push(...this.currentAttachments);
-		this.attachmentsList = newFileArray;
-		this.fireAttachmentListUpdated(oldVal);
+	_getObjectUrl() {
+		if (this.attachment) {
+			const { name, filepath } = this.attachment;
+			this.attachmentUrl = window.navigator.msSaveOrOpenBlob ?
+				window.navigator.msSaveOrOpenBlob(name, filepath) : window.URL.createObjectURL(this.attachment);
+		} else {
+			this.attachmentUrl = '';
+		}
 	}
 
-	newFilesAdded(evt) {
-		const newFileArray = [...this.currentAttachments];
-		newFileArray.push(...evt.detail.files);
-		this.currentAttachments = newFileArray;
-		this.updateComplete.then(() => this.shadowRoot.querySelector('#add_file_dialog').resize());
+	_getFileSizeString(fileSize) {
+		if (fileSize === 0) {
+			return '(0 Bytes)';
+		}
+
+		const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+		const decimals = 2;
+		const k = 1024;
+		const denomination = Math.floor(Math.log(fileSize) / Math.log(k));
+		return `(${parseFloat((fileSize / Math.pow(k, denomination)).toFixed(decimals))} ${sizes[denomination]})`;
 	}
 
-	updateAttachmentList(evt) {
-		const oldVal = [...this.attachmentsList];
-		this.attachmentsList = [...evt.detail.attachmentsList];
-		this.fireAttachmentListUpdated(oldVal);
+	_renderWithAttachment() {
+		return html`
+		<p>
+			<d2l-link
+				target="_blank"
+				href=${this.attachmentUrl}>
+				${this.attachment.name}
+			</d2l-link>
+			<span>${this._getFileSizeString(this.attachment.size)}</span>
+		</p>
+		`;
 	}
 
-	async showFileDialog() {
-		await this.shadowRoot.querySelector('#add_file_dialog').open();
+	_changedName(event) {
+		console.log(event.target.value);
+		this.nameValue = event.target.value;
+		console.log(this.nameValue);
+
+		this.isValidName = window.ValidationService.stringNotEmpty(this.nameValue);
+		console.log(this.isValidName);
 	}
 
 	render() {
-		return html`
-		<div>
-			${this.readOnly ? html`` : html`
-				<d2l-button primary id="add_file_button" @click="${this.showFileDialog}">
-						Add a File
-				</d2l-button>
-				`}
-				${this.readOnly ? html`
-				<d2l-attachment-list
-				.attachmentsList="${[...this.attachmentsList]}"
-				@internal-attachments-list-removed="${this.updateAttachmentList}"
-				readOnly>
-			</d2l-attachment-list>` : html`
-			<d2l-attachment-list
-				.attachmentsList="${[...this.attachmentsList]}"
-				@internal-attachments-list-removed="${this.updateAttachmentList}">
-			</d2l-attachment-list>`}
-			<d2l-dialog id="add_file_dialog" title-text="Add a File" @d2l-dialog-close="${this.onDialogClosed}">
-				<div id="file_loader_wrapper">
-					<d2l-labs-file-uploader id="file_loader" multiple @d2l-file-uploader-files-added="${this.newFilesAdded}">
+		return this.opened ?
+			html`
+			<d2l-dialog
+				title-text=${this.title}
+				?opened=${this.opened}
+				@d2l-dialog-close=${this._handleClosed}
+				>
+				<div>
+					<d2l-input-text
+						label=${this.nameLabel}
+						placeholder=${this.namePlaceholder}
+						required
+						aria-invalid=${!this.isValidName}
+						@input=${this._changedName}
+						@focusout=${this._changedName}
+						tabindex=0
+						onfocus
+						>
+					</d2l-input-text>
+					<d2l-labs-file-uploader
+						@d2l-file-uploader-files-added=${this._handleFileUploaded}
+						>
 					</d2l-labs-file-uploader>
+					<div>
+						${this.attachment ? this._renderWithAttachment() : html`<p>No attachment uploaded</p>`}
+					</div>
+					<d2l-button
+						slot="footer"
+						@click=${this._fireCompletionEvent}
+						primary
+						.disabled=${!(this.isValidImage && this.isValidName)}
+						data-dialog-action=${CREATE_ACTION}
+						>
+					Create
+					</d2l-button>
+					<d2l-button
+						slot="footer"
+						>
+					Cancel
+					</d2l-button>
 				</div>
-				<d2l-attachment-list .attachmentsList="${[...this.currentAttachments]}">
-				</d2l-attachment-list>
-				<d2l-button slot="footer" primary dialog-action @click="${this.commitCurrentFiles}">Add</d2l-button>
-				<d2l-button slot="footer" dialog-action>Cancel</d2l-button>
 			</d2l-dialog>
-		</div>
-		`;
+			` : html``;
 	}
 }
-customElements.define('d2l-attachments', Attachments);
+customElements.define('d2l-attachment-dialog', AttachmentDialog);

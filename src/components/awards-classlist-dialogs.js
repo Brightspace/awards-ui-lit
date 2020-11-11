@@ -62,6 +62,7 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 		this.selectedStudents = Array();
 		this.isValidOption = true;
 		this.isValidCriteria = false;
+		this.awards = [];
 	}
 
 	connectedCallback() {
@@ -72,6 +73,7 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 	async _fetchData() {
 		const params = {};
 		window.AwardService.getAssociatedAwards(params).then(data => this.awards = data.awards);
+		console.log(`Issue: ${this.awards}`);
 	}
 
 	_selectAward(e) {
@@ -234,6 +236,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 		this.selectedStudents = Array();
 		this.isValidOption = true;
 		this.isValidReason = false;
+		this.awards = [];
 	}
 
 	connectedCallback() {
@@ -244,6 +247,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 	async _fetchData() {
 		const params = {};
 		window.AwardService.getAssociatedAwards(params).then(data => this.awards = data.awards);
+		console.log(`Revoke dialog: ${this.awards}`);
 	}
 
 	_selectAward(e) {

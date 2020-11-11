@@ -75,6 +75,7 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 		this.studentOrders = window.AwardService.studentOrders;
 		this.currentListOrder = this.studentOrders[0].order;
 		this.currentQuery = '';
+		this.classlist = [];
 	}
 
 	connectedCallback() {

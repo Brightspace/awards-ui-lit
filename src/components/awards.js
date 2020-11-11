@@ -60,7 +60,7 @@ class Awards extends BaseMixin(LitElement) {
 
 		<d2l-tab-panel text="Course Awards">
 			<d2l-course-awards
-				class='component'
+				class='codmponent'
 				org-unit-id="${this.orgUnitId}"
 				>
 			</d2l-course-awards>

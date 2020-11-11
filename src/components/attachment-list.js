@@ -59,18 +59,6 @@ class AttachmentList extends BaseMixin(LitElement) {
 		this.dispatchEvent(event);
 	}
 
-	getFileSizeString(fileSize) {
-		if (fileSize === 0) {
-			return '(0 Bytes)';
-		}
-
-		const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-		const decimals = 2;
-		const k = 1024;
-		const denomination = Math.floor(Math.log(fileSize) / Math.log(k));
-		return `(${parseFloat((fileSize / Math.pow(k, denomination)).toFixed(decimals))} ${sizes[denomination]})`;
-	}
-
 	removeFile(evt) {
 		const oldVal = [...this.attachmentsList];
 		const newVal = [...this.attachmentsList];

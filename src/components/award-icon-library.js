@@ -5,7 +5,7 @@ import '@brightspace-ui/core/components/dialog/dialog-confirm.js';
 import '@brightspace-ui/core/components/tooltip/tooltip';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui-labs/file-uploader/d2l-file-uploader';
-import './attachments';
+import './attachments.js';
 import './attachment-list';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../mixins/base-mixin';
@@ -37,8 +37,8 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			isValidImage: {
 				type: Boolean
 			},
-			attachments: {
-				type: Array
+			attachment: {
+				type: Object
 			}
 		};
 	}
@@ -114,7 +114,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 
 	constructor() {
 		super();
-
+		this.icons = [];
 		this._reset();
 	}
 
@@ -275,9 +275,6 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 		this.infoDialogOpened = false;
 		this.deleteOpened = false;
 		this.uploadOpened = false;
-		this.isValidIconName = true;
-		this.isValidImage = false;
-		this.attachments = [];
 	}
 
 	_uploadDialogClose() {
@@ -286,100 +283,42 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 		this._reset();
 	}
 
-	_createIcon() {
-		const iconName = this.shadowRoot.getElementById('icon-name-upload').value;
+	_createIcon({ detail: { name, attachment } }) {
+		console.log(`Creating icon with name ${name} and filename ${attachment.name}`);
 
-		this.isValidIconName = window.ValidationService.stringNotEmpty(iconName);
-		this.isValidImage = this.attachments.length > 0;
+		//send in image and name
 
-		if (this.isValidIconName && this.isValidImage) {
-			this.uploadOpened = false;
-			console.log('Creating icon...');
-
-			//send in image and name
-
-			this._reset();
-		}
+		this._reset();
 	}
 
 	_changedIconName(e) {
 		this.isValidIconName = window.ValidationService.stringNotEmpty(e.target.value);
 	}
 
-	_uploadIcon() {
-		this.isValidImage = this.attachments.length > 0;
-
-		this.shadowRoot.getElementById('upload-dialog').resize();
+	_imageAdded(e) {
+		console.log(e.detail);
+		console.log('I bubbled');
+		this.isValidImage = e.detail !== null;
+		this.attachment = e.detail;
+		console.log(this.attachment.href);
 	}
 
-	stopDialogueCloseBubble(e) {
-		e.stopPropagation();
-	}
-
-	updateList(event) {
-		this.attachments = event.detail.attachmentsList;
-
-		if (this.attachments.length === 1) {
-			this.isValidImage = true;
-		} else {
-			this.isValidImage = false;
-		}
+	_handleUploadDialogClosed() {
+		this.uploadOpened = false;
 	}
 
 	_renderUploadDialog() {
-		return this.uploadOpened ? html`
-		<d2l-dialog
-			id="upload-dialog"
-			title-text="Upload New Icon"
+		console.log(`AWARD ICON LIBRARY: ${this.uploadOpened}`);
+		return html`
+		<d2l-attachment-dialog
+			title='Upload Icon'
+			name-label= 'Icon Name'
+			name-placeholder='Enter the icon name'
 			?opened=${this.uploadOpened}
-			@d2l-dialog-close=${this._uploadDialogClose}
+			@d2l-dialog-close=${this._handleUploadDialogClosed}
+			@d2l-attachment-created=${this._createIcon}
 			>
-			<div id="icon-name-upload-div">
-				<d2l-input-text
-					id="icon-name-upload"
-					label="Icon Name"
-					placeholder="Enter the icon name"
-					required
-					aria-haspopup="true"
-					aria-invalid=${!this.isValidIconName}
-					@input=${this._changedIconName}
-					@focusout=${this._changedIconName}
-					tabindex=0
-					novalidate
-					onfocus
-					>
-				</d2l-input-text>
-				${!this.isValidIconName ? html`
-				<d2l-tooltip id="icon-name-upload-tooltip" for="icon-name-upload" state="error" offset="10">
-					Please provide an icon name
-				</d2l-tooltip>
-				` : html``}
-			</div>
-
-			<div id="icon-img-upload-div">
-
-				<d2l-attachments id='icon-image-upload' .attachmentsList="${this.attachments}" @d2l-dialog-close="${this.stopDialogueCloseBubble}" @d2l-attachments-list-updated="${this.updateList}">
-					<p>Attachments are here</p>
-				</d2l-attachments>
-			</div>
-
-			<d2l-button
-				slot="footer"
-				@click=${this._createIcon}
-				primary
-				.disabled=${!(this.isValidImage && this.isValidIconName)}
-				dialog-action
-				>
-				Create
-			</d2l-button>
-			<d2l-button
-				slot="footer"
-				data-dialog-action
-				>
-				Cancel
-			</d2l-button>
-		</d2l-dialog>
-		` : html``;
+		</d2l-attachment-dialog>`;
 	}
 
 	render() {
