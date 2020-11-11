@@ -54,12 +54,12 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			.list-student-images {
+			.d2l-list__student-image {
 				width: 50px;
 				height: 50px;
 				object-fit: contain;
 			}
-			d2l-awards-search {
+			.awards-search {
 				display: flex;
 			}
 		`];
@@ -148,20 +148,20 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 		return html`
 		<d2l-button
 			@click=${this._issueButtonClicked}
-			description="Issue an award to students selected"
+			description=${this.localize('classlist-issue-button-description')}
 			primary
 			aria-haspopup="true"
 			?disabled=${!this.areStudentsSelected}
 			>
-			Issue
+			${this.localize('issue-action')}
 		</d2l-button>
 		<d2l-button
 			@click=${this._revokeButtonClicked}
-			description="Revoke an award to students selected"
+			description=${this.localize('classlist-revoke-button-description')}
 			aria-haspopup="true"
 			?disabled=${!this.areStudentsSelected}
 			>
-			Revoke
+			${this.localize('revoke-action')}
 		</d2l-button>
 		`;
 	}
@@ -187,12 +187,12 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 		});
 
 		const selectorParams = {
-			label: 'Classlist ordering Dropdown'
+			label: this.localize('classlist-dropdown-label')
 		};
 
 		const searchParams = {
-			label: 'Search classlist',
-			placeholder: 'Search classlist'
+			label: this.localize('classlist-search-label'),
+			placeholder: this.localize('classlist-search-placeholder')
 		};
 
 		return html`
@@ -202,6 +202,7 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 				.searchParams=${searchParams}
 				@d2l-input-search-searched=${this._updateSearch}
 				@d2l-selector-changed=${this._updateOrder}
+				class="awards-search"
 				>
 			</d2l-awards-search>
 		`;
@@ -227,13 +228,14 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 			<d2l-list-item
 				key = ${student.Id}
 				selectable
+				class="d2l-list__item"
 				>
-				<img class="list-student-images" src=${student.Picture}  slot="illustration">
+				<img class="d2l-list__student-image" src=${student.Picture}  slot="illustration">
 				<div>
 					${student.FirstName} ${student.LastName}
 				</div>
 				<div slot="actions">
-					${student.Awards.length ? student.Awards.map(award => html`${award}`) : html`This user has no awards`}
+					${student.Awards.length ? student.Awards.map(award => html`${award}`) : html`${this.localize('no-awards')}`}
 				</div>
 			</d2l-list-item>
 			`)}
@@ -243,10 +245,10 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 
 	render() {
 		return html`
-		${this._renderDialogs()}
-		${this._renderButtons()}
 		${this._renderSearch()}
 		${this._renderList()}
+		${this._renderButtons()}
+		${this._renderDialogs()}
 		`;
 	}
 }

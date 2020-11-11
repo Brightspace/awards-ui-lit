@@ -50,7 +50,7 @@ class Awards extends BaseMixin(LitElement) {
 
 	_renderCourseTabs() {
 		return html`
-		<d2l-tab-panel text="Classlist">
+		<d2l-tab-panel text=${this.localize('awards-tab-title-classlist')}>
 			<d2l-awards-classlist
 				class='component'
 				org-unit-id="${this.orgUnitId}"
@@ -58,7 +58,7 @@ class Awards extends BaseMixin(LitElement) {
 			</d2l-awards-classlist>
 		</d2l-tab-panel>
 
-		<d2l-tab-panel text="Course Awards">
+		<d2l-tab-panel text=${this.localize('awards-tab-title-course-awards')}>
 			<d2l-course-awards
 				class='codmponent'
 				org-unit-id="${this.orgUnitId}"
@@ -71,7 +71,7 @@ class Awards extends BaseMixin(LitElement) {
 	_renderOrgTabs() {
 		return html`
 		<d2l-tab-panel
-			text="Award Icon Library"
+			text=${this.localize('awards-tab-title-icon-library')}
 			>
 			<d2l-award-icon-library class='component'></d2l-award-icon-library>
 		</d2l-tab-panel>
@@ -81,7 +81,7 @@ class Awards extends BaseMixin(LitElement) {
 	_renderGeneralTabs() {
 		return html`
 			<d2l-tab-panel
-				text="My Awards"
+				text=${this.localize('awards-tab-title-my-awards')}
 				>
 				<d2l-my-awards
 					class='component'
@@ -90,7 +90,7 @@ class Awards extends BaseMixin(LitElement) {
 				</d2l-my-awards>
 			</d2l-tab-panel>
 			<d2l-tab-panel
-				text="View Available Awards"
+				text=${this.localize('awards-tab-title-available-awards')}
 				>
 				<d2l-available-awards
 					class='component'

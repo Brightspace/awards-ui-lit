@@ -42,22 +42,14 @@ class MyAwards extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			.flex-container {
-				display: flex;
-				flex-flow: row wrap;
-				justify-content: flex-start;
-			}
-			.flex-item {
-				margin: 0.25rem;
-				flex: 1;
-			}
-			.time-column {
+			.-time-column {
 				width: 25%;
 			}
-			.icon-column {
-				width: 10%
+			.-icon-column {
+				width: 10%;
+				min-width: 50px;
 			}
-			d2l-awards-search {
+			.awards-search {
 				display: flex;
 			}
 			`
@@ -120,12 +112,12 @@ class MyAwards extends BaseMixin(LitElement) {
 		});
 
 		const selectorParams = {
-			label: 'Awards Type Dropdown'
+			label: this.localize('issued-awards-selector-label')
 		};
 
 		const searchParams = {
-			label: 'Search for issued awards',
-			placeholder: 'Search for issued awards'
+			label: this.localize('issued-awards-search-placeholder'),
+			placeholder: this.localize('issued-awards-search-placeholder')
 		};
 
 		return html`
@@ -135,6 +127,7 @@ class MyAwards extends BaseMixin(LitElement) {
 				.searchParams=${searchParams}
 				@d2l-input-search-searched=${this._handleSearchEvent}
 				@d2l-selector-changed=${this._handleAwardTypeSelection}
+				class="awards-search"
 				>
 			</d2l-awards-search>
 		`;
@@ -143,16 +136,16 @@ class MyAwards extends BaseMixin(LitElement) {
 	_renderAward(award) {
 		return html`
 		<tr>
-			<td class='centered-column icon-column'>
+			<td class='table__td table__td--center -pad-top'>
 				<img src='${award.ImgPath}' width='75%'/>
 			</td>
-			<td>
+			<td class='table__td'>
 				<d2l-link aria-haspopup='true' @click="${this._getDialogOpenHandler(award.Id)}">${award.Name}</d2l-link>
 			</td>
-			<td>${award.Type}</td>
-			<td>${award.Credits}</td>
-			<td class='time-column'>${convertToDateString(award.IssueDate)}</td>
-			<td class='time-column'>${convertToDateString(award.ExpirationDate)}</td>
+			<td class='table__td'>${award.Type}</td>
+			<td class='table__td'>${award.Credits}</td>
+			<td class='table__td -time-column'>${convertToDateString(award.IssueDate)}</td>
+			<td class='table__td -time-column'>${convertToDateString(award.ExpirationDate)}</td>
 		</tr>
 		`;
 	}
@@ -161,15 +154,15 @@ class MyAwards extends BaseMixin(LitElement) {
 		const renderedAwards = this.issuedAwards.map(award => this._renderAward(award));
 		return renderedAwards.length > 0 ?
 			html`
-				<table class='flex-item' aria-label='Issued awards table'>
+				<table class='table' aria-label=${this.localize('issued-awards-table-label')}>
 					<thead>
 						<tr>
-							<th class='icon-column'>Icon</th>
-							<th>Name</th>
-							<th>Type</th>
-							<th>Credits</th>
-							<th class='time-column'>Issue Date</th>
-							<th class='time-column'>Expiration Date</th>
+							<th class="table__th -icon-column table__td--center">${this.localize('table-header-icon')}</th>
+							<th class="table__th">${this.localize('table-header-name')}</th>
+							<th class="table__th">${this.localize('table-header-type')}</th>
+							<th class="table__th">${this.localize('table-header-credits')}</th>
+							<th class='table__th -time-column'>${this.localize('table-header-issue-date')}</th>
+							<th class='table__th -time-column'>${this.localize('table-header-expiration-date')}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -179,7 +172,7 @@ class MyAwards extends BaseMixin(LitElement) {
 			` :
 			html`
 			<div>
-				<p>No awards found.</p>
+				<p>${this.localize('no-awards')}</p>
 			</div>
 			`;
 	}

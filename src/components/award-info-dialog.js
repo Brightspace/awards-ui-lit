@@ -92,33 +92,33 @@ class AwardInfoDialog extends BaseMixin(LitElement) {
 
 	_renderAwardDetails() {
 		const evidence = this.detailedAward.Evidence !== undefined ? html`
-			<p class='flex-item'><b>Evidence:</b> ${this.detailedAward.Evidence}</p>
+			<p class='flex-item'><b>${this.localize('award-info-dialog-evidence-text')}:</b> ${this.detailedAward.Evidence}</p>
 		` : html``;
 		const issueDate = this.detailedAward.IssueDate !== undefined ? html`
-			<p class='flex-item'><b>Issue Date:</b> ${convertToDateString(this.detailedAward.IssueDate)}</p>
+			<p class='flex-item'><b>${this.localize('award-info-dialog-issue-date-text')}:</b> ${convertToDateString(this.detailedAward.IssueDate)}</p>
 		` : html``;
 		const editButton = this.edit ? html`
 			<d2l-button
 				slot="footer"
 				primary
 				data-dialog-action=${DONE}
-				description="Save award data"
+				description=${this.localize('award-info-dialog-save-button-description')}
 				.disabled=${!this.submitEnabled}
 				>
-				Save
+				${this.localize('save-action')}
 			</d2l-button>
 			<d2l-button
 				slot="footer"
 				data-dialog-action=${CANCEL}
-				description="Cancel awards data changes"
+				description=${this.localize('award-info-dialog-cancel-button-description')}
 				>
-				Cancel
+				${this.localize('cancel-action')}
 			</d2l-button>
 		` : html``;
 		const printButton = this.hasPrintButton ? html`
 			<d2l-button-subtle
 				class='flex-item'
-				text='Print'
+				text=${this.localize('print-action')}
 				icon='tier1:print'
 				@click='${this._printHandler}'
 				>
@@ -127,7 +127,7 @@ class AwardInfoDialog extends BaseMixin(LitElement) {
 		const shareButton = this.hasShareButton ? html`
 			<d2l-button-subtle
 				class='flex-item'
-				text='Share on Badgr'
+				text=${this.localize('share-badgr-action')}
 				icon='tier1:share'
 				@click='${this._shareHandler}'
 				>
@@ -137,15 +137,15 @@ class AwardInfoDialog extends BaseMixin(LitElement) {
 		return html`
 		<div class='flex-award-popup'>
 			<img class='flex-award-image' src=${this.detailedAward.ImgPath} />
-			<p class='flex-item'><b>Type:</b> ${this.detailedAward.Type}</p>
-			<p class='flex-item'><b>Issuer:</b> ${this.detailedAward.Issuer}</p>
+			<p class='flex-item'><b>${this.localize('award-info-dialog-type-text')}:</b> ${this.detailedAward.Type}</p>
+			<p class='flex-item'><b>${this.localize('award-info-dialog-issuer-text')}:</b> ${this.detailedAward.Issuer}</p>
 			${this.edit ? html `
 				<d2l-input-text
 					id=${CREDITS_ID}
 					class='flex-item'
-					label="Credits"
-					name="Credits"
-					title="Credits"
+					label=${this.localize('award-info-dialog-credits-text')}
+					name=${this.localize('award-info-dialog-credits-text')}
+					title=${this.localize('award-info-dialog-credits-text')}
 					type="string"
 					value=${this.detailedAward.Credits}
 					required
@@ -156,21 +156,21 @@ class AwardInfoDialog extends BaseMixin(LitElement) {
 					>
 				</d2l-input-text>
 			` : html`
-				<p class='flex-item'><b>Credits:</b> ${this.detailedAward.Credits}</p>
+				<p class='flex-item'><b>${this.localize('award-info-dialog-credits-text')}:</b> ${this.detailedAward.Credits}</p>
 			`}
-			<p class='flex-item'><b>Description:</b> ${this.detailedAward.Description}</p>
+			<p class='flex-item'><b>${this.localize('award-info-dialog-description-text')}:</b> ${this.detailedAward.Description}</p>
 			${evidence}
 			${issueDate}
-			<p class='flex-item'><b>Expiration Date:</b> ${convertToDateString(this.detailedAward.ExpirationDate)}</p>
+			<p class='flex-item'><b>${this.localize('award-info-dialog-expiration-date-text')}:</b> ${convertToDateString(this.detailedAward.ExpirationDate)}</p>
 			${this.edit ? html`
 				<d2l-input-checkbox
 					id=${CHECKBOX_ID}
-					arai-label="Hidden until earned"
-					name="Hidden until earned"
+					arai-label=${this.localize('award-info-dialog-hiddne-until-earned-text')}
+					name=${this.localize('award-info-dialog-hiddne-until-earned-text')}
 					value=${this.detailedAward.HiddenUntilEarned}
 					.checked=${this.detailedAward.HiddenUntilEarned}
 					>
-					Hidden until earned
+					${this.localize('award-info-dialog-hiddne-until-earned-text')}
 				</d2l-input-checkbox>
 			` : html``}
 			${printButton}

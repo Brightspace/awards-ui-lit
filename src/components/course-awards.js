@@ -17,7 +17,6 @@ import { awardsTableStyles } from '../styles/awards-table-styles';
 import { BaseMixin } from '../mixins/base-mixin';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles';
 
-const SAVE_ACTION = 'save';
 const DELETE_ACTION = 'delete';
 const CANCEL_ACTION = 'cancel';
 
@@ -60,19 +59,17 @@ class CourseAwards extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			.flex-item {
-				margin: 0.25rem;
+			.-flex-item {
+				margin: 0.25rem 0rem;
 			}
-			d2l-input-search.flex-item {
-				flex-grow: 2;
+			.checkbox {
+				margin: 0.25rem 0rem;
 			}
-			d2l-input-checkbox {
-				margin: 0.25rem;
-			}
-			.icon-column {
+			.table__td--small {
 				width: 10%;
+				min-width: 50px;
 			}
-			d2l-awards-search {
+			.awards-search {
 				display: flex;
 			}
 		`];
@@ -164,11 +161,11 @@ class CourseAwards extends BaseMixin(LitElement) {
 				<d2l-dropdown-menu>
 					<d2l-menu>
 						<d2l-menu-item
-							text="Edit"
+							text=${this.localize('edit-button-text')}
 							@click="${this._getAwardInfoOpenHandler(awardRowId)}">
 						</d2l-menu-item>
 						<d2l-menu-item
-							text="Delete"
+							text=${this.localize('delete-button-text')}
 							@click="${this._getDeleteAwardHandler(awardRowId)}">
 						</d2l-menu-item>
 					</d2l-menu>
@@ -186,29 +183,31 @@ class CourseAwards extends BaseMixin(LitElement) {
 		});
 
 		const selectorParams = {
-			label: 'Awards Type Dropdown'
+			label: this.localize('issued-awards-selector-label')
 		};
 
 		const searchParams = {
-			label: 'Search for course awards',
-			placeholder: 'Search for course awards'
+			label: this.localize('course-awards-search-label'),
+			placeholder: this.localize('course-awards-search-label')
 		};
 
 		const buttonParams = {
 			id: 'add-award-button',
-			text: 'Add Awards to Course',
-			label: 'Add Awards to Course',
+			text: this.localize('course-awards-button-text'),
+			label: this.localize('course-awards-button-text'),
 			haspopup: 'true',
 			primary: true
 		};
 
 		return html`
 		<d2l-input-checkbox
+			class="checkbox"
 			@change='${this._handleBadgrUpdate}'
 			>
-			Allow users in this course to send earned awards to Badgr Backpack
+			${this.localize('badgr-checkbox-text')}
 		</d2l-input-checkbox>
 		<d2l-awards-search
+			class="awards-search"
 			.selectorParams=${selectorParams}
 			.selectorOptions=${awardTypeOptions}
 			.searchParams=${searchParams}
@@ -225,28 +224,28 @@ class CourseAwards extends BaseMixin(LitElement) {
 		const renderedAwards = this.courseAwards && this.courseAwards.map(award => this._renderAward(award));
 		return renderedAwards.length !== 0 ?
 			html`
-			<table class='flex-item' aria-label='Course awards table'>
+			<table class='table -flex-item' aria-label='Course awards table'>
 				<thead>
 					<tr>
-						<th class='centered-column'>Icon</th>
-						<th>Name</th>
-						<th>Type</th>
-						<th>Credits</th>
-						<th>Hidden Until Earned</th>
+						<th class='table__th table__td--center'>${this.localize('table-header-icon')}</th>
+						<th class='table__th'>${this.localize('table-header-name')}</th>
+						<th class='table__th'>${this.localize('table-header-type')}</th>
+						<th class='table__th'>${this.localize('table-header-credits')}</th>
+						<th class='table__th'>${this.localize('table-header-hidden-until-earned')}</th>
 					</tr>
 				</thead>
 				<tbody>
 					${renderedAwards}
 				</tbody>
 			</table>` :
-			html`<p>No awards found</p>`;
+			html`<p>${this.localize('no-awards')}</p>`;
 	}
 
 	_getHiddenAwardElement(award) {
 		return html`
 			<d2l-icon
 				icon=${award.HiddenUntilEarned ? 'tier1:check' : 'tier1:close-default'}
-				aria-label=${award.HiddenUntilEarned ? 'Hidden' : 'Not Hidden'}
+				aria-label=${award.HiddenUntilEarned ? this.localize('hidden') : this.localize('not-hidden')}
 				>
 			</d2l-icon>
 		`;
@@ -255,25 +254,25 @@ class CourseAwards extends BaseMixin(LitElement) {
 	_renderAward(award) {
 		return html`
 		<tr>
-			<td class='centered-column icon-column'>
+			<td class='table__td table__td--center table__td--small'>
 				<img src='${award.ImgPath}' width='75%'/>
 			</td>
-			<td>
+			<td class='table__td'>
 				${award.Name}
 				${ this._renderActionChevron(award.Id) }
 			</td>
-			<td>${award.Type}</td>
-			<td>
+			<td class='table__td'>${award.Type}</td>
+			<td class='table__td'>
 				<p>${award.Credits}</p>
 			</td>
-			<td class='centered-column'>
+			<td class='table__td table__td--center'>
 				${this._getHiddenAwardElement(award)}
 			</td>
 		</tr>
 		`;
 	}
 
-	render() {
+	_renderDialogs() {
 		return html`
 		<d2l-add-awards-dialog
 			?opened=${this.addAwardsDialogOpen}
@@ -287,14 +286,31 @@ class CourseAwards extends BaseMixin(LitElement) {
 			@d2l-dialog-close='${this._handleAwardInfoDialogClosed}'
 			>
 		</d2l-award-info-dialog>
-		<d2l-dialog-confirm id='save-dialog' title-text='Save changes?' text='Do you want to save your changes?'>
-			<d2l-button slot='footer' primary data-dialog-action='${SAVE_ACTION}'>Save</d2l-button>
-			<d2l-button slot='footer' data-dialog-action='${CANCEL_ACTION}'>Cancel</d2l-button>
+		<d2l-dialog-confirm
+			id='delete-dialog'
+			title-text=${this.localize('delete-dialog-title')}
+			text=${this.localize('delete-dialog-text')}
+			>
+			<d2l-button
+				slot='footer'
+				primary
+				data-dialog-action='${DELETE_ACTION}'
+				>
+				${this.localize('delete-action')}
+			</d2l-button>
+			<d2l-button
+				slot='footer'
+				data-dialog-action='${CANCEL_ACTION}'
+				>
+				${this.localize('cancel-action')}
+			</d2l-button>
 		</d2l-dialog-confirm>
-		<d2l-dialog-confirm id='delete-dialog' title-text='Delete award?' text='Are you sure you want to delete this award?'>
-			<d2l-button slot='footer' primary data-dialog-action='${DELETE_ACTION}'>Delete</d2l-button>
-			<d2l-button slot='footer' data-dialog-action='${CANCEL_ACTION}'>Cancel</d2l-button>
-		</d2l-dialog-confirm>
+		`;
+	}
+
+	render() {
+		return html`
+		${this._renderDialogs()}
 		${this._renderComponentHeader()}
 		${this._renderTable()}
 		`;
