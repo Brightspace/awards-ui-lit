@@ -1,7 +1,7 @@
 import { css } from 'lit-element/lit-element';
 
 export const awardsTableStyles = css`
-table {
+.table{
 	background-color: transparent;
 	width: 100%;
 	height: 41px;
@@ -13,28 +13,28 @@ table {
 	font-size: 0.8rem;
 	font-weight: 400;
 }
-
-td, th {
+.table__td {
 	background-color: #ffffff;
 	border:1px solid #cdd5dc;
 	padding: 0.5rem 1rem;
 	vertical-align: middle;
 }
-
-th {
+.table__th {
 	background-color: #f9fbff;
+	border:1px solid #cdd5dc;
 	font-size: 0.7rem;
 	line-height: 1rem;
 	text-align: left;
 	margin: 1rem 0;
 	white-space: nowrap;
+	padding: 0.5rem 1rem;
+	vertical-align: middle;
 }
-
-td.centered-column {
+.table__td--center {
 	text-align: center;
 }
 
-td.award_icon {
+.-pad-top {
 	padding-top: 1rem;
 }
 

@@ -51,7 +51,7 @@ class MyAwards extends BaseMixin(LitElement) {
 				margin: 0.25rem;
 				flex: 1;
 			}
-			.time-column {
+			.-time-column {
 				width: 25%;
 			}
 			.icon-column {
@@ -142,16 +142,16 @@ class MyAwards extends BaseMixin(LitElement) {
 	_renderAward(award) {
 		return html`
 		<tr>
-			<td class='centered-column icon-column'>
+			<td class='table__td table__td--center -pad-top'>
 				<img src='${award.ImgPath}' width='75%'/>
 			</td>
-			<td>
+			<td class='table__td'>
 				<d2l-link aria-haspopup='true' @click="${this._getDialogOpenHandler(award.Id)}">${award.Name}</d2l-link>
 			</td>
-			<td>${award.Type}</td>
-			<td>${award.Credits}</td>
-			<td class='time-column'>${convertToDateString(award.IssueDate)}</td>
-			<td class='time-column'>${convertToDateString(award.ExpirationDate)}</td>
+			<td class='table__td'>${award.Type}</td>
+			<td class='table__td'>${award.Credits}</td>
+			<td class='table__td -time-column'>${convertToDateString(award.IssueDate)}</td>
+			<td class='table__td -time-column'>${convertToDateString(award.ExpirationDate)}</td>
 		</tr>
 		`;
 	}
@@ -160,15 +160,15 @@ class MyAwards extends BaseMixin(LitElement) {
 		const renderedAwards = this.issuedAwards.map(award => this._renderAward(award));
 		return renderedAwards.length > 0 ?
 			html`
-				<table class='flex-item' aria-label=${this.localize('issued-awards-table-label')}>
+				<table class='table' aria-label=${this.localize('issued-awards-table-label')}>
 					<thead>
 						<tr>
-							<th class='icon-column'>${this.localize('table-header-icon')}</th>
-							<th>${this.localize('table-header-name')}</th>
-							<th>${this.localize('table-header-type')}</th>
-							<th>${this.localize('table-header-credits')}</th>
-							<th class='time-column'>${this.localize('table-header-issue-date')}</th>
-							<th class='time-column'>${this.localize('table-header-expiration-date')}</th>
+							<th class="table__th -pad-top">${this.localize('table-header-icon')}</th>
+							<th class="table__th">${this.localize('table-header-name')}</th>
+							<th class="table__th">${this.localize('table-header-type')}</th>
+							<th class="table__th">${this.localize('table-header-credits')}</th>
+							<th class='table__th -time-column'>${this.localize('table-header-issue-date')}</th>
+							<th class='table__th -time-column'>${this.localize('table-header-expiration-date')}</th>
 						</tr>
 					</thead>
 					<tbody>

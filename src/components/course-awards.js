@@ -68,7 +68,7 @@ class CourseAwards extends BaseMixin(LitElement) {
 			d2l-input-checkbox {
 				margin: 0.25rem;
 			}
-			.icon-column {
+			table__td--small {
 				width: 10%;
 			}
 			d2l-awards-search {
@@ -223,14 +223,14 @@ class CourseAwards extends BaseMixin(LitElement) {
 		const renderedAwards = this.courseAwards && this.courseAwards.map(award => this._renderAward(award));
 		return renderedAwards.length !== 0 ?
 			html`
-			<table class='flex-item' aria-label='Course awards table'>
+			<table class='table flex-item' aria-label='Course awards table'>
 				<thead>
 					<tr>
-						<th class='centered-column'>${this.localize('table-header-icon')}</th>
-						<th>${this.localize('table-header-name')}</th>
-						<th>${this.localize('table-header-type')}</th>
-						<th>${this.localize('table-header-credits')}</th>
-						<th>${this.localize('table-header-hidden-until-earned')}</th>
+						<th class='table__th table__td--center'>${this.localize('table-header-icon')}</th>
+						<th class='table__th'>${this.localize('table-header-name')}</th>
+						<th class='table__th'>${this.localize('table-header-type')}</th>
+						<th class='table__th'>${this.localize('table-header-credits')}</th>
+						<th class='table__th'>${this.localize('table-header-hidden-until-earned')}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -253,18 +253,18 @@ class CourseAwards extends BaseMixin(LitElement) {
 	_renderAward(award) {
 		return html`
 		<tr>
-			<td class='centered-column icon-column'>
+			<td class='table__td table__td--center table__td--small'>
 				<img src='${award.ImgPath}' width='75%'/>
 			</td>
-			<td>
+			<td class='table__td'>
 				${award.Name}
 				${ this._renderActionChevron(award.Id) }
 			</td>
-			<td>${award.Type}</td>
-			<td>
+			<td class='table__td'>${award.Type}</td>
+			<td class='table__td'>
 				<p>${award.Credits}</p>
 			</td>
-			<td class='centered-column'>
+			<td class='table__td table__td--center'>
 				${this._getHiddenAwardElement(award)}
 			</td>
 		</tr>

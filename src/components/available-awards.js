@@ -31,7 +31,7 @@ class AvailableAwards extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			.icon-column img {
+			.table__icon {
 				max-width: 100px;
 			}
 			d2l-awards-search {
@@ -106,12 +106,12 @@ class AvailableAwards extends BaseMixin(LitElement) {
 	_renderAward(award) {
 		return html`
 		<tr>
-			<td class='centered-column icon-column'>
-				<img src='${award.ImgPath}' width='75%'/>
+			<td class='table__td table__td--pad-top table__td--center'>
+				<img class="table__icon" src='${award.ImgPath}' width='75%'/>
 			</td>
-			<td>${award.Name}</td>
-			<td>${award.Course}</td>
-			<td>${award.Description}</td>
+			<td class='table__td'>${award.Name}</td>
+			<td class='table__td'>${award.Course}</td>
+			<td class='table__td'>${award.Description}</td>
 		</tr>
 		`;
 	}
@@ -120,13 +120,13 @@ class AvailableAwards extends BaseMixin(LitElement) {
 		const renderedAwards = this.availableAwards.map(award => this._renderAward(award));
 		return renderedAwards.length > 0 ?
 			html`
-				<table class='flex-item' aria-label='Available awards'>
+				<table class='table' aria-label='Available awards'>
 					<thead>
 						<tr>
-							<th class='icon-column'>${this.localize('table-header-icon')}</th>
-							<th>${this.localize('table-header-name')}</th>
-							<th>${this.localize('table-header-course')}</th>
-							<th>${this.localize('table-header-description')}</th>
+							<th class='table__th table__td--center'>${this.localize('table-header-icon')}</th>
+							<th class='table__th'>${this.localize('table-header-name')}</th>
+							<th class='table__th'>${this.localize('table-header-course')}</th>
+							<th class='table__th'>${this.localize('table-header-description')}</th>
 						</tr>
 					</thead>
 					<tbody>
