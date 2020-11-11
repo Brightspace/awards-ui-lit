@@ -5,8 +5,7 @@ import '@brightspace-ui/core/components/dialog/dialog-confirm.js';
 import '@brightspace-ui/core/components/tooltip/tooltip';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui-labs/file-uploader/d2l-file-uploader';
-import './attachments.js';
-import './attachment-list';
+import './attachment-dialog.js';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../mixins/base-mixin';
 import { convertToDateString } from '../helpers';
@@ -52,20 +51,16 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			.d2l-button--pad-bottom {
+			.icon-add-button {
 				padding-bottom: 12px;
 			}
-			.upload-dialog__d2l-button{
-				padding-bottom: 12px;
-				margin-top: 48px;
-			}
-			.icon-library {
+			.grid-container {
 				display: grid;
 				grid-template-columns: repeat(6, 1fr);
 				column-gap: 12px;
   				row-gap: 12px;
 			}
-			.icon-library__card {
+			.icon-container {
 				justify-self: center;
 				display: flex;
 				flex-direction: column;
@@ -75,27 +70,30 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				padding-top: 6px;
 				padding-bottom: 6px;
 			}
-			.icon-library__img {
+			.icon {
 				width: 75px;
 				height: 75px;
 				margin: auto;
 				object-fit: contain;
 			}
-			.icon-library__d2l-button-icon {
+			.icon-button {
 				margin: auto;
 				margin-top: 6px;
 			}
-			.icon-library__button-bar{
+			.icon-button-container {
 				margin: auto;
 			}
-
-			.info-dialog__column{
+			.upload-button{
+				padding-top: 12px;
+				padding-bottom: 12px;
+				margin-top: 48px;
+			}
+			.info-dialog-info{
 				display: flex;
 				flex-direction: column;
 			}
-			.info-dialog__img {
+			.info-dialog-image {
 				align-self: center;
-				padding: 20px 0px;
 			}
 
 			#icon-name-upload-tooltip {
@@ -135,7 +133,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 	_renderHeader() {
 		return html`
 		<d2l-button
-			class="d2l-button--pad-bottom"
+			class="icon-add-button"
 			@click=${this._uploadButtonClicked}
 			description=${this.localize('icon-library-upload-button-description')}
 			primary
@@ -162,17 +160,17 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 
 	_renderIcons() {
 		return html`
-		<div class="icon-library">
+		<div class="grid-container">
 			${this.icons.map(icon => html`
-				<div id="icon-${icon.Id}" class="icon-library__card">
+				<div id="icon-${icon.Id}" class="icon-container">
 					<img
-						class="icon-library__img"
+						class="icon"
 						src=${icon.Path}
 						>
 
-					<div class="icon-library__button-bar">
+					<div class="icon-button-container">
 						<d2l-button-icon
-							class="icon-library__d2l-button-icon"
+							class="icon-button"
 							text=${this.localize('icon-library-more-info-button-text')}
 							icon="tier1:more"
 							aria-haspopup="true"
@@ -181,8 +179,8 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 							>
 						</d2l-button-icon>
 						<d2l-button-icon
-							class="icon-library__d2l-button-icon"
-							text=${this.localize('icon-library-delete-button-text')}
+							class="icon-button"
+							text=${this.localize('delete-action')}
 							icon="tier1:delete"
 							aria-haspopup="true"
 							aria-label=${this.localize('icon-library-delete-button-label')}
@@ -210,12 +208,12 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			?opened=${this.infoDialogOpened}
 			@d2l-dialog-close=${this._infoDialogClose}
 			>
-			<div class="info-dialog__column">
-				<img class="info-dialog__img" src=${this.iconDetails.Path} />
-				<div><b>${this.localize('icon-library-info-name-text')}:</b> ${this.iconDetails.Name}</div>
-				<div><b>${this.localize('icon-library-info-creation-date-text')}:</b> ${convertToDateString(this.iconDetails.CreatedDate)}</div>
+			<div class="info-dialog-info">
+				<img class="info-dialog-image" src=${this.iconDetails.Path} />
+				<div><b>${this.localize('award-icon-library-icon-name-colon')}</b> ${this.iconDetails.Name}</div>
+				<div><b>${this.localize('award-icon-library-icon-creation-date-colon')}</b> ${convertToDateString(this.iconDetails.CreatedDate)}</div>
 				${this.iconDetails.UsedBy.length ? html`
-				<div><b>${this.localize('icon-library-info-used-by-text')}:</b></div>
+				<div><b>${this.localize('award-icon-library-icon-used-by-colon')}</b></div>
 				` : html``}
 
 				<d2l-list separators="between">
@@ -250,7 +248,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 		return this.deleteOpened ? html`
 		<d2l-dialog-confirm
 			title-text=${this.localize('icon-library-confirm-delete-title')}
-			text=${this.localize('icon-library-confirm-delete-title', {name: this.iconDetails.Name})}
+			text="Are you sure you wish to delete the ${this.iconDetails.Name} icon?"
 			?opened=${this.deleteOpened}
 			@d2l-dialog-close=${this._deleteClosed}
 			>
@@ -278,12 +276,6 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 		this.uploadOpened = false;
 	}
 
-	_uploadDialogClose() {
-		this.uploadOpened = false;
-
-		this._reset();
-	}
-
 	_createIcon({ detail: { name, attachment } }) {
 		console.log(`Creating icon with name ${name} and filename ${attachment.name}`);
 
@@ -292,29 +284,19 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 		this._reset();
 	}
 
-	_changedIconName(e) {
-		this.isValidIconName = window.ValidationService.stringNotEmpty(e.target.value);
-	}
-
-	_imageAdded(e) {
-		console.log(e.detail);
-		console.log('I bubbled');
-		this.isValidImage = e.detail !== null;
-		this.attachment = e.detail;
-		console.log(this.attachment.href);
-	}
-
 	_handleUploadDialogClosed() {
+		console.log("one");
 		this.uploadOpened = false;
+		this._reset();
 	}
 
 	_renderUploadDialog() {
 		console.log(`AWARD ICON LIBRARY: ${this.uploadOpened}`);
 		return html`
 		<d2l-attachment-dialog
-			title='Upload Icon'
-			name-label= 'Icon Name'
-			name-placeholder='Enter the icon name'
+			title=${this.localize('icon-library-dialog-upload-button-text')}
+			name-label=${this.localize('icon-library-icon-name-label')}
+			name-placeholder=${this.localize('icon-library-icon-name-placeholder')}
 			?opened=${this.uploadOpened}
 			@d2l-dialog-close=${this._handleUploadDialogClosed}
 			@d2l-attachment-created=${this._createIcon}

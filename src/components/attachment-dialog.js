@@ -46,6 +46,13 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 
 	static get styles() {
 		return css`
+			.attachment-dialog__name-input{
+				margin-bottom: 60px;
+			}
+			.attachment-dialog__action-button {
+				margin-top: 30px;
+				margin-right: 18px;
+			}
 		`;
 	}
 
@@ -55,6 +62,7 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 	}
 
 	_reset() {
+		console.log('reset');
 		this.attachment = null;
 		this.attachmentUrl = '';
 		this.nameValue = '';
@@ -65,13 +73,11 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 
 	_releaseBlobUrl() {
 		if (this.attachmentUrl && !window.navigator.msSaveOrOpenBlob) {
-			console.log(`Revoking the object URL: ${this.attachmentUrl}`);
 			window.URL.revokeObjectURL(this.attachmentUrl);
 		}
 	}
 
 	_handleClosed(event) {
-		console.log(event.detail.action);
 		this.opened = false;
 		this._releaseBlobUrl();
 		this._reset();
@@ -89,6 +95,7 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 			bubbles: false
 		});
 		this.dispatchEvent(attachmentChosenEvent);
+		this._reset();
 	}
 
 	_handleFileUploaded(event) {
@@ -133,12 +140,8 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 	}
 
 	_changedName(event) {
-		console.log(event.target.value);
 		this.nameValue = event.target.value;
-		console.log(this.nameValue);
-
 		this.isValidName = window.ValidationService.stringNotEmpty(this.nameValue);
-		console.log(this.isValidName);
 	}
 
 	render() {
@@ -151,6 +154,7 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 				>
 				<div>
 					<d2l-input-text
+						class="attachment-dialog__name-input"
 						label=${this.nameLabel}
 						placeholder=${this.namePlaceholder}
 						required
@@ -166,21 +170,26 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 						>
 					</d2l-labs-file-uploader>
 					<div>
-						${this.attachment ? this._renderWithAttachment() : html`<p>No attachment uploaded</p>`}
+						${this.attachment ? this._renderWithAttachment() : html`<p>${this.localize('attachment-dialog-none-uploaded')}</p>`}
 					</div>
 					<d2l-button
+						class="attachment-dialog__action-button"
 						slot="footer"
 						@click=${this._fireCompletionEvent}
 						primary
 						.disabled=${!(this.isValidImage && this.isValidName)}
 						data-dialog-action=${CREATE_ACTION}
+						description=${this.localize('create-action')}
 						>
-					Create
+					${this.localize('create-action')}
 					</d2l-button>
 					<d2l-button
+						class="attachment-dialog__action-button"
 						slot="footer"
+						description=${this.localize('cancel-action')}
+						data-dialog-action
 						>
-					Cancel
+					${this.localize('cancel-action')}
 					</d2l-button>
 				</div>
 			</d2l-dialog>
