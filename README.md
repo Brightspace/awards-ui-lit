@@ -93,3 +93,39 @@ Golden snapshots in source control must be updated by Travis CI. To trigger an u
 All version changes should obey [semantic versioning](https://semver.org/) rules.
 
 Include either `[increment major]`, `[increment minor]` or `[increment patch]` in your merge commit message to automatically increment the `package.json` version and create a tag.
+
+
+## BEM class name best practises
+
+The BEM guide can be found [here](http://getbem.com/introduction/)
+
+### Example
+```js
+render_library = () =>
+	<div class="library">
+		<div class="library__shelf">
+			<div class="library__book"></div>
+			<div class="library__book--hard-cover"></div>
+		</div>
+		<div class="library__shelf--fiction">
+			<div class="library__book"></div>
+		</div>
+	</div>
+```
+
+### Q: When to use a block?
+A: A block is the top level element in the render function. If you feel you need to include a second block you may, but don't have too, create a seperate function that returns that block.
+
+### Example
+```js
+render = () =>
+	<div class="city">
+		<div class="city__electrical-wires"/>
+		<div class="city__buildings"/>
+			{{ render_library() }}
+		</div>
+	</div>
+```
+
+### Q: What about reusable classes?
+A: We use [chainable classes](https://webuild.envato.com/blog/chainable-bem-modifiers/) when basic modifiers can be applied to multiple, or a combination of, elements and blocks.

@@ -54,12 +54,12 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			.list-student-images {
+			.d2l-list__student-image {
 				width: 50px;
 				height: 50px;
 				object-fit: contain;
 			}
-			d2l-awards-search {
+			.awards-search {
 				display: flex;
 			}
 		`];
@@ -201,6 +201,7 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 				.searchParams=${searchParams}
 				@d2l-input-search-searched=${this._updateSearch}
 				@d2l-selector-changed=${this._updateOrder}
+				class="awards-search"
 				>
 			</d2l-awards-search>
 		`;
@@ -226,8 +227,9 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 			<d2l-list-item
 				key = ${student.Id}
 				selectable
+				class="d2l-list__item"
 				>
-				<img class="list-student-images" src=${student.Picture}  slot="illustration">
+				<img class="d2l-list__student-image" src=${student.Picture}  slot="illustration">
 				<div>
 					${student.FirstName} ${student.LastName}
 				</div>
@@ -242,10 +244,10 @@ class AwardsClasslist extends BaseMixin(LitElement) {
 
 	render() {
 		return html`
-		${this._renderDialogs()}
-		${this._renderButtons()}
 		${this._renderSearch()}
 		${this._renderList()}
+		${this._renderButtons()}
+		${this._renderDialogs()}
 		`;
 	}
 }

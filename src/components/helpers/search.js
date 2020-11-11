@@ -30,21 +30,26 @@ class Search extends BaseMixin(LitElement) {
 			css`
 			:host {
 				display: inline-block;
+				margin-bottom: 20px;
 			}
 			:host([hidden]) {
 				display: none;
 			}
-			.flex-container-header {
+			.header {
 				display: flex;
 				flex-flow: row nowrap;
 				width: 100%;
 			}
-			.flex-item {
-				margin: 0.25rem;
+			.-flex-item {
+				margin: 0.25rem 0 0 0.25rem;
 				flex: 1;
 			}
-			d2l-input-search.flex-item {
+			.input-search {
+				margin: 0.25rem 0.25rem 0.25rem 0;
 				flex: 4;
+			}
+			.select{
+				width: 100%;
 			}
 			`
 		];
@@ -87,7 +92,7 @@ class Search extends BaseMixin(LitElement) {
 	_renderSearchBar() {
 		return !isObjectEmpty(this.searchParams) ? html`
 			<d2l-input-search
-				class='flex-item'
+				class='input-search'
 				label=${this.searchParams.label}
 				aria-label=${this.searchParams.label}
 				placeholder=${this.searchParams.placeholder}
@@ -104,7 +109,7 @@ class Search extends BaseMixin(LitElement) {
 
 		return options.length > 0 ? html `
 			<select
-				class='d2l-input-select flex-item'
+				class='d2l-input-select -flex-item'
 				aria-label=${this.selectorParams.label}
 				@input='${this._handleSelectorInput}'
 				>
@@ -116,7 +121,7 @@ class Search extends BaseMixin(LitElement) {
 	_renderButton() {
 		return !isObjectEmpty(this.buttonParams) ? html`
 			<d2l-button
-				class='flex-item'
+				class='-flex-item'
 				id=${this.buttonParams.id}
 				text=${this.buttonParams.text}
 				aria-label=${this.buttonParams.label}
@@ -131,7 +136,7 @@ class Search extends BaseMixin(LitElement) {
 
 	render() {
 		return html`
-			<div class='flex-container-header'>
+			<div class='header'>
 				${this._renderSearchBar()}
 				${this._renderSelector()}
 				${this._renderButton()}
