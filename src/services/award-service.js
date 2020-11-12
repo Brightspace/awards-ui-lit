@@ -52,6 +52,10 @@ export class AwardService {
 		return {};
 	}
 
+	static async deleteCertificateTemplate() {
+		return {};
+	}
+
 	static async getAssociatedAwards() {
 		return {};
 	}
@@ -81,6 +85,10 @@ export class AwardService {
 	}
 
 	static async updateAward() {
+		return {};
+	}
+
+	static async updateCertificateTemplate() {
 		return {};
 	}
 }

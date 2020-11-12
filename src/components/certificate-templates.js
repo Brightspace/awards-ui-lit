@@ -1,4 +1,5 @@
 import '@brightspace-ui/core/components/list/list';
+import './attachment-dialog';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../mixins/base-mixin';
 
@@ -11,6 +12,9 @@ class CertificateTemplates extends BaseMixin(LitElement) {
 			},
 			certificateTemplates: {
 				type: Array
+			},
+			uploadDialogOpened: {
+				type: Boolean
 			}
 		};
 	}
@@ -30,7 +34,7 @@ class CertificateTemplates extends BaseMixin(LitElement) {
 			}
 			.cert-templates__list-container {
 				justify-self: center;
-				width: 420px;
+				max-width: 600px;
 			}
 			.cert-templates__button {
 				width: 240px;
@@ -44,6 +48,7 @@ class CertificateTemplates extends BaseMixin(LitElement) {
 		super();
 
 		this.certificateTemplates = [];
+		this.uploadDialogOpened = false;
 	}
 
 	connectedCallback() {
@@ -56,19 +61,32 @@ class CertificateTemplates extends BaseMixin(LitElement) {
 		this.certificateTemplates = templates;
 	}
 
-	_addCertificateTemplate() {
-		console.log('Upload template');
+	_openUploadDialog() {
+		this.uploadDialogOpened = true;
 	}
 
-	_getTemplatePreviewOnClick({ Name, Path }) {
-		return () => {
-			console.log(`Previewing certificate template: ${Name}`);
-			window.open(Path);
-		};
+	_getTemplatePreviewOnClick({ Path }) {
+		return () => window.open(Path);
 	}
 
 	_getTemplateDeleteOnClick(name) {
-		return () => console.log(`Deleting certificate with name ${name}`);
+		return async() => await window.AwardService.deleteCertificateTemplate({
+			orgUnitId: this.orgUnitId,
+			name
+		});
+	}
+
+	async _createCertificateTemplate({ detail: { name, attachment }}) {
+		await window.AwardService.updateCertificateTemplate({
+			orgUnitId: this.orgUnitId,
+			name,
+			attachment
+		});
+	}
+
+	_handleUploadDialogClosed() {
+		this._fetchData();
+		this.uploadDialogOpened = false;
 	}
 
 	_renderIndividualTemplateItem(template) {
@@ -106,9 +124,19 @@ class CertificateTemplates extends BaseMixin(LitElement) {
 
 	render() {
 		return html`
+		<d2l-attachment-dialog
+			title=${this.localize('certificate-templates-upload-title')}
+			name-label=${this.localize('certificate-templates-name-label')}
+			name-placeholder=${this.localize('certificate-templates-name-placeholder')}
+			?opened=${this.uploadDialogOpened}
+			@d2l-dialog-close=${this._handleUploadDialogClosed}
+			@d2l-attachment-created=${this._createCertificateTemplate}
+			infer-name-from-attachment
+			>
+		</d2l-attachment-dialog>
 		<div class='cert-templates'>
 			<d2l-button
-				@click=${this._addCertificateTemplate}
+				@click=${this._openUploadDialog}
 				description=${this.localize('certificate-templates-add')}
 				primary
 				class='cert-templates__button'

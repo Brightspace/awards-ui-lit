@@ -1,11 +1,11 @@
 {
   "Objects": [
     {
-      "Name": "Certificate Test 1",
+      "Name": "Certificate1_Sample_Template_V1.1.pdf",
       "Path": "http://localhost:44444/d2l/awards/v1/6609/libraryPdfs?modified=132330981255828770&filePath=Certificate1_Sample_Template_V1.1.pdf"
     },
     {
-      "Name": "Certificate Test 2",
+      "Name": "Certificate2_Sample_Template.pdf",
       "Path": "http://localhost:44444/d2l/awards/v1/6609/libraryPdfs?modified=132330981255882506&filePath=Certificate2_Sample_Template.pdf"
     }
   ]

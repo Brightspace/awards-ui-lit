@@ -84,6 +84,10 @@ export class DemoAwardService {
 		console.log(`Received request to delete award: ${JSON.stringify(award)}`);
 	}
 
+	static async deleteCertificateTemplate({ orgUnitId, name }) {
+		console.log(`CERTIFICATE TEMPLATES: Recieved request to delete certificate template with name: ${name} in OrgUnit ${orgUnitId}`);
+	}
+
 	static async getAssociatedAwards({ query, orgUnitId, awardType }) {
 		console.log(`ASSOCIATED AWARDS: Received request with following params: [query=${query}], [orgUnitId=${orgUnitId}] [awardType=${awardType}]`);
 		return getFilteredAwards({ dataPath: '../../data/associated-awards.json', query, awardType });
@@ -131,5 +135,10 @@ export class DemoAwardService {
 
 	static async updateAward({ award }) {
 		console.log(`Received request to update award: ${JSON.stringify(award)}`);
+	}
+
+	static async updateCertificateTemplate({ orgUnitId, name, attachment }) {
+		const content = await attachment.arrayBuffer();
+		console.log(`CERTIFICATE TEMPLATES: Received request to update certificate template in OrgUnit ${orgUnitId} with file name ${name} and content-length ${content.byteLength}`);
 	}
 }

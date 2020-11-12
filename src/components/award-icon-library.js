@@ -102,6 +102,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 	constructor() {
 		super();
 		this.icons = [];
+		this.uploadOpened = false;
 		this._reset();
 	}
 
