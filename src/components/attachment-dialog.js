@@ -111,7 +111,7 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 		if (this.attachment) {
 			const { name } = this.attachment;
 			this.attachmentUrl = window.navigator.msSaveOrOpenBlob ?
-				window.navigator.msSaveOrOpenBlob(name, name) : window.URL.createObjectURL(this.attachment);
+				window.navigator.msSaveOrOpenBlob(this.attachment, name) : window.URL.createObjectURL(this.attachment);
 		} else {
 			this.attachmentUrl = '';
 		}
