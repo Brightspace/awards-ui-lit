@@ -51,16 +51,20 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			:host([hidden]) {
 				display: none;
 			}
-			.icon-add-button {
+			.d2l-button--pad-bottom {
 				padding-bottom: 12px;
 			}
-			.grid-container {
+			.upload-dialog__d2l-button{
+				padding-bottom: 12px;
+				margin-top: 48px;
+			}
+			.icon-library {
 				display: grid;
 				grid-template-columns: repeat(6, 1fr);
 				column-gap: 12px;
   				row-gap: 12px;
 			}
-			.icon-container {
+			.icon-library__card {
 				justify-self: center;
 				display: flex;
 				flex-direction: column;
@@ -70,42 +74,26 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 				padding-top: 6px;
 				padding-bottom: 6px;
 			}
-			.icon {
+			.icon-library__img {
 				width: 75px;
 				height: 75px;
 				margin: auto;
 				object-fit: contain;
 			}
-			.icon-button {
+			.icon-library__d2l-button-icon {
 				margin: auto;
 				margin-top: 6px;
 			}
-			.icon-button-container {
+			.icon-library__button-bar{
 				margin: auto;
 			}
-			.upload-button{
-				padding-top: 12px;
-				padding-bottom: 12px;
-				margin-top: 48px;
-			}
-			.info-dialog-info{
+			.info-dialog__column{
 				display: flex;
 				flex-direction: column;
 			}
-			.info-dialog-image {
+			.info-dialog__img {
 				align-self: center;
-			}
-
-			#icon-name-upload-tooltip {
-				margin: auto;
-			}
-
-			#icon-name-upload-div {
-				padding-bottom: 54px;
-			}
-
-			#icon-img-upload-div {
-				padding-bottom: 36px;
+				padding: 20px 0px;
 			}
 			`
 		];
@@ -133,7 +121,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 	_renderHeader() {
 		return html`
 		<d2l-button
-			class="icon-add-button"
+			class="d2l-button--pad-bottom"
 			@click=${this._uploadButtonClicked}
 			description=${this.localize('icon-library-upload-button-description')}
 			primary
@@ -160,17 +148,17 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 
 	_renderIcons() {
 		return html`
-		<div class="grid-container">
+		<div class="icon-library">
 			${this.icons.map(icon => html`
-				<div id="icon-${icon.Id}" class="icon-container">
+				<div id="icon-${icon.Id}" class="icon-library__card">
 					<img
-						class="icon"
+						class="icon-library__img"
 						src=${icon.Path}
 						>
 
-					<div class="icon-button-container">
+					<div class="icon-library__button-bar">
 						<d2l-button-icon
-							class="icon-button"
+							class="icon-library__d2l-button-icon"
 							text=${this.localize('icon-library-more-info-button-text')}
 							icon="tier1:more"
 							aria-haspopup="true"
@@ -179,7 +167,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 							>
 						</d2l-button-icon>
 						<d2l-button-icon
-							class="icon-button"
+							class="icon-library__d2l-button-icon"
 							text=${this.localize('delete-action')}
 							icon="tier1:delete"
 							aria-haspopup="true"
@@ -208,8 +196,8 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			?opened=${this.infoDialogOpened}
 			@d2l-dialog-close=${this._infoDialogClose}
 			>
-			<div class="info-dialog-info">
-				<img class="info-dialog-image" src=${this.iconDetails.Path} />
+			<div class="info-dialog__column">
+				<img class="info-dialog__img" src=${this.iconDetails.Path} />
 				<div><b>${this.localize('award-icon-library-icon-name-colon')}</b> ${this.iconDetails.Name}</div>
 				<div><b>${this.localize('award-icon-library-icon-creation-date-colon')}</b> ${convertToDateString(this.iconDetails.CreatedDate)}</div>
 				${this.iconDetails.UsedBy.length ? html`
@@ -248,7 +236,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 		return this.deleteOpened ? html`
 		<d2l-dialog-confirm
 			title-text=${this.localize('icon-library-confirm-delete-title')}
-			text="Are you sure you wish to delete the ${this.iconDetails.Name} icon?"
+			text=${this.localize('icon-library-confirm-delete-title', {name: this.iconDetails.Name})}
 			?opened=${this.deleteOpened}
 			@d2l-dialog-close=${this._deleteClosed}
 			>

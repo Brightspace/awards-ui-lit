@@ -73,7 +73,6 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 	async _fetchData() {
 		const params = {};
 		window.AwardService.getAssociatedAwards(params).then(data => this.awards = data.awards);
-		console.log(`Issue: ${this.awards}`);
 	}
 
 	_selectAward(e) {
@@ -247,7 +246,6 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 	async _fetchData() {
 		const params = {};
 		window.AwardService.getAssociatedAwards(params).then(data => this.awards = data.awards);
-		console.log(`Revoke dialog: ${this.awards}`);
 	}
 
 	_selectAward(e) {

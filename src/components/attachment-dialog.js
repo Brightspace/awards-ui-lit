@@ -4,7 +4,6 @@ import '@brightspace-ui/core/components/dialog/dialog';
 import '@brightspace-ui/core/components/link/link';
 import '@brightspace-ui/core/components/list/list';
 import '@brightspace-ui/core/components/list/list-item';
-import './attachment-list';
 import '@brightspace-ui-labs/file-uploader/d2l-file-uploader';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../mixins/base-mixin';
@@ -107,7 +106,7 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 		if (this.attachment) {
 			const { name, filepath } = this.attachment;
 			this.attachmentUrl = window.navigator.msSaveOrOpenBlob ?
-				window.navigator.msSaveOrOpenBlob(name, filepath) : window.URL.createObjectURL(this.attachment);
+				window.navigator.msSaveOrOpenBlob(name, name) : window.URL.createObjectURL(this.attachment);
 		} else {
 			this.attachmentUrl = '';
 		}
