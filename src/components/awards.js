@@ -79,7 +79,11 @@ class Awards extends BaseMixin(LitElement) {
 		<d2l-tab-panel
 			text=${this.localize('awards-tab-title-certificate-templates')}
 			>
-			<d2l-certificate-templates class='component'></d2l-certificate-templates>
+			<d2l-certificate-templates
+				class='component'
+				org-unit-id="${this.orgUnitId}"
+				>
+			</d2l-certificate-templates>
 		</d2l-tab-panel>
 		`;
 	}

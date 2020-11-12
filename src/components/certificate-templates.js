@@ -5,6 +5,10 @@ import { BaseMixin } from '../mixins/base-mixin';
 class CertificateTemplates extends BaseMixin(LitElement) {
 	static get properties() {
 		return {
+			orgUnitId: {
+				attribute: 'org-unit-id',
+				type: Number
+			},
 			certificateTemplates: {
 				type: Array
 			}
@@ -19,6 +23,18 @@ class CertificateTemplates extends BaseMixin(LitElement) {
 			}
 			:host([hidden]) {
 				display: none;
+			}
+			.cert-templates {
+				display: flex;
+				flex-flow: column nowrap;
+			}
+			.cert-templates__list-container {
+				justify-self: center;
+				width: 420px;
+			}
+			.cert-templates__button {
+				width: 240px;
+				margin-bottom: 36px;
 			}
 			`
 		];
@@ -36,9 +52,12 @@ class CertificateTemplates extends BaseMixin(LitElement) {
 	}
 
 	async _fetchData() {
-		const { Objects: templates } = await window.AwardService.getCertificateTemplates();
+		const { Objects: templates } = await window.AwardService.getCertificateTemplates({ orgUnitId: this.orgUnitId });
 		this.certificateTemplates = templates;
-		console.log(`CERTIFICATE TEPMLATES: ${JSON.stringify(this.certificateTemplates)}`);
+	}
+
+	_addCertificateTemplate() {
+		console.log('Upload template');
 	}
 
 	_getTemplatePreviewOnClick({ Name, Path }) {
@@ -64,7 +83,7 @@ class CertificateTemplates extends BaseMixin(LitElement) {
 			<div slot='actions'>
 				<d2l-button-icon
 					@click=${this._getTemplatePreviewOnClick(template)}
-					text=${this.localize('certificate-templates-preview')}
+					text="${this.localize('certificate-templates-preview')}"
 					icon='tier1:preview'
 					aria-label=${this.localize('certificate-template-preview')}
 					>
@@ -87,12 +106,25 @@ class CertificateTemplates extends BaseMixin(LitElement) {
 
 	render() {
 		return html`
-		<d2l-list
-			id='classlist'
-			grid
-			>
-			${this._renderTemplateListItems()}
-		</d2l-list>
+		<div class='cert-templates'>
+			<d2l-button
+				@click=${this._addCertificateTemplate}
+				description=${this.localize('certificate-templates-add')}
+				primary
+				class='cert-templates__button'
+				>
+				${this.localize('certificate-templates-add')}
+			</d2l-button>
+			<h3>${this.localize('certificate-templates-certificates')}</h3>
+			<div class='cert-templates__list-container'>
+				<d2l-list
+					id='classlist'
+					grid
+					>
+					${this._renderTemplateListItems()}
+				</d2l-list>
+			</div>
+		</div>
 		`;
 	}
 }

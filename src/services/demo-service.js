@@ -94,8 +94,8 @@ export class DemoAwardService {
 		return getFilteredAwards({ dataPath: '../../data/available-awards.json', query, awardType });
 	}
 
-	static async getCertificateTemplates() {
-		console.log('CERTIFICATE TEMPLATES: Received request');
+	static async getCertificateTemplates({ orgUnitId }) {
+		console.log(`CERTIFICATE TEMPLATES: Received request with orgUnitId: ${orgUnitId}`);
 		return fetch('../../data/certificate-templates.json').then(r => r.json());
 	}
 

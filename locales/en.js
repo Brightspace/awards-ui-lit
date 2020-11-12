@@ -22,6 +22,8 @@ export const val = {
 	'attachment-dialog-none-uploaded': 'No attachment uploaded.',
 	'badgr-checkbox-text': 'Allow users in this course to send earned awards to Badgr Backpack',
 	'cancel-action': 'Cancel',
+	'certificate-templates-add': 'Upload New Template',
+	'certificate-templates-certificates': 'Certificates',
 	'certificate-templates-delete': 'Delete certificate template',
 	'certificate-templates-preview': 'Preview certificate template (opens a new window)',
 	'classlist-dropdown-label': 'Classlist ordering Dropdown',
