@@ -57,7 +57,12 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 
 	constructor() {
 		super();
-		this._reset();
+		this.attachment = null;
+		this.attachmentUrl = '';
+		this.nameValue = '';
+		this.isValidName = true;
+		this.isValidImage = false;
+		this.nameValue = '';
 	}
 
 	_reset() {
@@ -65,7 +70,7 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 		this.attachmentUrl = '';
 		this.nameValue = '';
 		this.isValidName = true;
-		this.isValiImage = false;
+		this.isValidImage = false;
 		this.nameValue = '';
 	}
 
@@ -104,7 +109,7 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 
 	_getObjectUrl() {
 		if (this.attachment) {
-			const { name, filepath } = this.attachment;
+			const { name } = this.attachment;
 			this.attachmentUrl = window.navigator.msSaveOrOpenBlob ?
 				window.navigator.msSaveOrOpenBlob(name, name) : window.URL.createObjectURL(this.attachment);
 		} else {
