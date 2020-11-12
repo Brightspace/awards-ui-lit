@@ -35,6 +35,7 @@ class AddAwardsDialog extends BaseMixin(LitElement) {
 	constructor() {
 		super();
 		this.opened = false;
+		this.availableAwards = [];
 	}
 
 	connectedCallback() {

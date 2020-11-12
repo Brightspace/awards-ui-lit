@@ -4,6 +4,8 @@ import '@brightspace-ui/core/components/dialog/dialog';
 import '@brightspace-ui/core/components/dialog/dialog-confirm.js';
 import '@brightspace-ui/core/components/tooltip/tooltip';
 import '@brightspace-ui/core/components/inputs/input-text.js';
+import '@brightspace-ui-labs/file-uploader/d2l-file-uploader';
+import './attachment-dialog.js';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../mixins/base-mixin';
 import { convertToDateString } from '../helpers';
@@ -34,8 +36,8 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			isValidImage: {
 				type: Boolean
 			},
-			imageSelected: {
-				type: String
+			attachment: {
+				type: Object
 			}
 		};
 	}
@@ -85,7 +87,6 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			.icon-library__button-bar{
 				margin: auto;
 			}
-
 			.info-dialog__column{
 				display: flex;
 				flex-direction: column;
@@ -100,14 +101,8 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 
 	constructor() {
 		super();
-
-		this.iconDetails = null;
-		this.infoDialogOpened = false;
-		this.deleteOpened = false;
-		this.uploadOpened = false;
-		this.isValidIconName = true;
-		this.isValidImage = false;
-		this.imageSelected = '';
+		this.icons = [];
+		this._reset();
 	}
 
 	connectedCallback() {
@@ -173,7 +168,7 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 						</d2l-button-icon>
 						<d2l-button-icon
 							class="icon-library__d2l-button-icon"
-							text=${this.localize('icon-library-delete-button-text')}
+							text=${this.localize('delete-action')}
 							icon="tier1:delete"
 							aria-haspopup="true"
 							aria-label=${this.localize('icon-library-delete-button-label')}
@@ -203,10 +198,10 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 			>
 			<div class="info-dialog__column">
 				<img class="info-dialog__img" src=${this.iconDetails.Path} />
-				<div><b>${this.localize('icon-library-info-name-text')}:</b> ${this.iconDetails.Name}</div>
-				<div><b>${this.localize('icon-library-info-creation-date-text')}:</b> ${convertToDateString(this.iconDetails.CreatedDate)}</div>
+				<div><b>${this.localize('award-icon-library-icon-name-colon')}</b> ${this.iconDetails.Name}</div>
+				<div><b>${this.localize('award-icon-library-icon-creation-date-colon')}</b> ${convertToDateString(this.iconDetails.CreatedDate)}</div>
 				${this.iconDetails.UsedBy.length ? html`
-				<div><b>${this.localize('icon-library-info-used-by-text')}:</b></div>
+				<div><b>${this.localize('award-icon-library-icon-used-by-colon')}</b></div>
 				` : html``}
 
 				<d2l-list separators="between">
@@ -263,111 +258,37 @@ class AwardIconLibrary extends BaseMixin(LitElement) {
 	}
 
 	_reset() {
-		this.isValidIconName = true;
-		this.isValidImage = false;
-		this.imageSelected = '';
+		this.iconDetails = null;
+		this.infoDialogOpened = false;
+		this.deleteOpened = false;
+		this.uploadOpened = false;
 	}
 
-	_uploadDialogClose() {
-		this.uploadOpened = false;
+	_createIcon({ detail: { name, attachment } }) {
+		console.log(`Creating icon with name ${name} and filename ${attachment.name}`);
+
+		//send in image and name
 
 		this._reset();
 	}
 
-	_createIcon() {
-		const iconName = this.shadowRoot.getElementById('icon-name-upload').value;
-
-		this.isValidIconName = window.ValidationService.stringNotEmpty(iconName);
-		this.isValidImage = this.imageSelected.length > 0;
-
-		if (this.isValidIconName && this.isValidImage) {
-			this.uploadOpened = false;
-			console.log('Creating icon...');
-
-			this._reset();
-		}
-	}
-
-	_changedIconName(e) {
-		this.isValidIconName = window.ValidationService.stringNotEmpty(e.target.value);
-	}
-
-	_uploadIcon() {
-		this.imageSelected = 'image.png';
-		this.isValidImage = this.imageSelected.length > 0;
-
-		this.shadowRoot.getElementById('upload-dialog').resize();
+	_handleUploadDialogClosed() {
+		this.uploadOpened = false;
+		this._reset();
 	}
 
 	_renderUploadDialog() {
-		return this.uploadOpened ? html`
-		<d2l-dialog
-			id="upload-dialog"
-			title-text=${this.localize('icon-library-upload-button-text')}
+		console.log(`AWARD ICON LIBRARY: ${this.uploadOpened}`);
+		return html`
+		<d2l-attachment-dialog
+			title=${this.localize('icon-library-dialog-upload-button-text')}
+			name-label=${this.localize('icon-library-icon-name-label')}
+			name-placeholder=${this.localize('icon-library-icon-name-placeholder')}
 			?opened=${this.uploadOpened}
-			@d2l-dialog-close=${this._uploadDialogClose}
+			@d2l-dialog-close=${this._handleUploadDialogClosed}
+			@d2l-attachment-created=${this._createIcon}
 			>
-			<d2l-input-text
-				id="icon-name-upload"
-				label=${this.localize('icon-library-icon-name-label')}
-				placeholder=${this.localize('icon-library-icon-name-placeholder')}
-				required
-				aria-haspopup="true"
-				aria-invalid=${!this.isValidIconName}
-				@input=${this._changedIconName}
-				@focusout=${this._changedIconName}
-				tabindex=0
-				novalidate
-				>
-			</d2l-input-text>
-			${!this.isValidIconName ? html`
-			<d2l-tooltip for="icon-name-upload" state="error" align="start" offset="10">
-				${this.localize('icon-library-icon-name-tooltip')}
-			</d2l-tooltip>
-			` : html``}
-
-			<d2l-button
-				id="icon-image-upload"
-				class="upload-dialog__d2l-button"
-				@click=${this._uploadIcon}
-				@focusout=${this._uploadIcon}
-				primary
-				aria-invalid=${!this.isValidImage}
-				tabindex=1
-				>
-				${this.localize('icon-library-dialog-upload-button-text')}
-			</d2l-button>
-			${this.imageSelected ? html`
-			<div>
-				${this.localize('icon-library-dialog-image-selected', {name: this.imageSelected})}
-			</div>
-			` : html`
-			<div>
-				${this.localize('icon-library-dialog-no-image-selected')}
-			</div>
-			`}
-			${!this.isValidImage ? html`
-			<d2l-tooltip for="icon-image-upload" state="error" align="start" offset="10">
-				${this.localize('icon-library-dialog-image-selected-tooltip')}
-			</d2l-tooltip>
-			` : html``}
-
-			<d2l-button
-				slot="footer"
-				@click=${this._createIcon}
-				primary
-				.disabled=${!(this.isValidImage && this.isValidIconName)}
-				>
-				${this.localize('create-action')}
-			</d2l-button>
-			<d2l-button
-				slot="footer"
-				data-dialog-action
-				>
-				${this.localize('cancel-action')}
-			</d2l-button>
-		</d2l-dialog>
-		` : html``;
+		</d2l-attachment-dialog>`;
 	}
 
 	render() {

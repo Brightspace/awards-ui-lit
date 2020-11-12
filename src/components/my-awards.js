@@ -61,6 +61,7 @@ class MyAwards extends BaseMixin(LitElement) {
 		this.detailedAward = null;
 		this.currentQuery = '';
 		this.currentAwardType = window.AwardService.awardTypes[0].awardType;
+		this.issuedAwards = [];
 	}
 
 	connectedCallback() {

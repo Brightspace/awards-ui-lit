@@ -62,6 +62,7 @@ class AwardsClasslistIssueDialog extends BaseMixin(LitElement) {
 		this.selectedStudents = Array();
 		this.isValidOption = true;
 		this.isValidCriteria = false;
+		this.awards = [];
 	}
 
 	connectedCallback() {
@@ -234,6 +235,7 @@ class AwardsClasslistRevokeDialog extends BaseMixin(LitElement) {
 		this.selectedStudents = Array();
 		this.isValidOption = true;
 		this.isValidReason = false;
+		this.awards = [];
 	}
 
 	connectedCallback() {
