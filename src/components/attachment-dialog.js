@@ -39,6 +39,10 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 			},
 			isValidImage: {
 				type: Boolean
+			},
+			inferNameFromAttachment: {
+				type: Boolean,
+				attribute: 'infer-name-from-attachment'
 			}
 		};
 	}
@@ -83,10 +87,10 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 	_handleClosed(event) {
 		this.opened = false;
 		this._releaseBlobUrl();
-		this._reset();
 		if (event.detail.action === CREATE_ACTION) {
 			this._fireCompletionEvent();
 		}
+		this._reset();
 	}
 
 	_fireCompletionEvent() {
@@ -98,12 +102,12 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 			bubbles: false
 		});
 		this.dispatchEvent(attachmentChosenEvent);
-		this._reset();
 	}
 
 	_handleFileUploaded(event) {
 		this.attachment = event.detail ? event.detail.files[0] : null;
 		this.isValidImage = this.attachment !== null;
+		this.nameValue = this.inferNameFromAttachment ? this.attachment.name : this.nameValue;
 		this._getObjectUrl();
 	}
 
@@ -147,6 +151,24 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 		this.isValidName = window.ValidationService.stringNotEmpty(this.nameValue);
 	}
 
+	_renderNameInput() {
+		return this.inferNameFromAttachment ? html`` :
+			html`
+			<d2l-input-text
+				class="attachment-dialog__name-input"
+				label=${this.nameLabel}
+				placeholder=${this.namePlaceholder}
+				required
+				aria-invalid=${!this.isValidName}
+				@input=${this._changedName}
+				@focusout=${this._changedName}
+				tabindex=0
+				onfocus
+				>
+			</d2l-input-text>
+			`;
+	}
+
 	render() {
 		return this.opened ?
 			html`
@@ -156,18 +178,7 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 				@d2l-dialog-close=${this._handleClosed}
 				>
 				<div>
-					<d2l-input-text
-						class="attachment-dialog__name-input"
-						label=${this.nameLabel}
-						placeholder=${this.namePlaceholder}
-						required
-						aria-invalid=${!this.isValidName}
-						@input=${this._changedName}
-						@focusout=${this._changedName}
-						tabindex=0
-						onfocus
-						>
-					</d2l-input-text>
+					${this._renderNameInput()}
 					<d2l-labs-file-uploader
 						@d2l-file-uploader-files-added=${this._handleFileUploaded}
 						>
@@ -178,7 +189,6 @@ class AttachmentDialog extends BaseMixin(LitElement) {
 					<d2l-button
 						class="attachment-dialog__action-button"
 						slot="footer"
-						@click=${this._fireCompletionEvent}
 						primary
 						.disabled=${!(this.isValidImage && this.isValidName)}
 						data-dialog-action=${CREATE_ACTION}

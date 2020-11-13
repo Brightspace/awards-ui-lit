@@ -52,11 +52,19 @@ export class AwardService {
 		return {};
 	}
 
+	static async deleteCertificateTemplate() {
+		return {};
+	}
+
 	static async getAssociatedAwards() {
 		return {};
 	}
 
 	static async getAwards() {
+		return {};
+	}
+
+	static async getCertificateTemplates() {
 		return {};
 	}
 
@@ -77,6 +85,10 @@ export class AwardService {
 	}
 
 	static async updateAward() {
+		return {};
+	}
+
+	static async updateCertificateTemplate() {
 		return {};
 	}
 }
