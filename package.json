@@ -9,9 +9,6 @@
     "lint:lit": "lit-analyzer src/components/*.js demo src/test",
     "start": "es-dev-server --app-index demo/index.html --node-resolve --dedupe --open --watch",
     "test": "npm run lint && npm run test:unit && npm run test:headless",
-    "test:diff": "mocha ./**/*.visual-diff.js -t 40000",
-    "test:diff:golden": "mocha ./**/*.visual-diff.js -t 40000 --golden",
-    "test:diff:golden:commit": "commit-goldens",
     "test:headless": "karma start",
     "test:headless:watch": "karma start --auto-watch=true --single-run=false",
     "test:sauce": "karma start karma.sauce.conf.js",
@@ -20,9 +17,9 @@
   "author": "D2L Corporation",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@brightspace-ui/visual-diff": "^1",
     "@open-wc/testing": "^2",
     "@open-wc/testing-karma": "^4",
+    "@webcomponents/webcomponentsjs": "^2",
     "d2l-polymer-behaviors": "Brightspace/d2l-polymer-behaviors-ui#semver:^2",
     "babel-eslint": "^10",
     "deepmerge": "^3",
@@ -39,7 +36,6 @@
   },
   "dependencies": {
     "@brightspace-ui/core": "^1",
-    "@webcomponents/webcomponentsjs": "^2",
     "@brightspace-ui-labs/file-uploader": "^2",
     "dayjs": "^1.8.28",
     "lit-element": "^2"

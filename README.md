@@ -69,25 +69,6 @@ npm run test:headless
 npm run test:headless:watch
 ```
 
-### Visual Diff Testing
-
-NOTE: Visual Diff Testing implementation on hold
-
-This repo uses the [@brightspace-ui/visual-diff utility](https://github.com/BrightspaceUI/visual-diff/) to compare current snapshots against a set of golden snapshots stored in source control.
-
-```shell
-# run visual-diff tests
-npm run test:diff
-
-# subset of visual-diff tests:
-npm run test:diff -- -g some-pattern
-
-# update visual-diff goldens
-npm run test:diff:golden
-```
-
-Golden snapshots in source control must be updated by Travis CI. To trigger an update, press the "Regenerate Goldens" button in the pull request `visual-difference` test run.
-
 ## Versioning, Releasing & Deploying
 
 All version changes should obey [semantic versioning](https://semver.org/) rules.
